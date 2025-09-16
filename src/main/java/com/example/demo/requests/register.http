@@ -1,0 +1,11 @@
+@rootURL = http://localhost:8080
+@userName = sambata
+@password = sambata
+POST {{rootURL}}/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userName": "{{userName}}",
+  "password": "{{password}}"
+}

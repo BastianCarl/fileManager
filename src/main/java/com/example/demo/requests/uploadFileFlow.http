@@ -1,0 +1,47 @@
+@rootURL = http://localhost:8080
+@userName = sambata
+@password = sambata
+@boundary = WebAppBoundary
+###
+# @name login
+POST {{rootURL}}/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userName": "{{userName}}",
+  "password": "{{password}}"
+}
+
+> {%
+    try {
+        const ct = response.headers["content-type"] || "";
+        let token = null;
+        if (ct.includes("application/json")) {
+            const j = JSON.parse(response.body);
+            token = j.token || j.accessToken || (j.data && j.data.token);
+        } else {
+            token = (response.body || "").trim();
+        }
+        if (!token) {
+            client.log("Login response body: " + response.body);
+            throw new Error("Token not found in login response.");
+        }
+        client.global.set("token", token);
+    } catch (e) {
+        client.log("Failed to parse login response: " + e.message);
+        throw e;
+    }
+%}
+
+###
+POST {{rootURL}}/files/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary={{boundary}}
+
+--{{boundary}}
+Content-Disposition: form-data; name="file"; filename="steam.jpg"
+Content-Type: text/plain
+
+< ./notes.txt
+--{{boundary}}--

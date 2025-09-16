@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:8080
+@boundary = ----OneFileBoundary123
+@fileName= notes.txt
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZWJpIiwiaWF0IjoxNzU3MDA2MjY5LCJleHAiOjE3NTcwMDY0NDl9.sn_tPO0WYacZDp4iPlkw2amuYlhBofv6NTAZrx22Z0c
+POST {{baseUrl}}/images/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary={{boundary}}
+
+--{{boundary}}
+Content-Disposition: form-data; name="file"; filename="this is a test"
+Content-Type: text/plain
+
+< ./notes.txt
+--{{boundary}}--

@@ -1,0 +1,29 @@
+authorizare
+cokkies vs tokens
+imagine docker
+integrare cu s3
+filtru JWT
+
+fisire mari > .text vs .pdf
+mai multe fisire de descarcat (arhiva)
+http files per flow
+
+filed injections vs constructor injections
+
+
+-----------
+JWS vs JWE (de ce nu token criptat trimis peste tot)
+vreau sa setez https pe back-ul meu si as vrea sa folosesc cert store(trusted autorities vs personal) de ce nu e o idee buna cum as putea face
+authorization header
+constanta vs final field
+refactor JWT filter
+endpoint separat unde toate fisierele ca si arhiva
+cand e necesar s3 vs disk (latency)
+extractie header (cum as putea sa pun mana intr-un enpoint, annotare endpoint)
+
+
+doar admini pot face upload
+optional cum as face un load test
+
+
+

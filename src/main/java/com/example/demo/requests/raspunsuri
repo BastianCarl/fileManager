@@ -1,0 +1,37 @@
+JWS vs JWE
+
+JWS = Json web signature
+    content is visible
+    content is Base64 encoded
+
+JWE = Json web encryption
+    content is not visible
+    content is encrypted
+
+JWT uses either JWS or JWE
+
+-------------------------------------------------
+HTTPS(SSL/TTL) requires both TrustStore and KeyStore
+
+TrustStore(stores information about others)
+    stores SSL certificates(self-signed and CA signed) of external trusted entities
+    used during SSL handShake
+    used for HTTP connections
+    checks API's server certificate is trusted
+
+KeyStore(stores information about us)
+    vault used for storing private keys, certificates
+
+HOW TO?
+    Create a KeyStore
+    Generate a SSL Certificate
+    Import SSL Certificate to KeyStore
+    Configure Tomcat to use it
+
+
+The keystore is where you store your own private keys and certificates
+The truststore contains certificates from other entities that you trust (typically from Certificate Authorities or trusted servers).
+
+Constants vs final
+    constants is final static
+    final is final
