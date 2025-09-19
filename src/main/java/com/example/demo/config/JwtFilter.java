@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import com.example.demo.service.JWTService;
 import com.example.demo.service.MyUserDetailsService;
+import com.example.demo.utiliti.JwtHelper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,15 +22,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final MyUserDetailsService myUserDetailsService;
+    private static final String AUTHENTICATION = "Authentication";
+    private static final String AUTHENTICATION_PREFIX = "Bearer ";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(AUTHENTICATION);
         String jwtToken = null;
         String username = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwtToken = authHeader.substring(7);
+        if (authHeader != null && authHeader.startsWith(AUTHENTICATION_PREFIX)) {
+            jwtToken = JwtHelper.getJwtTokenValue(authHeader);
             username = jwtService.extractUserName(jwtToken);
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

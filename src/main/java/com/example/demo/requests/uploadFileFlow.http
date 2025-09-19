@@ -36,7 +36,7 @@ Accept: application/json
 
 ###
 POST {{rootURL}}/files/upload
-Authorization: Bearer {{token}}
+Authentication: Bearer {{token}}
 Content-Type: multipart/form-data; boundary={{boundary}}
 
 --{{boundary}}

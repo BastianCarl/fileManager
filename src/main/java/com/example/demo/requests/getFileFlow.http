@@ -2,7 +2,7 @@
 @userName = sambata
 @password = sambata
 @boundary = WebAppBoundary
-@fileId= 2
+@fileId= 1
 ###
 # @name login
 POST {{rootURL}}/login
@@ -37,4 +37,4 @@ Accept: application/json
 
 ###
 GET {{rootURL}}/files/{{fileId}}
-Authorization: Bearer {{token}}
+Authentication: Bearer {{token}}

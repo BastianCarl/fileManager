@@ -5,6 +5,7 @@ import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.UserRepo;
 import com.example.demo.service.FileService;
 import com.example.demo.service.JWTService;
+import com.example.demo.utiliti.JwtHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,9 @@ public class FileController {
     private final UserRepo userRepo;
 
     @PostMapping({"/upload"})
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
         try {
-            FileMetadata metadata = this.fileService.uploadImage(file, getOwnerId(request));
+            FileMetadata metadata = this.fileService.uploadImage(file, getOwnerId(authToken));
             AwsClient.uploadFile(file);
             return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
         } catch (IOException var4) {
@@ -38,8 +39,8 @@ public class FileController {
     }
 
     @GetMapping({"/{fileId}"})
-    public String getFile(@PathVariable Long fileId, HttpServletRequest request) throws IOException {
-        FileMetadata metadata = this.fileService.getImageMetadata(fileId, getOwnerId(request));
+    public String getFile(@PathVariable Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
+        FileMetadata metadata = this.fileService.getImageMetadata(fileId, getOwnerId(authToken));
         return AwsClient.getFile(AwsClient.generateAwsKey(metadata));
     }
 
@@ -48,11 +49,9 @@ public class FileController {
 //        return fileService.getImageMetadataList(getOwnerId(request));
 //    }
 
-    private Long getOwnerId(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        String jwtToken = authHeader.substring(7);
-        String username = jwtService.extractUserName(jwtToken);
+    private Long getOwnerId(String authToken) {
+        String jwtTokenValue = JwtHelper.getJwtTokenValue(authToken);
+        String username = jwtService.extractUserName(jwtTokenValue);
         return userRepo.findByUserName(username).getId();
     }
-
 }

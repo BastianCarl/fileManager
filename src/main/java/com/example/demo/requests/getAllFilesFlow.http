@@ -35,4 +35,4 @@ Accept: application/json
 %}
 ###
 GET {{rootURL}}/files/all
-Authorization: Bearer {{token}}
+Authentication: Bearer {{token}}

@@ -36,4 +36,4 @@
 #
 ####
 #GET {{rootURL}}/images/{{fileId}}
-#Authorization: Bearer {{token}}
+#Authentication: Bearer {{token}}

@@ -3,7 +3,7 @@
 @fileName= notes.txt
 @token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZWJpIiwiaWF0IjoxNzU3MDA2MjY5LCJleHAiOjE3NTcwMDY0NDl9.sn_tPO0WYacZDp4iPlkw2amuYlhBofv6NTAZrx22Z0c
 POST {{baseUrl}}/images/upload
-Authorization: Bearer {{token}}
+Authentication: Bearer {{token}}
 Content-Type: multipart/form-data; boundary={{boundary}}
 
 --{{boundary}}
