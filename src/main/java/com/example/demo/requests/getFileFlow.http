@@ -2,7 +2,7 @@
 @userName = sambata
 @password = sambata
 @boundary = WebAppBoundary
-@fileId= 1
+@fileId= 2
 ###
 # @name login
 POST {{rootURL}}/login

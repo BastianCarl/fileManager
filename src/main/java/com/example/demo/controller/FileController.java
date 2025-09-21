@@ -6,14 +6,14 @@ import com.example.demo.repository.UserRepo;
 import com.example.demo.service.FileService;
 import com.example.demo.service.JWTService;
 import com.example.demo.utiliti.JwtHelper;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,10 +44,14 @@ public class FileController {
         return AwsClient.getFile(AwsClient.generateAwsKey(metadata));
     }
 
-//    @GetMapping({"/all"})
-//    public List<FileMetadata> getAllFiles(HttpServletRequest request) throws IOException {
-//        return fileService.getImageMetadataList(getOwnerId(request));
-//    }
+    @GetMapping("/download")
+    public ResponseEntity<byte[]> downloadZip(@RequestHeader("Authentication") String authToken) throws IOException {
+        byte[] zipBytes =  fileService.downloadAllFiles(getOwnerId(authToken));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=arhiva.zip")
+                .contentType(new MediaType("application", "zip"))
+                .body(zipBytes);
+    }
 
     private Long getOwnerId(String authToken) {
         String jwtTokenValue = JwtHelper.getJwtTokenValue(authToken);

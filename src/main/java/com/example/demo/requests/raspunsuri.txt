@@ -31,7 +31,19 @@ HOW TO?
 
 The keystore is where you store your own private keys and certificates
 The truststore contains certificates from other entities that you trust (typically from Certificate Authorities or trusted servers).
+------------------------------------------------------------------
 
 Constants vs final
     constants is final static
     final is final
+--------------------------------------------------------------------------
+
+s3 vs disk
+    SSD 0.2–0.5 ms
+    HDD 5–10 ms
+    AWS EBS
+    AWS EFS
+    AWS S3 20–100 ms rata buna de Throughput
+
+---------------------------------------------------------
+Load test

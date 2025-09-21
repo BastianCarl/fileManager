@@ -24,6 +24,3 @@ extractie header (cum as putea sa pun mana intr-un enpoint, annotare endpoint)
 
 doar admini pot face upload
 optional cum as face un load test
-
-
-
