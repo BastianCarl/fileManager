@@ -28,7 +28,6 @@ HOW TO?
     Import SSL Certificate to KeyStore
     Configure Tomcat to use it
 
-
 The keystore is where you store your own private keys and certificates
 The truststore contains certificates from other entities that you trust (typically from Certificate Authorities or trusted servers).
 ------------------------------------------------------------------
@@ -46,4 +45,162 @@ s3 vs disk
     AWS S3 20–100 ms rata buna de Throughput
 
 ---------------------------------------------------------
-Load test
+hashing vs criptat vs encodat
+    Hash:
+        keys, hash functions, digest, collision
+        hash values itself stores no data
+        used for integrity checking, hash table(store and retrieve) uses hashes as index
+        irreversible
+        fix length
+    Encryption:
+        reversible
+        data --> cipher text (unreadable data) --> original data
+        used for sending sensible information
+        key-based:
+            symmetric:
+                shared key between sender and receiver
+                encryption and decryption use the same key
+                faster, less secured
+                limited data
+                used for encryption
+            asymmetric:
+                private-public key are related
+                one key encrypt and other one decrypt
+                slower, more secured
+                bulk date
+                to prove that someone sent a message uses private key to encrypted an
+                used for encryption, and signatures(integrity and authentication)
+            symmetric + asymmetric(hybrid encryption used TLS/SSL):
+                used asymmetric keys to share symmetric key
+                used symmetric key to share bulk data
+    Encoding:
+        transformation based on a set of rules (binary, hexadecimal, base64)
+        data representation
+        reversible
+    CA:
+        CA is trusted by the client
+        CA sings a certificate that proves a particular asymmetric public key belongs to a domain
+        CA has its own private-public keys
+        CA has self-signed certificate(including CA public key)
+        CA generates certificate for serves and also sign wit CA's private key
+        Client(browser) has CA certificates installed
+        Client verifies server's certificate is legitimate (issued by CA)
+        Client verifies that certificate belongs to server (check that private key belongs to server)
+        Digital Signature is a proof that something belongs to somebody and its content was not altered
+        A self-signed certificate is a digital certificate not validated by a trusted Certificate Authority (CA), but instead signed by its own private key.
+-------
+JVM-ul trebuia sa fie portabil si sa ruleze identic pe orice OS, fara sa depinda de infrastructura sistemului de operare.
+C# a fost gandit initial strict pentru Windows
+-----
+trusted root = what CA I trust, therefore all certificates form this authorities are trusted
+personal certificates =  store certificates related to you. Certificates with private keys associated with you
+-------------------
+500/501
+--------------------
+Root Certificate
+    can emit Intermediate certificates
+    It is the certificates that is directly trusted by client
+    has a public key
+    if it's compromised than all intermediate and end-user certificates are compromised
+Intermediate (proxy for root)
+    it's trusted by client only if the root is also trusted by client
+    sign with root private key
+    has a public key
+end user certificate (SSL)
+    belongs to a domain and proves that a private-key pair belong to the host
+    has a public key
+    sign with private the of intermediate certificate that emitted the certificate
+    it's trusted only if the issuer (intermediate) is trust
+Chain of trust
+    Browser verifies that intermediate certificate is legit and is emitted by one of the root certificate and therefore trust it
+    Browser verifies that end-user certificate is legit
+
+PKI
+    server
+    client
+    CA
+MAC's alternative for signatures
+tls handshake
+    Client Hello
+    Server Hello
+    Certificate
+    key exchange
+-------------------------
+
+1xx - Informational
+    web sockets
+| Cod     | Status                          | Descriere                                                                                                               |
+| ------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **200** | OK                              | Cererea a avut succes; semnificația exactă depinde de metoda folosită (GET, POST, etc.).                                |
+| **201** | Created                         | Cererea a fost completată și a fost creată una sau mai multe resurse noi.                                               |
+| **202** | Accepted                        | Cererea a fost acceptată, dar nu a fost încă procesată; util pentru procesare batch.                                    |
+| **203** | Non-Authoritative Information   | Cererea a reușit, dar răspunsul a fost modificat de un proxy sau sursă terță; se folosește pentru cache sau backup-uri. |
+| **204** | No Content                      | Cererea a fost procesată cu succes, dar nu există conținut de returnat.                                                 |
+| **205** | Reset Content                   | Cererea a fost procesată; clientul trebuie să reseteze documentul sau vizualizarea.                                     |
+| **206** | Partial Content                 | Serverul a returnat doar o parte a resursei (de obicei pentru Range requests).                                          |
+| **207** | Multi-Status                    | Răspunsul oferă status pentru mai multe resurse într-un singur mesaj (XML).                                             |
+| **208** | Already Reported                | Evită listarea duplicatelor într-o colecție WebDAV; doar o resursă raportează 200 OK.                                   |
+| **226** | IM Used                         | Cererea GET a fost procesată, iar serverul a aplicat manipulări de instanță asupra resursei.                            |
+| **300** | Multiple Choices                | Resursa are mai multe variante; clientul trebuie să aleagă una. Include liste de opțiuni și locații.                    |
+| **301** | Moved Permanently               | Resursa a fost mutată permanent la un nou URL; toate cererile viitoare trebuie să folosească noua adresă.               |
+| **302** | Found                           | Resursa este temporar disponibilă la un alt URI; cererile viitoare pot continua să folosească adresa originală.         |
+| **303** | See Other                       | Redirectează clientul către alt URI folosind metoda GET; de exemplu, după trimiterea unui formular.                     |
+| **304** | Not Modified                    | Resursa nu s-a modificat; clientul poate folosi versiunea din cache.                                                    |
+| **307** | Temporary Redirect              | Redirecționează temporar clientul; metoda HTTP trebuie păstrată.                                                        |
+| **308** | Permanent Redirect              | Resursa a fost mutată permanent; metoda HTTP nu poate fi schimbată.                                                     |
+| **400** | Bad Request                     | Cerere invalidă din cauza sintaxei greșite sau rutei incorecte.                                                         |
+| **401** | Unauthorized                    | Lipsă/invalidare autentificare; serverul respinge cererea.                                                              |
+| **402** | Payment Required                | Rezervat pentru sisteme de plată, rar folosit.                                                                          |
+| **403** | Forbidden                       | Cererea înțeleasă, dar accesul este interzis.                                                                           |
+| **404** | Not Found                       | Resursa nu există sau nu are adresă de redirecționare.                                                                  |
+| **405** | Method Not Allowed              | Metoda cerută nu este permisă pentru resursă.                                                                           |
+| **406** | Not Acceptable                  | Conținutul nu corespunde cu header-ul `Accept`.                                                                         |
+| **407** | Proxy Authentication Required   | Necesită autentificare prin proxy.                                                                                      |
+| **408** | Request Timeout                 | Serverul nu a primit cererea completă la timp.                                                                          |
+| **409** | Conflict                        | Conflict cu starea curentă a resursei.                                                                                  |
+| **410** | Gone                            | Resursa a fost eliminată definitiv.                                                                                     |
+| **411** | Length Required                 | Lipsă header `Content-Length`.                                                                                          |
+| **412** | Precondition Failed             | Condițiile din header nu au fost îndeplinite.                                                                           |
+| **413** | Payload Too Large               | Cererea este prea mare pentru a fi procesată.                                                                           |
+| **414** | URI Too Long                    | URI prea lung pentru a fi procesat.                                                                                     |
+| **415** | Unsupported Media Type          | Format de media nesuportat.                                                                                             |
+| **416** | Range Not Satisfiable           | Domeniul solicitat nu este valid pentru resursă.                                                                        |
+| **417** | Expectation Failed              | Serverul nu poate îndeplini cerințele din `Expect`.                                                                     |
+| **418** | I’m a Teapot                    | Cod de glumă, serverul este un ceainic.                                                                                 |
+| **421** | Misdirected Request             | Cererea a fost trimisă către serverul greșit.                                                                           |
+| **422** | Unprocessable Entity            | Resursa nu poate fi procesată (eroare semantică).                                                                       |
+| **423** | Locked                          | Resursa este blocată.                                                                                                   |
+| **424** | Failed Dependency               | Cererea a eșuat din cauza unei dependențe.                                                                              |
+| **425** | Too Early                       | Serverul refuză cererea pentru a evita repetarea.                                                                       |
+| **426** | Upgrade Required                | Necesită schimbarea protocolului.                                                                                       |
+| **428** | Precondition Required           | Serverul cere o solicitare condiționată.                                                                                |
+| **429** | Too Many Requests               | Prea multe cereri într-un interval scurt.                                                                               |
+| **431** | Request Header Fields Too Large | Header-ele sunt prea mari pentru a fi procesate.                                                                        |
+| **451** | Unavailable for Legal Reasons   | Resursa indisponibilă din motive legale.                                                                                |
+                                                    |
+
+3xx - Redirection
+    301 - moved permanently
+    304 - Not modified (resursa se afla deja in cache deci nu mai e nevoie sa fie descarcata si poata folosi direct din cache)
+    307	- Temporary Redirect
+
+5xx - Server Error
+    500 - Internal server error
+-----
+HashTable
+    uses a hashTable
+HashTree
+    Red–black tree (Heap)
+
+LinkedList este dublu-inlantuita
+
+ immutability
+        a class whose instance cannot be modified
+        how to
+            dont provide setters
+            final class
+            all fields are private final
+            all mutable objects are inaccessible out of class
+    Advantages
+        thead-safe
+        optimized at run-time

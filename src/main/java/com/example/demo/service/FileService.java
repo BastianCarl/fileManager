@@ -11,9 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -22,6 +20,8 @@ import java.util.zip.ZipOutputStream;
 public class FileService {
 
     private final FileMetadataRepository repository;
+    private static final Set<String> ACCEPTED_ARCHIVE_TYPES = new HashSet<>(List.of("zip"));
+    private static final int LIMIT_FOR_DOWNLOADING = 1500;
     public FileMetadata uploadImage(MultipartFile file, Long ownerId) throws IOException {
         validateImage(file);
         FileMetadata metadata = new FileMetadata(file.getOriginalFilename(), file.getContentType(), ownerId, file.getSize(), AwsClient.generateAwsKey(file));
@@ -47,13 +47,27 @@ public class FileService {
 //            throw new IllegalArgumentException("Invalid mime type.");
 //        }
     }
-
-    public byte[] downloadAllFiles(Long ownerId) throws IOException {
-        List<FileMetadata> files =  repository.findByOwnerId(ownerId);
-        Map<String, byte[]> filesMap = new HashMap<>();
+    /*
+     move Archive to other class
+     File Service Interface(implement for Local and AWS)
+     AwsClient.getFile(AwsClient.generateAwsKey(fileMetadata)) with multiple threads (5 fisiere in paralel) daca s-a terminat un fiser sa incepem altul fiser
+     retry mechanism and logging for error
+     */
+    public byte[] downloadAllFilesAsArchive(Long ownerId) throws IOException {
+        List<FileMetadata> files = repository.findByOwnerId(ownerId);
+        int totalDownloaded = 0;
+        byte[] file;
+      var filesMap = new HashMap<String, byte[]>();
         for (FileMetadata fileMetadata : files) {
             String awsUrl = AwsClient.getFile(AwsClient.generateAwsKey(fileMetadata));
-            filesMap.put(fileMetadata.getName(), downloadFile(awsUrl));
+            file = downloadFile(awsUrl);
+            // improve this computation
+            // estimare dupa compresie
+            totalDownloaded += file.length;
+            filesMap.put(fileMetadata.getName(), file);
+            if (totalDownloaded >= LIMIT_FOR_DOWNLOADING) {
+                break;
+            }
         }
         return createZip(filesMap);
     }
@@ -61,12 +75,13 @@ public class FileService {
     public byte[] downloadFile(String awsUrl) throws IOException {
         URL url = new URL(awsUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        // move to constant
+        // use Spring to make GET
         con.setRequestMethod("GET");
-
         try (InputStream in = con.getInputStream();
              ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-
-            byte[] data = new byte[8192]; // buffer de 8KB
+            // move to constant
+            byte[] data = new byte[8192];
             int bytesRead;
             while ((bytesRead = in.read(data)) != -1) {
                 buffer.write(data, 0, bytesRead);
@@ -79,7 +94,8 @@ public class FileService {
     public static byte[] createZip( Map<String, byte[]> files) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
-        for (Map.Entry<String, byte[]> entry : files.entrySet()) {
+        // use streams
+        for (var entry : files.entrySet()) {
                 ZipEntry element = new ZipEntry(entry.getKey());
                 zos.putNextEntry(element);
                 zos.write(entry.getValue());
@@ -87,5 +103,9 @@ public class FileService {
         }
         zos.close();
         return baos.toByteArray();
+    }
+
+    public boolean isArchiveTypeAccepted(String type) {
+        return ACCEPTED_ARCHIVE_TYPES.contains(type);
     }
 }

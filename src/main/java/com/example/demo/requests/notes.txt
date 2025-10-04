@@ -24,3 +24,20 @@ extractie header (cum as putea sa pun mana intr-un enpoint, annotare endpoint)
 
 doar admini pot face upload
 optional cum as face un load test
+
+-------
+hashing vs criptat vs encodat
+
+ce e un self-signed certificat
+un chrome cum de crede un self-signed cert
+un chrome cum de crede un certificat emit de autoritate
+cum java nu se uita in system certManager personal vs trusted root (c# vs java)
+
+http status code
+request de upload dar dupa 5 e regula de business care ne opresc sa generam pe backend. Ce status ar trebui intors.
+----
+hashMap vs treeMap
+linkedList simplu inlantuita
+imutable cum ai implementa de mana si cum fuctioneza o colectie care e imutable si la ce ajuta
+
+-----

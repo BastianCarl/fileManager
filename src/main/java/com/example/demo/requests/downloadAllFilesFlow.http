@@ -2,6 +2,7 @@
 @userName = sambata
 @password = sambata
 @boundary = WebAppBoundary
+@fileId= 1
 ###
 # @name login
 POST {{rootURL}}/login
@@ -35,13 +36,5 @@ Accept: application/json
 %}
 
 ###
-POST {{rootURL}}/files/upload
+GET {{rootURL}}/files/downloadAllFilesAsArchive/zip
 Authentication: Bearer {{token}}
-Content-Type: multipart/form-data; boundary={{boundary}}
-
---{{boundary}}
-Content-Disposition: form-data; name="file"; filename="steam.jpg"
-Content-Type: text/plain
-
-< ./notes.txt
---{{boundary}}--

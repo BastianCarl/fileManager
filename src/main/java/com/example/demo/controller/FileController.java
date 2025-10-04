@@ -44,13 +44,20 @@ public class FileController {
         return AwsClient.getFile(AwsClient.generateAwsKey(metadata));
     }
 
-    @GetMapping("/download")
-    public ResponseEntity<byte[]> downloadZip(@RequestHeader("Authentication") String authToken) throws IOException {
-        byte[] zipBytes =  fileService.downloadAllFiles(getOwnerId(authToken));
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=arhiva.zip")
-                .contentType(new MediaType("application", "zip"))
-                .body(zipBytes);
+    /*
+            filename=arhiva.zip
+     */
+    @GetMapping("/downloadAllFilesAsArchive/{type}")
+    public ResponseEntity<byte[]> downloadAllFilesAsArchive(@RequestHeader("Authentication") String authToken, @PathVariable String type) throws Exception {
+        if (fileService.isArchiveTypeAccepted(type)) {
+            byte[] zipBytes = fileService.downloadAllFilesAsArchive(getOwnerId(authToken));
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=arhiva.zip")
+                    .contentType(new MediaType("application", "zip"))
+                    .body(zipBytes);
+        } else {
+            throw new Exception("Unsupported Archive type");
+        }
     }
 
     private Long getOwnerId(String authToken) {
