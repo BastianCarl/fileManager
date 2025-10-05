@@ -33,7 +33,7 @@ public class FileController {
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
         try {
             FileMetadata metadata = this.fileMetaDataService.uploadFileMetaData(file, getOwnerId(authToken));
-            AwsImplementationFileService.uploadFile(file);
+            threadManager.uploadFile(file);
             return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
         } catch (IOException var4) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -42,11 +42,11 @@ public class FileController {
         }
     }
 
-    @GetMapping({"/{fileId}"})
-    public String getFile(@PathVariable Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
-        FileMetadata metadata = this.fileMetaDataService.getFilesMetadata(fileId, getOwnerId(authToken));
-        return AwsImplementationFileService.getFile(AwsImplementationFileService.generateAwsKey(metadata));
-    }
+//    @GetMapping({"/{fileId}"})
+//    public String getFile(@PathVariable Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
+//        FileMetadata metadata = this.fileMetaDataService.getFilesMetadata(fileId, getOwnerId(authToken));
+//        return AwsImplementationFileService.getFile(AwsImplementationFileService.generateKey(metadata));
+//    }
 
     /*
             filename=arhiva.zip

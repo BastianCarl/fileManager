@@ -13,6 +13,5 @@ public class DemoApplication {
 	private static final String SECRET_KEY = "AWS_SECRET_ACCESS_KEY";
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		System.out.println(AwsImplementationFileService.getBucket());
 	}
 }

@@ -6,13 +6,8 @@ import com.example.demo.repository.FileMetadataRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
-import static com.example.demo.utility.Archiver.createZip;
 
 @Service
 @AllArgsConstructor
@@ -20,10 +15,11 @@ public class FileMetaDataService {
 
     private final FileMetadataRepository repository;
     private final ThreadManager threadManager;
+    private final AwsImplementationFileService awsImplementationFileService;
 
     public FileMetadata uploadFileMetaData(MultipartFile file, Long ownerId) throws IOException {
         validateFile(file);
-        FileMetadata metadata = new FileMetadata(file.getOriginalFilename(), file.getContentType(), ownerId, file.getSize(), AwsImplementationFileService.generateAwsKey(file));
+        FileMetadata metadata = new FileMetadata(file.getOriginalFilename(), file.getContentType(), ownerId, file.getSize(), awsImplementationFileService.generateKey(file));
         return repository.save(metadata);
     }
 
