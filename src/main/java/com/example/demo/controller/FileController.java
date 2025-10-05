@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.aws.AwsClient;
+import com.example.demo.files.AwsImplementationFileService;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.UserRepo;
-import com.example.demo.service.FileService;
+import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.JWTService;
-import com.example.demo.utiliti.JwtHelper;
+import com.example.demo.service.ThreadManager;
+import com.example.demo.utility.Archiver;
+import com.example.demo.utility.JwtHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,15 +23,17 @@ import java.util.Map;
 @AllArgsConstructor
 public class FileController {
 
-    private final FileService fileService;
+    private final FileMetaDataService fileMetaDataService;
     private final JWTService jwtService;
     private final UserRepo userRepo;
+    private final Archiver archiver;
+    private final ThreadManager threadManager;
 
     @PostMapping({"/upload"})
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
         try {
-            FileMetadata metadata = this.fileService.uploadImage(file, getOwnerId(authToken));
-            AwsClient.uploadFile(file);
+            FileMetadata metadata = this.fileMetaDataService.uploadFileMetaData(file, getOwnerId(authToken));
+            AwsImplementationFileService.uploadFile(file);
             return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
         } catch (IOException var4) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -40,8 +44,8 @@ public class FileController {
 
     @GetMapping({"/{fileId}"})
     public String getFile(@PathVariable Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
-        FileMetadata metadata = this.fileService.getImageMetadata(fileId, getOwnerId(authToken));
-        return AwsClient.getFile(AwsClient.generateAwsKey(metadata));
+        FileMetadata metadata = this.fileMetaDataService.getFilesMetadata(fileId, getOwnerId(authToken));
+        return AwsImplementationFileService.getFile(AwsImplementationFileService.generateAwsKey(metadata));
     }
 
     /*
@@ -49,8 +53,8 @@ public class FileController {
      */
     @GetMapping("/downloadAllFilesAsArchive/{type}")
     public ResponseEntity<byte[]> downloadAllFilesAsArchive(@RequestHeader("Authentication") String authToken, @PathVariable String type) throws Exception {
-        if (fileService.isArchiveTypeAccepted(type)) {
-            byte[] zipBytes = fileService.downloadAllFilesAsArchive(getOwnerId(authToken));
+        if (archiver.isArchiveTypeAccepted(type)) {
+            byte[] zipBytes = threadManager.manageDownloadAllFilesAsArchive(getOwnerId(authToken));
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=arhiva.zip")
                     .contentType(new MediaType("application", "zip"))

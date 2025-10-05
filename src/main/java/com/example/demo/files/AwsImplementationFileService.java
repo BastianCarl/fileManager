@@ -1,4 +1,4 @@
-package com.example.demo.aws;
+package com.example.demo.files;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -9,20 +9,23 @@ import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.demo.model.FileMetadata;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
-
-public class AwsClient {
+@Service
+public class AwsImplementationFileService {
     private static final String BUCKET_NAME = "sebi-bucket264";
     private static final Regions REGION = Regions.EU_CENTRAL_1;
     private static final String ACCESS_KEY = "AWS_ACCESS_KEY_ID";
     private static final String SECRET_KEY = "AWS_SECRET_ACCESS_KEY";
     private static final int EXPIRATION = 30000;
     private static AmazonS3 s3client;
-    private static int count = 0;
     static {
         s3client = AmazonS3ClientBuilder.standard()
                 .withRegion(REGION)
@@ -42,13 +45,12 @@ public class AwsClient {
         meta.setContentLength(file.getSize());
         meta.setContentType(file.getContentType());
         InputStream in = file.getInputStream();
-        PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, AwsClient.generateAwsKey(file), in, meta);
+        PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, AwsImplementationFileService.generateAwsKey(file), in, meta);
         s3client.putObject(req);
-        count++;
     }
 
     public static String getFile(String awsKey) {
-        return  s3client.generatePresignedUrl(BUCKET_NAME, awsKey, new Date(System.currentTimeMillis() + EXPIRATION)).toString();
+        return s3client.generatePresignedUrl(BUCKET_NAME, awsKey, new Date(System.currentTimeMillis() + EXPIRATION)).toString();
     }
 
     public static String generateAwsKey(MultipartFile file) {
@@ -57,5 +59,25 @@ public class AwsClient {
 
     public static String generateAwsKey(FileMetadata file) {
         return file.getName().split("\\.")[0] + file.getSize();
+    }
+
+    public byte[] downloadFile(String awsUrl) throws IOException {
+        URL url = new URL(awsUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        // move to constant
+        // use Spring to make GET
+        con.setRequestMethod("GET");
+        try (InputStream in = con.getInputStream();
+             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            // move to constant
+            byte[] data = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = in.read(data)) != -1) {
+                buffer.write(data, 0, bytesRead);
+            }
+            return buffer.toByteArray();
+        } finally {
+            con.disconnect();
+        }
     }
 }
