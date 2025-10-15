@@ -41,3 +41,43 @@ linkedList simplu inlantuita
 imutable cum ai implementa de mana si cum fuctioneza o colectie care e imutable si la ce ajuta
 
 -----
+ 412 Precondition Failed
+    Google will not index a URL with the HTTP 412
+    status code indicates that access to the target resource was denied
+    conditional requests
+    Condition is defined using If-Unmodified-Since or If-Match headers
+    used for updating a cache
+
+ETag
+    an identifier for a specific version of a resource
+    lets caches be more efficient and save bandwidth
+    used for If-Match and If-None-Match
+
+428 Precondition Required
+    Typically, a 428 response means that a required precondition header such as If-Match is missing.
+
+
+ ----
+1.feature de limbaj (record si altele de la java 1 pana in prezent)
+2.concurenta, immutabilitate in colectii
+3.cand ai folosi o colectie concurenta vs cand o colectie imutabila(de acelasi tip)
+ cum sa implementez un calculator care stie sa adune in mai multe feluri(vreau sa folosesc sealed classes, enum, cu interfete si clase) 3 implementari
+ ce teste ar trebui facute?
+ *design patters(creational patterns)
+
+ ---
+ ce se intampla daca stochez intr-un treemap 1,2,3,4,5, 6 (nu conteaza structura din spate)
+ poti adauga code cu reflection intr-o clasa?
+ sycron vs async
+ paralel vs concurent
+ sycronized vs non-static method
+ cand pot sa aplic try-with-resources, closeable vs autocloseable interface
+ file handlers
+ Interfata A si Interfata B, iar Clasa C implementeaza atat A cat si B care au aceeasi metoda default. Ce face C?
+ Ce e mai rapid un for sau un Stream (stream creeaza un obiect de fiecare data) care e mai rapid. Un milion de elemente si operatii si cronometrat
+ Am un tests si vreau sa generez un stream infinit de obiecte care se opreste la o conditie.
+ lambda(anonymus method) vs annoymus classes
+ effectively final
+ records first level imutabilt
+ Pattern Matching in java exemple
+ ------

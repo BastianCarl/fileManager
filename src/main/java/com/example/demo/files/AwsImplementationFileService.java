@@ -17,10 +17,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
-
-
 @Service
-public class AwsImplementationFileService {
+public class AwsImplementationFileService implements FileService {
 
     @Value("${aws.bucket.name}")
     private String BUCKET_NAME;
@@ -55,14 +53,6 @@ public class AwsImplementationFileService {
 
     private String generatePresignedUrl(String awsKey) {
         return s3client.generatePresignedUrl(BUCKET_NAME, awsKey, new Date(System.currentTimeMillis() + EXPIRATION)).toString();
-    }
-
-    public String generateKey(MultipartFile file) {
-        return file.getOriginalFilename().split("\\.")[0] + file.getSize();
-    }
-
-    public String generateKey(FileMetadata file) {
-        return file.getName().split("\\.")[0] + file.getSize();
     }
 
     public byte[] downloadFile(FileMetadata fileMetadata) throws IOException {

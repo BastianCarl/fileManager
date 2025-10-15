@@ -1,5 +1,4 @@
 package com.example.demo.service;
-
 import com.example.demo.files.AwsImplementationFileService;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
@@ -14,7 +13,6 @@ import java.util.*;
 public class FileMetaDataService {
 
     private final FileMetadataRepository repository;
-    private final ThreadManager threadManager;
     private final AwsImplementationFileService awsImplementationFileService;
 
     public FileMetadata uploadFileMetaData(MultipartFile file, Long ownerId) throws IOException {

@@ -204,3 +204,55 @@ LinkedList este dublu-inlantuita
     Advantages
         thead-safe
         optimized at run-time
+
+-----
+key should be immutable, equals and hascode
+
+--------------
+Conditional request
+    where the result, and even the success of a request, can be controlled by comparing the affected resources with a validator
+    These headers define a precondition, and the result of the request will be different if the precondition is matched or not (If-Match, If-None-Match)
+    304
+    Etag is an identifier for a specific version of a resource
+    used for:
+        Prevent a (heavy) response payload if the client has a cached representation that's still the same as on the server
+        Prevent an update if the client has an older version than the server
+    etag header
+--------------
+Java features:
+    1. Reflection
+    5: Generics, Concurrent Collections
+    7: try-with-resources, diamond operator(determines the most suitable constructor)
+    8: lambda expressions, stream, default methods interface
+    10: var
+    12. Switch Expression
+    14. Records - immutable class
+    15. Sealed Classes(more fine-grained inheritance control), Hidden Classes
+    16. Pattern Matching
+    25. Flexible Constructor Bodies
+
+atomic = single, indivisible operations
+Thepossibility of incorrect results in the presence of unlucky timing is so importantin concurrent programming that it has a name: a race condition.
+Concurent collections
+    - thread-safe(correctness) collection classes known as Concurrent Collections.
+    - improved lock mechanism (segment locking mechanism)
+
+Synchronized
+    - less efficentet than concurent collections due to lock mechanism
+
+Non-concurent collections
+    - For every operation  only one thread can access the entire collection at a time -> performance problems
+    - if one thread is iterating over a collection and another thread tries to modify it concurrently, it results in a ConcurrentModificationException.
+
+colectie concurenta vs cand o colectie imutabila:
+    both are thread-safe
+    imutable is read-only
+
+Creational design patterns:
+    1. Factory
+        simple factory
+        factory design
+    2. Abstract
+    3. Builder
+    4. Singleton
+    5. Prototype

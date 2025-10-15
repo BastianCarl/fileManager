@@ -1,38 +1,37 @@
-package com.example.demo.service;
+package com.example.demo.files;
 
-import com.example.demo.files.AwsImplementationFileService;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import static com.example.demo.utility.Archiver.createZip;
 
 @Component
-public class ThreadManager {
+public class FileServiceOrchestrator {
 
     @Value("${limit.for.downloading}")
     private int LIMIT_FOR_DOWNLOADING;
-    @Autowired
-    private AwsImplementationFileService awsImplementationFileService;
-    @Autowired
-    private FileMetadataRepository repository;
+    private final FileService fileServiceImplementation;
+    private final FileMetadataRepository repository;
 
-    public void uploadFile(MultipartFile file) throws IOException {
-        awsImplementationFileService.uploadFile(file);
+    @Autowired
+    public FileServiceOrchestrator(AwsImplementationFileService awsImplementationFileService, FileMetadataRepository repository) {
+        this.fileServiceImplementation = awsImplementationFileService;
+        this.repository = repository;
     }
 
-    private Map<String, byte[]> ManageDownloadAllFiles(List<FileMetadata> files) {
+    public void uploadFile(MultipartFile file) throws IOException {
+        fileServiceImplementation.uploadFile(file);
+    }
+
+    private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
         final ThreadManagerContext threadManagerContext = new ThreadManagerContext();
         int totalDownloaded = 0;
         final var executor = Executors.newFixedThreadPool(5);
@@ -43,13 +42,19 @@ public class ThreadManager {
             }
            totalDownloaded += fileMetadata.getSize();
            futures.add(executor.submit(() -> {
-               byte[] file;
+               byte[] file = null;
                try {
-                   file = awsImplementationFileService.downloadFile(fileMetadata);
+                   file = fileServiceImplementation.downloadFile(fileMetadata);
                } catch (IOException e) {
-                   throw new RuntimeException(e);
+                   try {
+                       file = fileServiceImplementation.downloadFile(fileMetadata);
+                   } catch (IOException ex) {
+                       System.err.println("Could not download file");
+                   }
                }
-               threadManagerContext.addElement(fileMetadata.getName(), file);
+               if (file != null) {
+                   threadManagerContext.addElement(fileMetadata.getName(), file);
+               }
             }));
         }
         for (Future<?> f : futures) {
@@ -64,7 +69,7 @@ public class ThreadManager {
 
     public byte[] manageDownloadAllFilesAsArchive(Long ownerId) throws IOException {
         List<FileMetadata> files = repository.findByOwnerId(ownerId);
-        return createZip(ManageDownloadAllFiles(files));
+        return createZip(manageDownloadAllFiles(files));
     }
 
     public static class ThreadManagerContext {
@@ -74,6 +79,5 @@ public class ThreadManager {
         }
         synchronized public void addElement(String key, byte[] value) {
             filesMap.put(key, value);
-        }
-    }
-}
+
+    }}}
