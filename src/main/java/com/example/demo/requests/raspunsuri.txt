@@ -256,3 +256,412 @@ Creational design patterns:
     3. Builder
     4. Singleton
     5. Prototype
+
+   -----
+   Reflection nu poate fi folosit pentru a face metode/field-uri
+   When you execute something synchronously, you wait for it to finish before moving on to another task.
+   When you execute something asynchronously, you can move on to another task before it finishes.
+   Concurrency is about dealing with lot of things at once, Parallelism is about doing a lot of things at once"
+   Concurrency
+        - context switching.
+        - efficiently managing multiple task
+    Parallelism
+        - multiple central processing units
+
+
+ synchronized on the Class object (only one thread can use this method)
+ Instance methods are synchronized over the instance of the class owning the method, which means only one thread per instance of the class can execute this method.
+
+ When working with files, streams, or other resources, it is important to close them after use. If you forget to close a resource,
+  it may keep using memory or even prevent you from opening the file again until the program ends.
+
+  Closeable vs Autocloseable
+    - closeable is meant to be used with I/O, throws I/O Exception
+    - autocloseable is more generic, throws exception
+
+Files Handlers
+    Closes this file input stream and releases any system resources associated with the stream.
+    Locked Files
+    Each open file uses a file descriptor. Most operating systems limit the number of open file descriptors per process (Too many open files)
+    The garbage collector will definitely clear the memory if there is no longer a reference to the open file. However, it will happen only when the collector runs.
+    Until that point, that resource stays in memory.
+
+Interfete
+    Clasa care implemnetreza trebuie sa fac override la metoda default mostenit
+
+effectively final
+  variabila a fost initializata in momentul in care a fost creeata si ulterios si a ulterior nu s-a facut alta atribuire
+
+Pattern Matching
+    - instace of (type pattern)
+    - switch
+    - records(extraction)
+    - Data Oriented programming
+----------------
+ graal
+    - jdk (JVM, javac, jit, jre)
+    - native Image feature transforms java code (not byte) in binary code (/bin/bash)
+
+ AOT
+    - Ahead-of-time optimization
+    - AOT compilation refers to the process of transforming high-level programming code into machine code before the program runs.
+    - In traditional Java applications, the Just-in-Time (JIT) compiler compiles code during runtime, which can introduce some delays.
+    - With AOT, Spring 6 aims to overcome these delays by performing the compilation ahead of time, which improves startup performance and resource usage.
+
+    Java code
+        int a = 5;
+        int b = 3;
+        int c = a + b;
+        int d = a - b;
+
+    Byte code
+        0: iconst_5
+        1: istore_1
+        3: istore_2
+        4: iload_1
+        5: iload_2
+        6: iadd
+        7: istore_3
+        8: iload_1
+        9: iload_2
+        10: isub
+        11: istore
+
+    Machine code
+        mov     eax, 5        ; a = 5
+        mov     ebx, 3        ; b = 3
+        mov     ecx, eax
+        add     ecx, ebx      ; c = a + b
+        mov     edx, eax
+        sub     edx, ebx      ; d = a - b
+
+-------------
+
+CAS(Compare and swap)
+    - a lock free lock solution to update the state
+    - more performance
+    - more complex
+Lock
+    a synchronization mechanism that allows only one thread to access a critical section of code at a time.
+    Locks are a blocking mechanism
+        - less performance
+        - less complex
+
+ atomitic
+    - wrapper
+    - atomic writing and reading
+    - visibility(volatile is useless for atomic)
+
+Metode din Object class
+    toString
+    hashCode
+    equal
+    finalize
+    getClass
+    clone
+    wait(), notify() notifyAll()
+
+Functional interface
+    Conceptually, a functional interface has exactly one abstract method.
+    Since default methods have an implementation, they are not abstract.
+    If an interface declares an abstract method overriding one of the public methods of java.lang.Object,
+    hat also does not count toward the interface's abstract method count since any implementation of the interface will have an implementation from java.lang.Object or elsewhere.
+Override
+ Indicates that a method declaration is intended to override a method declaration in a supertype.
+
+ Properties in Spring
+    Command-line arguments (--server.port=8081)
+    Java system properties (-Dserver.port=8082)
+    Environment variables (SERVER_PORT=8083)
+    Application property files
+
+Creational Design Pattern
+    - Simple Factory
+    - Factory Method
+        - replace direct object construction calls (using the new operator) with calls to a special factory method
+    - Abstract Factory
+        - lets you produce families of related objects without specifying their concrete classes.
+    - Builder
+        - lets you construct complex objects step by step
+Volatile
+    the values should be directly read/write from main memory and not from cache
+    when you write to volatile variable then all variable visible to that write will be written directly to main memory(RAM)
+    when you read a volatile variable then all variables visible to that thread will be read from main memory
+    happens before guarantee
+        - all writes to non-volatile should be before write to volatile variable
+        - all reads to non-volatile should be after read to volatile variable
+Override
+    - attempting to assign weaker access privileges ('private'); was 'packageLocal'
+    - private < default < protected < public
+    - Covariant  return type
+        - a subtype of the overridden method's return type.
+    - Exceptions
+        - runtimeException no limitation
+        - checked exception must be a subtype of the parent exception
+
+wait(), notify() notifyAll()
+    - used for thread sycronization
+    - wait tells a thread to wait untill a notify/notifyAll is called on the same object
+    - notify tells a thread that is waiting to continue
+    - notify tells all threads that are waiting to continue
+Overloading with Collections
+    - uses the method with the most specific parameters in relation with argument (maybe instance of)
+
+Core vs thread vs process?
+https://kishoreconnect.com/understanding-processes-threads-and-cpu-cores
+
+
+        - Program(code) + Resources(Memory(stack, heap), CPU)
+    Thread
+        -it's also called lightweight process. Subprogram + resources(stack)
+    Core
+     - core = max number of parallel threads
+      - CPU
+Se poate un proces sa nu aiba thread-uri?
+    Threads exist within a process — every process has at least one.
+
+Factory Method
+    - Orientat pe serviciu si nu pe obiectul care face serviciul(Curier)
+Abstract Factory
+    - vreau un set de elemente compatibil (ecosistem)
+Builder
+    - vreau sa fie ca si a vecinului
+Prototype
+    - lego
+
+concurrentHashMap: computeIfAbsent, computeIfPresent, merge
+    - used to defeat slipped conditions
+--------------------------------------------
+Throwable
+    - Exception
+        - exceptional conditions that user programs should catch
+        - Runtime exceptions are unchecked(not needed to be handled)
+        - All other exceptions are checked
+    - Error
+        - which defines exceptions that are not expected tobe caught under normal circumstances
+        - represents catastrophic failures that cannot usually be handled by your program.
+The default handler displays a string describing the exception, prints a stack trace from the point at which the exception occurred, and terminates the program.
+wait vs Thread.sleep
+    wait notify/notifyAll can only be used in synchronized context because they use monitor
+    wait release the monitor sleep doesn't
+JVM memory
+    - registrii
+        - zone de stocare foarte rapide din interiorul unui core
+        - fiecare core are properiu set de registrii
+    - L1, L2, L3 cache
+        - L1, L2, apartin unui singur core
+        - L3 este partajat de toate core-urile
+    - RAM
+        - Heap
+            - objects
+        - Stack
+            - primitives, references
+    registrii > L1 > L2 > L3 > RAM
+ClassLoader
+    - Classes are loaded into the JVM on an 'as needed' basis
+    - bootstrap class loader that is built into the JVM is responsible for loading the classes of the Java runtime.
+    - In addition to the bootstrap class loader, the JVM has an extension class loader responsible for loading classes from standard extension APIs, and a system class loader that loads classes from a general class path as well as your application classes.
+    - The java.lang.ClassLoader is an abstract class
+Initialization
+    The first time a class is touched(whether that’s by creating an object, accessing a static field, or calling a static method) during this process, the JVM performs static initialization.
+    static initializer are executed as the appear and only once
+    the program reaches a new expression, Java allocates memory for the new object on the heap. At this stage, all instance fields of the object are filled with default values,
+    Order of execution
+        Super
+            -field assignments and instance initialization blocks
+            - constructor
+        Current
+            - field assignments and instance initialization blocks
+            - constructor
+Design patterns
+    - Decorator
+        - Uses an intermediate class
+        - used for adding additional capabilities
+        - keep the same interface
+        - Read about inputStream bufferedInputStream
+        - used for Open/Closed principle
+        - Used as alternative for Inheritance
+    - Adapter
+        - Uses an intermediate class
+        - used for making two incompatible things to work
+        - not used for adding additional capabilities
+    - Proxy
+        - Uses an intermediate class
+        - used for controlling input/output (Cache, Security, Logging)
+        - not used for adding additional capabilities
+    - Facade
+        - avoid tight coupling between clients and subsystems
+        - Facade provides convenient access to a particular part of the subsystem’s functionality
+        - faced contains a particular feature of a system
+        - consultant, front desk assistant
+        - simplify a complex system
+        - combine different functionalities to offer a new functionality
+    - Flyweight
+        - separate object's field into two categories: intrinsic(constant) extrinsic(changeable)
+        - put intrinsic fields into a separate class
+        - optimize memory by storing the same object just once
+---------------------------------
+Thread Status
+    - New
+        - created but not started yet
+    - Runnable
+        - either running or waiting for scheduler to give resources
+    - Blocked
+        - waiting for the monitor(waiting to enter a synchronized method or code block)
+    - Waiting
+        - waiting for another thread
+        - wait
+        - join
+    - Timed Waiting
+        - waiting for another thread to perform a particular action within a stipulated amount of time
+        - wait(long millis))
+        - join(long millis))
+        - sleep(long millis))
+    - Terminated
+        - after finishing the execution
+ClassLoader
+    1.Application ClassLoader
+        - loads from classes from Java Runtime Image
+    2.Platform Class Loader
+         - loads from classes from Java Runtime Image and any other module specified by the system property java.platform or --module-path.
+    3.Bootstrap ClassLoader
+        - loaded from directories specified by the environment variable CLASSPATH, the -classpath or -cp
+
+Behavioral Patterns
+     Observer
+        - define a subscription mechanism to notify multiple objects about any events that happen to the object they’re observing.
+        - Observable -> Observers ( 1 -> many relationship)
+        - when Observable stats is changed all Observers are notified
+     Command
+        - Invoker -> Command (1 -> many relationship)
+        - Command -> receiver (1 -> receiver)
+        - Command has 2 methods: execute and unexecute
+        - Receiver has 1 method: action that actually does the work
+        - acts as proxy between Invoker and Receiver
+     Strategy
+        - using composition instead of inheritance for code reuse
+        - families of algorithms
+        - help reuse code for non-hierarchy relationship
+     State
+        - behave differently depending on the current state
+        - events
+        - actions(events)
+        - action + state = transition(new sta te)
+        - replace conditions such as if (state == sth & action == sth2) with polymorphic;
+        - avoid to miss a particular case
+     ChainOfResponsibility
+        - Chain of handlers
+        - allows to execute handlers in a particular order
+        - deals with a different kinds of requests
+        - avoid using of if  if(condition) -> handlers
+        - each handler has a handlingMethod and a reference to next handler in the chain
+        - only a handler handles a requests (not sure)
+        - a handler can either process or pass the requests(not sure)
+        - avoid using of nested ifs
+     Template Method
+        - Let clients extend only particular steps of an algorithm, but not the whole algorithm or its structure
+        - used for code reuse
+        - similar with Strategy
+    Bridge
+        - allows to compose different thinks instead of creating for each possible combination
+        - split a large class or a set of closely related classes into two separate hierarchies
+        - Decoupling interface and implementation??????
+    Iterator
+        - collections
+        - Iterable
+        - Iterator
+            - hasNext()
+            - next()
+            - current()
+            - linkedList vs ArrayList
+    Composite
+        - used hierarchy structures
+        - Component
+            - Leaf
+            - Composite
+        - avoid individual interaction
+    Visitor
+        - Defines an utility class used by other classes
+        - defines an algorithm in many forms so that it suits each class that uses it
+        - add new operations to preexisting classes without changing them
+        - allows iterating through a collections of different objects and execute a specific algorithm for each element(overloading) alternative of instance of
+    Mediator
+        - avoid direct communication between two component
+        - similar with Command but is bidirectional
+        - Mediator is responsible for business logic
+        - all component just notify Mediator
+        - Mediator acts as God
+    Momento
+        - save and restore the previous state of an object
+        - can be used with command
+Transactional
+    - it wraps your method call in a transactional boundary
+    - Automatically starts, commits, or rolls back a transaction
+    - It creates a proxy (JDK or CGLIB) around your bean
+    - This proxy intercepts method calls and delegates to a TransactionManager
+Propagation
+    - control of transaction boundaries
+    - REQUIRED
+    - REQUIRES_NEW
+    - SUPPORTS
+    - NOT_SUPPORTED
+    - MANDATORY
+    - NEVER
+    - NESTED
+Isolation
+    - Isolation levels define how data accessed by one transaction is isolated from other transactions
+    - DEFAULT
+    - READ_UNCOMMITTED
+    - READ_COMMITTED
+    - REPEATABLE_READ
+    - SERIALIZABLE
+-----------------------
+Reference
+    Hard(Strong)
+    - The object can’t be garbage collected if it’s reachable through any strong reference
+    - List<String> list = new ArrayList<>;
+    Soft
+    - A soft reference tells the garbage collector that a referenced object can be collected at the collector’s discretion
+    - SoftReference<List<String>> listReference = new SoftReference<List<String>>(new ArrayList<String>());
+    - That’ll happen, especially when JVM is at risk of running out of memory
+    - memory-sensitive cache
+    - All soft references to softly-reachable objects are guaranteed to have been cleared before the virtual machine throws an OutOfMemoryError
+    Weak
+    - A weakly referenced object is cleared by the Garbage Collector when it’s weakly reachable.
+    - Weak reachability means that an object has neither strong nor soft references pointing to it.
+    - Objects referenced only by weak references aren’t prevented from being collected
+    - to create canonicalizing mappings
+    Phantom
+    -  enqueued after the collector determines that their referents may otherwise be reclaimed
+Rule: Strong reference ensures that the object wont be collected by GB. Soft and Weak offers a way to access the object, without ensuring the object won't be collected by CG
+Domain Driven Design
+    - Strategic Design
+        - overview of the app
+        - how app works
+        - flows
+        - edge case-uri
+        - define business requirements
+        - ubiquitous language
+        - Core domains
+        - Subdomain
+    - Tactical Design (Technical zone)
+        - Bounded Context (Subdomain)
+        - Entities(class)
+        - Value objects(Fields)
+    - Aggregate
+        - a class which has classes as dependencies
+        - a group of entities
+    - Service
+        - logic
+        - no state
+    - Domain Events
+AOP
+    - complementary for OOP
+    - crosscutting
+    - logging
+    - performance monitoring
+    - exceptions
+    - validations
+    - Concepts
+        - Aspect: feature used across classes
+

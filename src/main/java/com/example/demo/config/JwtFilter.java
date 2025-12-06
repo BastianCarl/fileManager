@@ -15,6 +15,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 @AllArgsConstructor
 @Component
@@ -31,6 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwtToken = null;
         String username = null;
 
+        var interator =  new LinkedList<>().iterator();
         if (authHeader != null && authHeader.startsWith(AUTHENTICATION_PREFIX)) {
             jwtToken = JwtHelper.getJwtTokenValue(authHeader);
             username = jwtService.extractUserName(jwtToken);

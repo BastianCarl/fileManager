@@ -81,3 +81,59 @@ ETag
  records first level imutabilt
  Pattern Matching in java exemple
  ------
+ sprint aot, graalvm
+ compare and swap  - atomitic integer
+ lock vs compare and swap
+
+
+Stream<Integer> infinite = Stream.iterate(0, n -> n + 1);
+Iterator<Integer> it = infinite.iterator();
+for (int i = 0; i < 10 && it.hasNext(); i++) {
+    System.out.println(it.next());
+}
+
+Metode din Object class
+@Override si @FunctionalInterface
+
+properties ordinea de interpretare pentru spring
+creational dessign pattern
+---------------------------
+volatile (how does it actually work with more variables)
+concurrentHashMap: merge, computeIfAbsent, Compute
+seria lui Jakob
+wait(), notify() notifyAll()
+ce inseamna override mai deep: daca metoda parinte face throws la execeptii ce pot sa pun la copil, daca metoda din parinte are modificator de acces ce regula am pentru copil, daca in parinte am return type un class ce regula am in copil
+overloading(exemple cu parametrii ca si colectii) vs overriding (compile time vs run-time)
+Sigleton: Enum, Lazy-initilization, Classic, 2 instante posibil pentru unul din cele 3
+Prototype
+Core vs thread vs process?
+----
+Exceptii
+    throwable, error, exceptions
+    https://media.geeksforgeeks.org/wp-content/uploads/20230613122108/Exception-Handling-768.png
+wait vs Thread.sleep
+
+Tipurile de memorie in java (jvm standard)
+Cum se incarca o clasa si cum se initializeaza campurile
+Singleon si Serializare si Deserealizare
+test care arata din ce cauza chiar daca primele 2 sunt automice ele in impreuna nu sunt atomice
+Strucural Design pattern (proxy, flywight, facade, adapte, decorater)
+-----------------
+Thread status in java
+Ordininea in Care se cheama class loaderel
+@Transactional under the hood, isolation levels, propogation
+https://refactoring.guru/refactoring/smells
+Behavioral Patterns
+    Observer
+    Comment
+    Strategy
+    State
+    ChainOfReponsability
+    Template
+------
+Weak references
+Tipuri de cache(Right True)
+Cum se face un aztec class in Spring
+Agregat, Doman Driven Design Concept
+In Jackson daca serializez o lista de obiecte daca dupa deserelizez daca e in aceasi ordine
+Aspect
