@@ -132,8 +132,23 @@ Behavioral Patterns
     Template
 ------
 Weak references
-Tipuri de cache(Right True)
-Cum se face un aztec class in Spring
+Tipuri de cache(Right True)?
+Cum se face un aztec class in Spring?
 Agregat, Doman Driven Design Concept
-In Jackson daca serializez o lista de obiecte daca dupa deserelizez daca e in aceasi ordine
+---------------------------------------------
 Aspect
+-----
+    - READ_UNCOMMITTED
+    - READ_COMMITTED
+    - REPEATABLE_READ
+    - SERIALIZABLE
+
+    ACID(ce previn, pana la lockuri)
+    Phantom vs finalizer
+    https://www.geeksforgeeks.org/system-design/domain-driven-design-ddd/
+    implementare de cache gata facuta din Spring pentru search
+    implementare de cache custom si nu din spring din java pentru search (cache distribuit)
+    stampede cache
+    cand as putea sa foloses cache si cand nu pe aplicatia noastra
+    clean arhitecture???
+------------

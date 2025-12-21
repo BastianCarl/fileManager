@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 
@@ -57,15 +56,11 @@ public class FileController {
         }
     }
 
-//    @GetMapping({"/{fileId}"})
-//    public String getFile(@PathVariable Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
-//        FileMetadata metadata = this.fileMetaDataService.getFilesMetadata(fileId, getOwnerId(authToken));
-//        return AwsImplementationFileService.getFile(AwsImplementationFileService.generateKey(metadata));
-//    }
+    @GetMapping("/search/{file}")
+    public String search(@PathVariable String file) {
+        return fileServiceOrchestrator.searchFile(file);
+    }
 
-    /*
-            filename=arhiva.zip
-     */
     @GetMapping("/downloadAllFilesAsArchive/{type}")
     public ResponseEntity<byte[]> downloadAllFilesAsArchive(@RequestHeader("Authentication") String authToken, @PathVariable String type) throws Exception {
         if (archiver.isArchiveTypeAccepted(type)) {

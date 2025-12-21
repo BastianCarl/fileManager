@@ -4,6 +4,8 @@ import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -26,9 +28,10 @@ public class FileServiceOrchestrator {
         this.fileServiceImplementation = awsImplementationFileService;
         this.repository = repository;
     }
-
-    public void uploadFile(MultipartFile file) throws IOException {
-        fileServiceImplementation.uploadFile(file);
+    @CachePut(value = "sebi", key = "#file.originalFilename")
+    public String uploadFile(MultipartFile file) throws IOException {
+         fileServiceImplementation.uploadFile(file);
+         return file.getOriginalFilename();
     }
 
     private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
@@ -70,6 +73,18 @@ public class FileServiceOrchestrator {
     public byte[] manageDownloadAllFilesAsArchive(Long ownerId) throws IOException {
         List<FileMetadata> files = repository.findByOwnerId(ownerId);
         return createZip(manageDownloadAllFiles(files));
+    }
+
+    @Cacheable(value = "sebi")
+    public String searchFile(String fileName) {
+        try {
+            Thread.sleep(5000);
+        }catch (InterruptedException e) {}
+        try {
+        return repository.findByName(fileName).getName();
+        } catch (Exception e) {
+            return "File not found";
+        }
     }
 
     public static class ThreadManagerContext {

@@ -617,6 +617,7 @@ Isolation
     - SERIALIZABLE
 -----------------------
 Reference
+    https://web.archive.org/web/20100819115659/http://weblogs.java.net/blog/2006/05/04/understanding-weak-references
     Hard(Strong)
     - The object can’t be garbage collected if it’s reachable through any strong reference
     - List<String> list = new ArrayList<>;
@@ -633,7 +634,7 @@ Reference
     - to create canonicalizing mappings
     Phantom
     -  enqueued after the collector determines that their referents may otherwise be reclaimed
-Rule: Strong reference ensures that the object wont be collected by GB. Soft and Weak offers a way to access the object, without ensuring the object won't be collected by CG
+Rule: Strong reference ensures that the object wont be collected by GC. Soft and Weak offers a way to access the object, without ensuring the object won't be collected by CG
 Domain Driven Design
     - Strategic Design
         - overview of the app
@@ -654,14 +655,195 @@ Domain Driven Design
     - Service
         - logic
         - no state
-    - Domain Events
 AOP
     - complementary for OOP
-    - crosscutting
-    - logging
-    - performance monitoring
-    - exceptions
-    - validations
-    - Concepts
-        - Aspect: feature used across classes
+    - used for crosscutting concern
+        - logging
+        - performance monitoring
+        - exceptions
+        - validations
+    - uses a proxy
+    - @Aspect && @Component
+    - Aspect = feature used for multiples classes
+    - JointPoint = point during the execution of a program
+    - Advice = what to execute
+        - Before advice
+        - After advice
+        - After returning advice
+        - After throwing advice
+        - Around advice
+    - Pointcut: A predicate that specifies for which method to be executed
+Cache
+    - Write-Through
+        - In write-through, data is simultaneously updated to cache and memory
+        - questions the advantage of having a cache in write operation
+        - worse performance
+        - more reliable
+    - Write-Back(Write-behind)
+        - The data is updated only in the cache and updated into the memory at a later time
+        - better performance
+        - less reliable
+    - Cache aside (Lazy loading, write-around)
+        - data is written directly to the main memory, bypassing the cache. The cache is only updated if the same data is read again.
+        - cache stays slim and contains only the data needed
+        - gets filled only after a cache miss
+        - logic is in the core application
+    - Read-Through
+        -  In a read-through cache, data is loaded into the cache on demand, typically when a read request occurs for data that is not already in the cache.
+    - Read Ahead
+        - Allows the controller to read sequentially ahead of the requested data and store the additional data in cache memory
+        - This process speeds up reads for sequential data, but there is little improvement when accessing random data.
 
+Isolation Levels
+    - Transaction isolation levels define how concurrent transactions interact to maintain data consistency and integrity(how much a transactions is affected by another transaction)
+    - Read Uncommitted
+        - transaction can see uncommitted changes made by other transactions
+    - Read Committed
+        - transaction can only see changes made by other committed transactions
+        - non-repeatable read
+    - Repeatable Read
+        - transaction will see the same data throughout its duration, even if other transactions commit changes to the data
+        - This level ensures that if you read a row in a transaction, it stays the same throughout that transaction
+        - phantom reads
+    - Serializable
+        - It makes transactions behave as if they’re running one after another, completely isolated.
+        - lock the whole table
+        - serially executing.
+    - *Snapshot
+        - similar with Serializable
+    - Problems
+        - Dirty Read: Reading uncommitted changes that might get rolled back. (Read Uncommited)
+        - Non-repeatable Read: Seeing different data for the same row within one transaction.(Read Uncommited, Read Uncommited)
+        - Phantom Read: Seeing new or missing rows in the same query within one transaction. (Read Uncommited, Read Uncommited, Repeatable Read)
+        - Lost updates: two concurrent transaction modifies the exact data. (Read Uncommited, Read Uncommited)
+ACID
+    Atomicity
+    - all the queries in a transactions must succeed
+    - if one query fails all the successful queries must be rolled back
+    Consistency
+    - Consistency in Data
+        - Referential Integrity
+    - Consistency in Read
+        - If a transaction commited a change a new transaction will immediately see the change
+    Isolation
+        - how much a transaction see what another transaction modifies
+    Durability
+        - changes made by commited transactions must be persisted in a durable non-volatile storage system(disk vs ram)
+        - durability technics
+            - WAL (write ahead log )
+            - Snapshot
+            - AOF
+ Domain-Driven Design (DDD)
+    Domain
+        - concept specific to a particular domain: account, transactions, customer, refund
+    Driven
+        - influenced by
+    Design
+        - blueprint of a software system
+    Strategic Design
+        - focuses on defining the overall architecture
+        - It addresses high-level concerns
+        - Bounded Context (exemplu seo)
+            - particular area from a larger problem
+            - contains specific terms(terminology) that may have a different meaning in other areas
+
+-------------
+ Domain-Driven Design (DDD)
+ - With DDD we're looking to create models of a problem domain. The code is the model.
+ - This then is the first of the DDD patterns: a model-driven design. It means being able to map - ideally quite literally - the concepts in the model to those of the design/code.
+ - A change in the model implies a change to the code; changing the code means the model has changed.
+ - DDD advocates that the domain experts and developers consciously communicate using the concepts within the model. -> ubiquitous language.
+ - Whenever we discuss a model it's always within some context
+ - Every domain model lives in precisely one Bonded Context
+ - relationships between these BCs. (Context mapping)
+    - published language
+    - open host service
+    - shared kernel
+    - customer/supplier
+    - conformist
+    - anti-corruption layer
+
+    Definitions
+    domain
+    A	 sphere	 of	 knowledge,	 influence,	 or	activity.	The	 subject	area	 to	which	 the	 user	applies	a
+    program	is	the	domain	of	the	software.
+
+    model
+    A	 system	 of	 abstractions	 that	 describes	 selected	 aspects	 of	 a	 domain	 and	 can	 be	 used	 to
+    solve	problems	related	to	that	domain.
+
+    ubiquitous	language
+    A	 language	 structured	 around	 the	 domain	 model	 and	 used	 by	 all	 team	 members	 within	 a
+    bounded	context	to	connect	all	the	activities	of	the	team	with	the	software.
+
+    context
+    The	setting	in	which	a	word	or	statement	appears	 that	determines	its	meaning.	Statements
+    about	a	model	can	only	be	understood	in	a	context.
+
+    bounded	context
+    A	description	of	a	boundary	 (typically	a	subsystem,	or	the	work	of	a	particular	team)	within
+    which	a	particular	model	is	defined	and	applicable
+- Model
+    - Model is a representation of the domain having a couple aspects(narrow) and being suitable for a particular problem.
+
+- Entities
+    - Concept of identifier equality refers to entities.
+    - may change
+    - have identity
+- Value Object
+    - Whereas the concept of structural equality.
+    - cannot change
+    - doesn't have identity
+- Services
+    - When a significant process or transformation in the domain is	not	a natural responsibility
+      of an entity or value object
+    - Services encapsulate domain logic that operates on multiple objects or orchestrates interactions between objects.
+    - Services are typically stateless and focus on performing specific tasks or enforcing domain rules.
+- Aggregates
+    - Cluster the entities and value objects into aggregates and act as single unit
+    - Each Aggregate has a Aggregate Root which is responsible for the synchronization of the other members of the aggregates
+- Repositories
+    - They provide a consistent interface for querying and storing domain objects.
+- Domain Events
+    - Something	happened that domain experts care about.
+- Bounded Context
+    - exists as consequences of the ubiquitous language
+    - a part of the domain where term(models) have a particular meaning
+
+stampede cache
+    - A situation when cache expired and multiple similar request are occurring causing a response time too long
+    - Solutions
+        - Locking
+            - first request causes cache revalidating and lock the cookie. Other request must wai until the ache refresh is done without creating a new cache revalidating request
+        - stale-while-revalidating
+            - first request causes cache revalidating and gets back a stale value. All other request receive a stale value until cache revalidation in done.
+Phantom Reference
+    - An object becomes phantom reachable after it has been finalized, but before the memory is reclaimed.
+    - When the garbage collector determines that an object is phantom reachable, it adds the phantom reference to the reference queue,
+    - allowing the application to perform post-mortem cleanup actions before the object’s memory is actually reclaimed
+Finalization
+    - Just before destroying any object, the garbage collector always calls the finalize() method to perform clean-up activities on that object.
+    - The primary purpose of finalize() is to release resources like file handles, network connections, or database connections that the object holds before it is destroyed.
+Phantom Reference vs Finalization
+    - It can be used instead of a finalize method, guaranteeing that the object is not resurrected during finalization.
+    This allows the object to be garbage collected in a single cycle, rather than needing to wait for a second GC cycle to ensure that it has not been resurrected.
+    - Detect exactly when an object has been removed from memory, ensuring that its memory is available, for example deferring allocation of a large amount of memory (e.g., a large image) until previous memory is freed.
+
+Clean Architecture
+    - one concern per component
+    - structured in layers of dependency
+    - Domain (core business logic)
+        - Entities
+        - Value Objects
+        - Domain Events
+        - Domain Services
+        - Interfaces
+        - Exceptions
+    - Application (Use Case or flows)
+        - Orchestrate the domain
+        - business logic
+    - Presentation Layer (API)
+        - defines entry points to the system
+    - Infrastructure (External Services)
+        - databases
+        - aws
