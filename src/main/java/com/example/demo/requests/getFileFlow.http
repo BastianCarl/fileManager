@@ -1,8 +1,8 @@
 @rootURL = http://localhost:8080
-@userName = sambata
-@password = sambata
+@userName = sebi
+@password = sebi
 @boundary = WebAppBoundary
-@fileId= 2
+@fileId= 1
 ###
 # @name login
 POST {{rootURL}}/login
@@ -36,5 +36,5 @@ Accept: application/json
 %}
 
 ###
-GET {{rootURL}}/files/{{fileId}}
+GET {{rootURL}}/files/get/{{fileId}}
 Authentication: Bearer {{token}}

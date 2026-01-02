@@ -693,7 +693,7 @@ Cache
     - Read Ahead
         - Allows the controller to read sequentially ahead of the requested data and store the additional data in cache memory
         - This process speeds up reads for sequential data, but there is little improvement when accessing random data.
-
+--------------------------
 Isolation Levels
     - Transaction isolation levels define how concurrent transactions interact to maintain data consistency and integrity(how much a transactions is affected by another transaction)
     - Read Uncommitted

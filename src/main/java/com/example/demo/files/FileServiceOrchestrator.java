@@ -2,18 +2,22 @@ package com.example.demo.files;
 
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
+import com.example.demo.utility.Archiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import static com.example.demo.utility.Archiver.createZip;
 
 @Component
 public class FileServiceOrchestrator {
@@ -21,17 +25,24 @@ public class FileServiceOrchestrator {
     @Value("${limit.for.downloading}")
     private int LIMIT_FOR_DOWNLOADING;
     private final FileService fileServiceImplementation;
-    private final FileMetadataRepository repository;
+    private final FileMetadataRepository fileMetadataRepository;
+    private final UserService userService;
+    private final Archiver archiver;
 
     @Autowired
-    public FileServiceOrchestrator(AwsImplementationFileService awsImplementationFileService, FileMetadataRepository repository) {
+    public FileServiceOrchestrator(AwsImplementationFileService awsImplementationFileService,
+                                   FileMetadataRepository fileMetadataRepository,
+                                   UserService userService,
+                                   Archiver archiver)
+    {
         this.fileServiceImplementation = awsImplementationFileService;
-        this.repository = repository;
+        this.fileMetadataRepository = fileMetadataRepository;
+        this.userService = userService;
+        this.archiver = archiver;
     }
-    @CachePut(value = "sebi", key = "#file.originalFilename")
-    public String uploadFile(MultipartFile file) throws IOException {
+
+    public void uploadFile(MultipartFile file) throws IOException {
          fileServiceImplementation.uploadFile(file);
-         return file.getOriginalFilename();
     }
 
     private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
@@ -70,25 +81,40 @@ public class FileServiceOrchestrator {
         return threadManagerContext.getFilesMap();
     }
 
-    public byte[] manageDownloadAllFilesAsArchive(Long ownerId) throws IOException {
-        List<FileMetadata> files = repository.findByOwnerId(ownerId);
-        return createZip(manageDownloadAllFiles(files));
+    @Cacheable(value ="downloadCache", key = "#fileId")
+    public byte[] manageDownloadFile(Long ownerId, Long fileId) throws IOException {
+        try {
+            Thread.sleep(5000);
+        }catch (InterruptedException e) {}
+        List<FileMetadata> files = userService.isAdmin(ownerId) ? fileMetadataRepository.findAll() : fileMetadataRepository.findByOwnerId(ownerId);
+        Optional<FileMetadata> fileMetadata = files.stream().filter(file -> file.getId().equals(fileId)).findFirst();
+        if (fileMetadata.isPresent()) {
+            byte[] file = null;
+            file = fileServiceImplementation.downloadFile(fileMetadata.get());
+            return file;
+        }
+        return new byte[0];
     }
 
-    @Cacheable(value = "sebi")
-    public String searchFile(String fileName) {
+    public byte[] manageDownloadAllFilesAsArchive(Long ownerId) throws IOException {
+        List<FileMetadata> files = userService.isAdmin(ownerId) ? fileMetadataRepository.findAll() : fileMetadataRepository.findByOwnerId(ownerId);
+        return archiver.createZip(manageDownloadAllFiles(files));
+    }
+
+    @Cacheable(value ="searchCache", key = "#name")
+    public String searchFile(String name) {
         try {
             Thread.sleep(5000);
         }catch (InterruptedException e) {}
         try {
-        return repository.findByName(fileName).getName();
+        return fileMetadataRepository.findByName(name).getName();
         } catch (Exception e) {
             return "File not found";
         }
     }
 
     public static class ThreadManagerContext {
-        private Map<String, byte[]> filesMap = new HashMap<>();
+        private Map<String, byte[]> filesMap = new ConcurrentHashMap<>();
         public Map<String, byte[]> getFilesMap() {
             return filesMap;
         }

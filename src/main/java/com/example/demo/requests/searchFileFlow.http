@@ -1,6 +1,6 @@
 @rootURL = http://localhost:8080
-@userName = sambata
-@password = sambata
+@userName = sebi
+@password = sebi
 @boundary = WebAppBoundary
 @file = steam.jpg
 ###

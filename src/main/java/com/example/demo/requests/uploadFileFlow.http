@@ -1,6 +1,6 @@
 @rootURL = http://localhost:8080
-@userName = sambata
-@password = sambata
+@userName = sebi
+@password = sebi
 @boundary = WebAppBoundary
 ###
 # @name login
@@ -43,5 +43,5 @@ Content-Type: multipart/form-data; boundary={{boundary}}
 Content-Disposition: form-data; name="file"; filename="steam.jpg"
 Content-Type: text/plain
 
-< ./notes.txt
+< ./steam.jpg
 --{{boundary}}--

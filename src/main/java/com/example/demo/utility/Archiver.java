@@ -1,6 +1,8 @@
 package com.example.demo.utility;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -15,10 +17,15 @@ public class Archiver {
     @Value("#{'${accepted.archive.types}'.split(',')}")
     private  Set<String> ACCEPTED_ARCHIVE_TYPES;
 
-    public static byte[] createZip(Map<String, byte[]> files) throws IOException {
+    @Cacheable(value = "zipCache", key = "#files.keySet().hashCode()")
+    public byte[] createZip(Map<String, byte[]> files) throws IOException {
+        try {
+            Thread.sleep(5000);
+        }catch (InterruptedException e){
+
+        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
-        // use streams
         for (var entry : files.entrySet()) {
             ZipEntry element = new ZipEntry(entry.getKey());
             zos.putNextEntry(element);

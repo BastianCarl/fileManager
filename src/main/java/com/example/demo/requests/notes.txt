@@ -152,3 +152,9 @@ Aspect
     cand as putea sa foloses cache si cand nu pe aplicatia noastra
     clean arhitecture???
 ------------
+adaug logging in aplicatie care scrie in console si in fisier cu custom format. async loggin
+stie redis de stampede?
+refactor manageDownloadAllFiles
+https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-1c4e781eb6a5
+ContentDisposition in loc de String.Format
+CompleteableFuture vs Future

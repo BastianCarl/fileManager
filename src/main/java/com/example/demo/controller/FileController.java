@@ -1,20 +1,16 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.FileMetadata;
-import com.example.demo.repository.UserRepo;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.JWTService;
 import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.utility.Archiver;
 import com.example.demo.utility.JwtHelper;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,12 +26,12 @@ public class FileController {
     private String archiveName;
     private final FileMetaDataService fileMetaDataService;
     private final JWTService jwtService;
-    private final UserRepo userRepo;
+    private final UserRepository userRepo;
     private final Archiver archiver;
     private final FileServiceOrchestrator fileServiceOrchestrator;
 
     @Autowired
-    public FileController(FileMetaDataService fileMetaDataService, JWTService jwtService, UserRepo userRepo, Archiver archiver, FileServiceOrchestrator fileServiceOrchestrator) {
+    public FileController(FileMetaDataService fileMetaDataService, JWTService jwtService, UserRepository userRepo, Archiver archiver, FileServiceOrchestrator fileServiceOrchestrator) {
         this.fileMetaDataService = fileMetaDataService;
         this.jwtService = jwtService;
         this.userRepo = userRepo;
@@ -56,9 +52,18 @@ public class FileController {
         }
     }
 
+    @GetMapping("/get/{fileId}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable(value = "fileId") Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
+        byte[] bytes = fileServiceOrchestrator.manageDownloadFile(getOwnerId(authToken), fileId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\"", "ceva"))
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(bytes);
+    }
+
     @GetMapping("/search/{file}")
-    public String search(@PathVariable String file) {
-        return fileServiceOrchestrator.searchFile(file);
+    public String search(@PathVariable(value = "file") String name) {
+        return fileServiceOrchestrator.searchFile(name);
     }
 
     @GetMapping("/downloadAllFilesAsArchive/{type}")

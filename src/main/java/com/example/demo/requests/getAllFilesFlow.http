@@ -1,6 +1,6 @@
 @rootURL = http://localhost:8090
-@userName = sambata
-@password = sambata
+@userName = cristi
+@password = cristi
 @boundary = WebAppBoundary
 ###
 # @name login

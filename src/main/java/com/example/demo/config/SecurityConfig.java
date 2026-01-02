@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,8 +27,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
+//        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/files/downloadAllFilesAsArchive/**").hasAnyRole("ADMIN"));
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(
-                "/filles/search","/register", "/login", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html")
+                "/register", "/login", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html"
+                )
                 .permitAll()
                 .anyRequest()
                 .authenticated());

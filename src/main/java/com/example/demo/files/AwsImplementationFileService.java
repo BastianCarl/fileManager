@@ -9,6 +9,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.demo.model.FileMetadata;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
@@ -41,7 +43,6 @@ public class AwsImplementationFileService implements FileService {
 //    public Bucket getBucket() {
 //        return s3client.listBuckets().stream().filter(element -> element.getName().equals(BUCKET_NAME)).findFirst().get();
 //    }
-
     public void uploadFile(MultipartFile file) throws IOException {
         ObjectMetadata meta = new ObjectMetadata();
         meta.setContentLength(file.getSize());
@@ -49,13 +50,16 @@ public class AwsImplementationFileService implements FileService {
         InputStream in = file.getInputStream();
         PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, generateKey(file), in, meta);
         s3client.putObject(req);
+//        return in.readAllBytes();
     }
 
     private String generatePresignedUrl(String awsKey) {
         return s3client.generatePresignedUrl(BUCKET_NAME, awsKey, new Date(System.currentTimeMillis() + EXPIRATION)).toString();
     }
 
+//    @Cacheable(value = "myCache", key = "#fileMetadata.name")
     public byte[] downloadFile(FileMetadata fileMetadata) throws IOException {
+        System.err.println("No download happened");
         String awsUrl = generatePresignedUrl(generateKey(fileMetadata));
         URL url = new URL(awsUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();

@@ -1,11 +1,13 @@
 @rootURL = http://localhost:8080
-@userName = sambata
-@password = sambata
+@userName = sebi
+@password = sebi
+@role= ROLE_ADMIN
 POST {{rootURL}}/register
 Content-Type: application/json
 Accept: application/json
 
 {
   "userName": "{{userName}}",
-  "password": "{{password}}"
+  "password": "{{password}}",
+  "role": "{{role}}"
 }

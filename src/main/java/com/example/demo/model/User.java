@@ -15,9 +15,11 @@ public class User{
     @Column(name = "user_name")
     private String userName;
     private String password;
+    private String role;
 
     public User(UserDTO user) {
         this.userName = user.getUserName();
         this.password = user.getPassword();
+        this.role = user.getRole();
     }
 }
