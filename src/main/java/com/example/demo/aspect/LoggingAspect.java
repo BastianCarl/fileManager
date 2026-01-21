@@ -6,9 +6,6 @@ import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-
 @Component
 @Aspect
 public class LoggingAspect {
@@ -18,14 +15,13 @@ public class LoggingAspect {
     /*
     return-type, class-name, method-name(args)
      */
-    @Before("execution(* com.example.demo.aspect.Person.*(..))")
+    @Before(
+            "execution(* com.example.demo.controller.FileController.downloadFile(..)) || " +
+            "execution(* com.example.demo.controller.FileController.uploadFile(..)) || " +
+            "execution(* com.example.demo.controller.FileController.search(..)) || " +
+            "execution(* com.example.demo.controller.FileController.getAllFiles(..))"
+    )
     public void logMethodCall(JoinPoint joinPoint) {
         LOGGER.info("Method call " + joinPoint.getSignature().getName());
     }
-
-    @Before("execution(* com.example.demo.aspect.Person.*(..))")
-    public void logMethodFinish(JoinPoint joinPoint) {
-        LOGGER.info("Method finish " + Arrays.toString(joinPoint.getArgs()));
-    }
 }
-

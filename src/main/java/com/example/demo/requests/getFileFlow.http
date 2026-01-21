@@ -1,8 +1,8 @@
-@rootURL = http://localhost:8080
+@rootURL = http://localhost:8080/api/v1
 @userName = sebi
 @password = sebi
 @boundary = WebAppBoundary
-@fileId= 1
+@fileId= 2
 ###
 # @name login
 POST {{rootURL}}/login
@@ -36,5 +36,5 @@ Accept: application/json
 %}
 
 ###
-GET {{rootURL}}/files/get/{{fileId}}
+GET {{rootURL}}/files/{{fileId}}
 Authentication: Bearer {{token}}

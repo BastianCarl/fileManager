@@ -1,11 +1,11 @@
-@rootURL = http://localhost:8080
+@rootURL = http://localhost:8080/api/v1
 @userName = sebi
 @password = sebi
 @boundary = WebAppBoundary
 @file = steam.jpg
 ###
 # @name login
-POST {{rootURL}}/login
+POST {{rootURL}}/logining
 Content-Type: application/json
 Accept: application/json
 
@@ -36,5 +36,5 @@ Accept: application/json
 %}
 
 ###
-GET {{rootURL}}/files/search/{{file}}
+GET {{rootURL}}/files?file=steam.jpg
 Authentication: Bearer {{token}}

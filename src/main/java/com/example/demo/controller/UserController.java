@@ -20,7 +20,7 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
 
-    @PostMapping("register")
+    @PostMapping("registration")
     public User register(@RequestBody UserDTO user) {
        return userService.saveUser(new User(user));
     }

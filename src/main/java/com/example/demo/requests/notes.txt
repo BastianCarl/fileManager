@@ -158,3 +158,10 @@ refactor manageDownloadAllFiles
 https://medium.com/@nadinCodeHat/rest-api-naming-conventions-and-best-practices-1c4e781eb6a5
 ContentDisposition in loc de String.Format
 CompleteableFuture vs Future
+-------
+visualVM
+CompleteableFuture
+procesari heavy pe CPU merita sa folosim CompleteableFuture?
+thread vs virtualThread
+JNI vs foreign function and memory
+background job care stie sa asculte intr-o cale configurabila(pe disk) si sa importe(faca upload) toate fisierele sub un user de sistem(quartz-cron)

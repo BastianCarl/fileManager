@@ -847,3 +847,80 @@ Clean Architecture
     - Infrastructure (External Services)
         - databases
         - aws
+--------------------------------------
+Sync Logging
+    -  Logging events are directly written to the destination (e.g., file, console) by the triggering thread, blocking it until the write operation completes.
+ASync Logging
+    -  Logging events are queued and written to the destination by a separate thread, minimizing the impact on application performance.
+Cache stampe Redis
+    - Redis nu gestionează nativ problema cache stamped
+CompleteableFuture vs Future
+    ExecutorService
+    - used for managing thread instead of manual manipulation of threads
+    - it manages a pool of threads to handle asynchronous tasks more efficiently, without the need to manually create or manage individual threads.
+    - less control of the threads(lifecycle events, priorities, and other characteristics )
+    Future
+        - The Future interface represents the result of an asynchronous computation.
+        - interface
+    CompletableFuture
+        - Implementation
+        - allows chaining
+
+    ExecutorService + submit + Callable = Future -> control
+    ExecutorService + submit + Runnable = Future -> control
+    ExecutorService + execute + Runnable = Nothing
+----------------------------------------------------------------
+CompleteableFuture
+    - CompleteableFuture is an asynchronous Reactive Functional Programming API
+    - Responsive
+        - non-blocking
+    - Resilient
+        - exception or error won't crash de code
+    - Elastic
+        - configurable number of threads according to the load(thread pools)
+    - Message Driven
+        - handler method are triggered when previous method is completed(not called with ())
+            - getUserAsync()
+                  .thenCompose(this::getOrderAsync)
+                  .thenAccept(this::sendEmail);
+    - 3 types of methods
+        - Factory
+            - initiate asynchronous computation
+        - Chaning methods
+            - chain async computation
+        - Exception Method
+            - handle exceptions
+
+procesari heavy pe CPU merita sa folosim CompleteableFuture?
+    - if the task can be dismantled in multiple smaller tasks and concurrency is possible then CompleteableFuture can be used to better orchestrate these tasks
+thread vs virtualThread
+    - Virtual threads were added in java 19
+    - Virtual threads are a lightweight version of threads(platform threads)
+    - Virtual threads enable server applications written in the simple thread-per-request style to scale with near-optimal hardware utilization.
+    - platform thread are expensive(consumes a lot of memory)
+    - virtual threads are used for services where every request requires a thread
+    - every virtual thread runs on a platform thread
+    - a virtual thread can detect when it's doing blocking operation and it can unmount itself from platform thread allowing another virtual thread to be mounted
+    (I won't need cpu because I'm waiting so please remove me from platform thread so that another virtual thread can use the virtual thread)
+    - jvm decides what virtual threads are running on witch platform thread
+    - it's more expensive to run a task in a virtual thread than in a platform thread.
+JNI vs foreign function and memory
+    - native code = code that is compiled for  a specific architecture or OS, and it can be executed directly by the CPU
+    - JNI(Java Native Interface) is used to access functionalities that are not available in JDK
+    - a bridge between byte code running on the JVM and the native code
+    - a native method is method whose implementation is written in a native language(C\C++)
+    - increases performance
+foreign memory
+    - used for working with memory outside the heap and for joint memory with c++/c
+    - memory segment
+    - arena
+        - used for creating and managing(allocate and deallocate) the  memory segments
+    - value layout
+        - int, long double
+    - memory layout
+        - used for objects
+foreign function
+    - allows code from other languages to be used in Java
+    - an alternative for JNI
+    - downcall
+    - upcall

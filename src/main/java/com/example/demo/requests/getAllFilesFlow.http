@@ -1,7 +1,8 @@
-@rootURL = http://localhost:8090
-@userName = cristi
-@password = cristi
+@rootURL = http://localhost:8080/api/v1
+@userName = sebi
+@password = sebi
 @boundary = WebAppBoundary
+@fileId= 1
 ###
 # @name login
 POST {{rootURL}}/login
@@ -34,5 +35,5 @@ Accept: application/json
     }
 %}
 ###
-GET {{rootURL}}/files/all
+GET {{rootURL}}/files/all/zip
 Authentication: Bearer {{token}}

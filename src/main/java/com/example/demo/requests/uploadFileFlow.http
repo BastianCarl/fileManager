@@ -1,4 +1,4 @@
-@rootURL = http://localhost:8080
+@rootURL = http://localhost:8080/api/v1
 @userName = sebi
 @password = sebi
 @boundary = WebAppBoundary
@@ -35,13 +35,13 @@ Accept: application/json
 %}
 
 ###
-POST {{rootURL}}/files/upload
+POST {{rootURL}}/files
 Authentication: Bearer {{token}}
 Content-Type: multipart/form-data; boundary={{boundary}}
 
 --{{boundary}}
-Content-Disposition: form-data; name="file"; filename="steam.jpg"
+Content-Disposition: form-data; name="file"; filename="problems.png"
 Content-Type: text/plain
 
-< ./steam.jpg
+< ./problems.png
 --{{boundary}}--

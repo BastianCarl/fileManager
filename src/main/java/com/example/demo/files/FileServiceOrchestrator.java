@@ -2,22 +2,17 @@ package com.example.demo.files;
 
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 @Component
 public class FileServiceOrchestrator {
@@ -28,6 +23,7 @@ public class FileServiceOrchestrator {
     private final FileMetadataRepository fileMetadataRepository;
     private final UserService userService;
     private final Archiver archiver;
+    private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
 
     @Autowired
     public FileServiceOrchestrator(AwsImplementationFileService awsImplementationFileService,
@@ -46,46 +42,70 @@ public class FileServiceOrchestrator {
     }
 
     private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
-        final ThreadManagerContext threadManagerContext = new ThreadManagerContext();
-        int totalDownloaded = 0;
-        final var executor = Executors.newFixedThreadPool(5);
+        if (files == null || files.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        ThreadManagerContext threadContext = new ThreadManagerContext();
+        ExecutorService executor = Executors.newFixedThreadPool(DOWNLOAD_THREAD_POOL_SIZE);
         List<Future<?>> futures = new ArrayList<>();
+
+        long accumulatedSize = 0;
+
         for (FileMetadata fileMetadata : files) {
-            if (totalDownloaded > LIMIT_FOR_DOWNLOADING) {
+            long fileSize = fileMetadata.getSize();
+
+            if (accumulatedSize + fileSize > LIMIT_FOR_DOWNLOADING) {
                 break;
             }
-           totalDownloaded += fileMetadata.getSize();
-           futures.add(executor.submit(() -> {
-               byte[] file = null;
-               try {
-                   file = fileServiceImplementation.downloadFile(fileMetadata);
-               } catch (IOException e) {
-                   try {
-                       file = fileServiceImplementation.downloadFile(fileMetadata);
-                   } catch (IOException ex) {
-                       System.err.println("Could not download file");
-                   }
-               }
-               if (file != null) {
-                   threadManagerContext.addElement(fileMetadata.getName(), file);
-               }
-            }));
+
+            accumulatedSize += fileSize;
+
+            Future<?> future = executor.submit(() -> {
+                byte[] fileContent = downloadFileWithRetry(fileMetadata);
+                if (fileContent != null) {
+                    threadContext.addElement(fileMetadata.getName(), fileContent);
+                }
+            });
+
+            futures.add(future);
         }
-        for (Future<?> f : futures) {
+
+        awaitCompletion(futures);
+        executor.shutdown();
+        return threadContext.getFilesMap();
+    }
+
+    private byte[] downloadFileWithRetry(FileMetadata fileMetadata) {
+        try {
+            return fileServiceImplementation.downloadFile(fileMetadata);
+        } catch (IOException e) {
             try {
-                f.get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                return fileServiceImplementation.downloadFile(fileMetadata);
+            } catch (IOException ex) {
+                System.err.println("Failed to download file after retry: " + fileMetadata.getName());
+                ex.printStackTrace();
+                return null;
             }
         }
-        return threadManagerContext.getFilesMap();
+    }
+
+    private void awaitCompletion(List<Future<?>> futures) {
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Download thread was interrupted");
+            } catch (ExecutionException e) {
+                System.err.println("Error during file download");
+                e.getCause().printStackTrace();
+            }
+        }
     }
 
     @Cacheable(value ="downloadCache", key = "#fileId")
     public byte[] manageDownloadFile(Long ownerId, Long fileId) throws IOException {
-        try {
-            Thread.sleep(5000);
-        }catch (InterruptedException e) {}
         List<FileMetadata> files = userService.isAdmin(ownerId) ? fileMetadataRepository.findAll() : fileMetadataRepository.findByOwnerId(ownerId);
         Optional<FileMetadata> fileMetadata = files.stream().filter(file -> file.getId().equals(fileId)).findFirst();
         if (fileMetadata.isPresent()) {
@@ -118,7 +138,9 @@ public class FileServiceOrchestrator {
         public Map<String, byte[]> getFilesMap() {
             return filesMap;
         }
+
         synchronized public void addElement(String key, byte[] value) {
             filesMap.put(key, value);
-
-    }}}
+        }
+    }
+}

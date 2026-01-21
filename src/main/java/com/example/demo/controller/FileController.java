@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.FileMetadata;
+import com.example.demo.model.UserDTO;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.JWTService;
@@ -39,7 +40,7 @@ public class FileController {
         this.fileServiceOrchestrator = fileServiceOrchestrator;
     }
 
-    @PostMapping({"/upload"})
+    @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
         try {
             FileMetadata metadata = this.fileMetaDataService.uploadFileMetaData(file, getOwnerId(authToken));
@@ -52,26 +53,38 @@ public class FileController {
         }
     }
 
-    @GetMapping("/get/{fileId}")
+    @GetMapping("/{fileId}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable(value = "fileId") Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
         byte[] bytes = fileServiceOrchestrator.manageDownloadFile(getOwnerId(authToken), fileId);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\"", "ceva"))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment()
+                        .filename("ceva")
+                        .build()
+                        .toString()
+                )
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(bytes);
     }
 
-    @GetMapping("/search/{file}")
-    public String search(@PathVariable(value = "file") String name) {
+    @GetMapping
+    public String search(@RequestParam(value = "file") String name) {
         return fileServiceOrchestrator.searchFile(name);
     }
 
-    @GetMapping("/downloadAllFilesAsArchive/{type}")
-    public ResponseEntity<byte[]> downloadAllFilesAsArchive(@RequestHeader("Authentication") String authToken, @PathVariable String type) throws Exception {
+    @GetMapping("/all/{type}")
+    public ResponseEntity<byte[]> getAllFiles(@RequestHeader("Authentication") String authToken, @PathVariable String type) throws Exception {
         if (archiver.isArchiveTypeAccepted(type)) {
             byte[] zipBytes = fileServiceOrchestrator.manageDownloadAllFilesAsArchive(getOwnerId(authToken));
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\"", archiveName))
+                    .header(
+                            HttpHeaders.CONTENT_DISPOSITION,
+                            ContentDisposition.attachment()
+                                    .filename(archiveName)
+                                    .build()
+                                    .toString()
+                    )
                     .contentType(new MediaType("application", "zip"))
                     .body(zipBytes);
         } else {
@@ -83,5 +96,9 @@ public class FileController {
         String jwtTokenValue = JwtHelper.getJwtTokenValue(authToken);
         String username = jwtService.extractUserName(jwtTokenValue);
         return userRepo.findByUserName(username).getId();
+    }
+
+    private Long getOwnerId(UserDTO userDTO) {
+        return userRepo.findByUserName(userDTO.getUserName()).getId();
     }
 }
