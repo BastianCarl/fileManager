@@ -2,7 +2,7 @@
 @userName = sebi
 @password = sebi
 @boundary = WebAppBoundary
-@fileId= 2
+@fileId= 1
 ###
 # @name login
 POST {{rootURL}}/login

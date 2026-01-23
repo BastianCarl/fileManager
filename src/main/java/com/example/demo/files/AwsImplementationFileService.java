@@ -9,15 +9,12 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.demo.model.FileMetadata;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Date;
 @Service
 public class AwsImplementationFileService implements FileService {
@@ -51,6 +48,18 @@ public class AwsImplementationFileService implements FileService {
         PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, generateKey(file), in, meta);
         s3client.putObject(req);
 //        return in.readAllBytes();
+    }
+
+    public void uploadFile(File file) throws IOException {
+        ObjectMetadata meta = new ObjectMetadata();
+        meta.setContentLength(file.length());
+        meta.setContentType(Files.probeContentType(file.toPath()));
+
+        InputStream in = new FileInputStream(file);
+        PutObjectRequest req =
+                new PutObjectRequest(BUCKET_NAME, file.getName(), in, meta);
+
+        s3client.putObject(req);
     }
 
     private String generatePresignedUrl(String awsKey) {

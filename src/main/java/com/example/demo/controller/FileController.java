@@ -1,13 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.FileMetadata;
-import com.example.demo.model.UserDTO;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.FileMetaDataService;
-import com.example.demo.service.JWTService;
 import com.example.demo.files.FileServiceOrchestrator;
+import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
-import com.example.demo.utility.JwtHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,26 +21,22 @@ public class FileController {
 
     @Value("${archive.name}")
     private String archiveName;
-    private final FileMetaDataService fileMetaDataService;
-    private final JWTService jwtService;
-    private final UserRepository userRepo;
     private final Archiver archiver;
     private final FileServiceOrchestrator fileServiceOrchestrator;
+    private final UserService userService;
 
     @Autowired
-    public FileController(FileMetaDataService fileMetaDataService, JWTService jwtService, UserRepository userRepo, Archiver archiver, FileServiceOrchestrator fileServiceOrchestrator) {
-        this.fileMetaDataService = fileMetaDataService;
-        this.jwtService = jwtService;
-        this.userRepo = userRepo;
+    public FileController(Archiver archiver, FileServiceOrchestrator fileServiceOrchestrator, UserService userService) {
         this.archiver = archiver;
         this.fileServiceOrchestrator = fileServiceOrchestrator;
+        this.userService = userService;
     }
 
     @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
         try {
-            FileMetadata metadata = this.fileMetaDataService.uploadFileMetaData(file, getOwnerId(authToken));
-            fileServiceOrchestrator.uploadFile(file);
+            Long ownerId = userService.getOwnerId(authToken);
+            FileMetadata metadata = fileServiceOrchestrator.uploadFile(file, ownerId);
             return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
         } catch (IOException var4) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -55,7 +47,7 @@ public class FileController {
 
     @GetMapping("/{fileId}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable(value = "fileId") Long fileId, @RequestHeader("Authentication") String authToken) throws IOException {
-        byte[] bytes = fileServiceOrchestrator.manageDownloadFile(getOwnerId(authToken), fileId);
+        byte[] bytes = fileServiceOrchestrator.manageDownloadFile(userService.getOwnerId(authToken), fileId);
         return ResponseEntity.ok()
                 .header(
                         HttpHeaders.CONTENT_DISPOSITION,
@@ -76,7 +68,7 @@ public class FileController {
     @GetMapping("/all/{type}")
     public ResponseEntity<byte[]> getAllFiles(@RequestHeader("Authentication") String authToken, @PathVariable String type) throws Exception {
         if (archiver.isArchiveTypeAccepted(type)) {
-            byte[] zipBytes = fileServiceOrchestrator.manageDownloadAllFilesAsArchive(getOwnerId(authToken));
+            byte[] zipBytes = fileServiceOrchestrator.manageDownloadAllFilesAsArchive(userService.getOwnerId(authToken));
             return ResponseEntity.ok()
                     .header(
                             HttpHeaders.CONTENT_DISPOSITION,
@@ -90,15 +82,5 @@ public class FileController {
         } else {
             throw new Exception("Unsupported Archive type");
         }
-    }
-
-    private Long getOwnerId(String authToken) {
-        String jwtTokenValue = JwtHelper.getJwtTokenValue(authToken);
-        String username = jwtService.extractUserName(jwtTokenValue);
-        return userRepo.findByUserName(username).getId();
-    }
-
-    private Long getOwnerId(UserDTO userDTO) {
-        return userRepo.findByUserName(userDTO.getUserName()).getId();
     }
 }

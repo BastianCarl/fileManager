@@ -2,6 +2,7 @@ package com.example.demo.files;
 
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
+import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
@@ -23,22 +24,31 @@ public class FileServiceOrchestrator {
     private final FileMetadataRepository fileMetadataRepository;
     private final UserService userService;
     private final Archiver archiver;
+    private final FileMetaDataService fileMetaDataService;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
 
     @Autowired
     public FileServiceOrchestrator(AwsImplementationFileService awsImplementationFileService,
                                    FileMetadataRepository fileMetadataRepository,
                                    UserService userService,
+                                   FileMetaDataService fileMetaDataService,
                                    Archiver archiver)
     {
         this.fileServiceImplementation = awsImplementationFileService;
         this.fileMetadataRepository = fileMetadataRepository;
         this.userService = userService;
         this.archiver = archiver;
+        this.fileMetaDataService = fileMetaDataService;
     }
 
-    public void uploadFile(MultipartFile file) throws IOException {
-         fileServiceImplementation.uploadFile(file);
+    public FileMetadata uploadFile(MultipartFile file, Long ownerId) throws IOException {
+        fileServiceImplementation.uploadFile(file);
+        return this.fileMetaDataService.uploadFileMetaData(file, ownerId);
+    }
+
+    public FileMetadata uploadFile(File file, Long ownerId) throws IOException {
+        fileServiceImplementation.uploadFile(file);
+        return this.fileMetaDataService.uploadFileMetaData(file, ownerId);
     }
 
     private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {

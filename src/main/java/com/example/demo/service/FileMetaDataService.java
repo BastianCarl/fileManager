@@ -5,7 +5,9 @@ import com.example.demo.repository.FileMetadataRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 @Service
@@ -18,6 +20,12 @@ public class FileMetaDataService {
     public FileMetadata uploadFileMetaData(MultipartFile file, Long ownerId) throws IOException {
         validateFile(file);
         FileMetadata metadata = new FileMetadata(file.getOriginalFilename(), file.getContentType(), ownerId, file.getSize(), awsImplementationFileService.generateKey(file));
+        return repository.save(metadata);
+    }
+
+    public FileMetadata uploadFileMetaData(File file, Long ownerId) throws IOException {
+//        validateFile(file);
+        FileMetadata metadata = new FileMetadata(file.getName(), Files.probeContentType(file.toPath()), ownerId, file.length(), awsImplementationFileService.generateKey(file));
         return repository.save(metadata);
     }
 
