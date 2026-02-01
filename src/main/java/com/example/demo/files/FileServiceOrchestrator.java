@@ -1,5 +1,8 @@
 package com.example.demo.files;
 
+import com.example.demo.FileUtils;
+import com.example.demo.exception.DuplicatedFile;
+import com.example.demo.exception.FailedRestoreProcedure;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -20,7 +24,9 @@ public class FileServiceOrchestrator {
 
     @Value("${limit.for.downloading}")
     private int LIMIT_FOR_DOWNLOADING;
-    private final FileService fileServiceImplementation;
+    @Value("${cron.job.backup.path}")
+    private String BACKUP_PATH;
+    private final FileService fileService;
     private final FileMetadataRepository fileMetadataRepository;
     private final UserService userService;
     private final Archiver archiver;
@@ -34,7 +40,7 @@ public class FileServiceOrchestrator {
                                    FileMetaDataService fileMetaDataService,
                                    Archiver archiver)
     {
-        this.fileServiceImplementation = awsImplementationFileService;
+        this.fileService = awsImplementationFileService;
         this.fileMetadataRepository = fileMetadataRepository;
         this.userService = userService;
         this.archiver = archiver;
@@ -42,13 +48,14 @@ public class FileServiceOrchestrator {
     }
 
     public FileMetadata uploadFile(MultipartFile file, Long ownerId) throws IOException {
-        fileServiceImplementation.uploadFile(file);
+        fileService.uploadFile(file);
         return this.fileMetaDataService.uploadFileMetaData(file, ownerId);
     }
 
-    public FileMetadata uploadFile(File file, Long ownerId) throws IOException {
-        fileServiceImplementation.uploadFile(file);
-        return this.fileMetaDataService.uploadFileMetaData(file, ownerId);
+    public FileMetadata uploadFile(File file, Long ownerId) throws IOException, DuplicatedFile {
+        FileMetadata fileMetadata = this.fileMetaDataService.uploadFileMetaData(file, ownerId);
+        fileService.uploadFile(file);
+        return fileMetadata;
     }
 
     private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
@@ -88,12 +95,11 @@ public class FileServiceOrchestrator {
 
     private byte[] downloadFileWithRetry(FileMetadata fileMetadata) {
         try {
-            return fileServiceImplementation.downloadFile(fileMetadata);
+            return fileService.downloadFile(fileMetadata);
         } catch (IOException e) {
             try {
-                return fileServiceImplementation.downloadFile(fileMetadata);
+                return fileService.downloadFile(fileMetadata);
             } catch (IOException ex) {
-                System.err.println("Failed to download file after retry: " + fileMetadata.getName());
                 ex.printStackTrace();
                 return null;
             }
@@ -106,9 +112,7 @@ public class FileServiceOrchestrator {
                 future.get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                System.err.println("Download thread was interrupted");
             } catch (ExecutionException e) {
-                System.err.println("Error during file download");
                 e.getCause().printStackTrace();
             }
         }
@@ -120,7 +124,7 @@ public class FileServiceOrchestrator {
         Optional<FileMetadata> fileMetadata = files.stream().filter(file -> file.getId().equals(fileId)).findFirst();
         if (fileMetadata.isPresent()) {
             byte[] file = null;
-            file = fileServiceImplementation.downloadFile(fileMetadata.get());
+            file = fileService.downloadFile(fileMetadata.get());
             return file;
         }
         return new byte[0];
@@ -135,11 +139,21 @@ public class FileServiceOrchestrator {
     public String searchFile(String name) {
         try {
             Thread.sleep(5000);
-        }catch (InterruptedException e) {}
+        } catch (InterruptedException e) {}
         try {
         return fileMetadataRepository.findByName(name).getName();
         } catch (Exception e) {
             return "File not found";
+        }
+    }
+
+    public void restoreFolder(List<MultipartFile> files, String date) {
+        Path backupDirectoryWithDate = Path.of(BACKUP_PATH, date);
+        FileUtils.deleteFilesOnly(backupDirectoryWithDate);
+        try {
+            FileUtils.createFiles(files,backupDirectoryWithDate);
+        } catch (IOException e) {
+            throw new FailedRestoreProcedure(String.format("Failed to restore files for %s", date));
         }
     }
 

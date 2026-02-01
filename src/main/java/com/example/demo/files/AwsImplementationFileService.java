@@ -50,6 +50,11 @@ public class AwsImplementationFileService implements FileService {
 //        return in.readAllBytes();
     }
 
+    @Override
+    public void deletedFile(MultipartFile file) {
+        s3client.deleteObject(BUCKET_NAME, generateKey(file));
+    }
+
     public void uploadFile(File file) throws IOException {
         ObjectMetadata meta = new ObjectMetadata();
         meta.setContentLength(file.length());

@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.HexFormat;
+import static org.apache.commons.codec.digest.DigestUtils.sha256;
 
 @Entity(name = "file_metadata")
 @Data
@@ -20,6 +22,7 @@ public class FileMetadata {
     private Long ownerId;
     private Long size;
     private String awsKey;
+    private String hashValue;
 
     public FileMetadata(String name, String mimeType, Long ownerId, Long size, String awsKey) {
         this.name = name;
@@ -27,5 +30,8 @@ public class FileMetadata {
         this.ownerId = ownerId;
         this.size = size;
         this.awsKey = awsKey;
+    }
+    public static String generateHashValue(byte[] bytes){
+       return HexFormat.of().formatHex(sha256(bytes));
     }
 }

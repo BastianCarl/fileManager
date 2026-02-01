@@ -1,6 +1,7 @@
-package com.example.demo.quartz;
+package com.example.demo.cronJob;
 
 import org.quartz.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class FileUploaderConfig {
     private static final String JOB_NAME = "FileUploaderJob";
     private static final String TRIGGER_NAME = "FileUploaderTrigger";
-    private static final String CRON_EXPRESSION = "* * * * * ?";
-
+    @Value("${cron.job.expression}")
+    private String CRON_EXPRESSION;
     @Bean
     public JobDetail getJob() {
         return JobBuilder.newJob(FileUploaderJob.class)
