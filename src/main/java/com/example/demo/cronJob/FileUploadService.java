@@ -47,9 +47,9 @@ public class FileUploadService {
     }
 
 
-    public void manageFilesProcessing(){
+    public void manageFilesProcessing() {
         File directory = new File(PENDING_PATH);
-        File[] files = directory.listFiles(File::isFile);
+        var files = directory.listFiles(File::isFile);
         if (files != null) {
             for (File file : files) {
                 this.manageFileProcessing(file);

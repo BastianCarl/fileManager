@@ -165,3 +165,24 @@ procesari heavy pe CPU merita sa folosim CompleteableFuture?
 thread vs virtualThread
 JNI vs foreign function and memory
 background job care stie sa asculte intr-o cale configurabila(pe disk) si sa importe(faca upload) toate fisierele sub un user de sistem(quartz-cron)
+---------------------------------------------
+redenumire cronJob
+mutat fisierele de back/failed/pending intr-un alt fisier pe disk care sa nu faca parte din aplicatie
+cron.job.date.format redenumire
+1. Quartz job să ruleze la un timp predefinit setat prin cron in application properties.
+2. ⁠Jobul trebuie să scaneze folderul și să uploadeze fișierele dar să logheze explicit ce a făcut. Spre ex: Uploaded successful for file xxx. / Error for file xxx. ( in caz de eroare fișierele rămân pe loc și reîncărcăm la următorul run )
+3. ⁠după upload cu succes fișierul este mutat intr un backup folder. Structura tine cont de data măcar: backup/20260124/xxx
+4. ⁠calea de fișier de backup este configurabilă în application settings. La fel și formatul datei din sub folderul în care se salvează fișierele
+5. ⁠deduplicare fisiere. Gen pentru fiecare fișier calculăm hashul și salvăm în baza nume + acest hash. La fiecare attempt de upload pt un fișier trebuie să verificăm dacă nu cumva este duplicat fișierul. Gen luăm din bază după nume acel hash, calculăm hashul fișierului de pe disk și dacă e egal atunci este același fișier. Dacă e duplicat îl mutăm în backup folder direct și menționăm în log asta.
+6. ⁠un fișier cu eroare trebuie să fie reîncărcat de X ori. Apoi fișierul trebuie mutat intr un folder special din backup spre ex backup-errors/…
+7. ⁠calea pt backup-errors sa fie configurabilă iar formatul pt errors este diferit: practic tu ai fișierul demo.csv. Dacă el nu poate fi uploadat de cele X ori de retry atunci îl mutăm în backup-errors/ cu numele 20260124-demo.csv . Practic vrem toate fișierele în același folder să fie ușor de investigat.
+read about retry in Spring and not hard code in FileUploadService
+Fara execeptii pentru bussiness control flow
+Proprietatiile sa crape la pornire nu pana ruleaza job-ul
+FileUploadService sa nu mai foloseasca chestii din Files ci din FilesUtils
+public class FileUtils cu sa fie BEAN nu clasa Helper
+cand am 2 sisteme sa de facut codul sa reincerc pe fiecare sistem separat
+job-ul muta intr-un pending folder cand ruleaza pentru a nu fie afectat de alti useri
+ce se intampla in timp ce procesez dau un restart
+fara exceptii checked mai bine metoda intoarce un resultat si in functie de el fac bussiness flow
+restaurez = le procesez pe toate din foolderul de back pentru o cea data si le copiez in fisierul de astazi dar trebuie sa apara in baza si amazon ca ultima versiune
