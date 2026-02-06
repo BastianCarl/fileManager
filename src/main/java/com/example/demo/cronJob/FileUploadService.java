@@ -1,8 +1,9 @@
 package com.example.demo.cronJob;
 
 import com.example.demo.FileUtils;
-import com.example.demo.exception.DuplicatedFile;
 import com.example.demo.files.FileServiceOrchestrator;
+import com.example.demo.model.FileMetadata;
+import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +23,7 @@ public class FileUploadService {
 
     private final FileServiceOrchestrator fileServiceOrchestrator;
     private final UserService userService;
+    private final FileMetaDataService fileMetaDataService;
     @Value("${cron.job.backup.path}")
     private String BACKUP_PATH;
     @Value("${cron.job.failed.path}")
@@ -32,61 +33,39 @@ public class FileUploadService {
     @Value("${cron.job.date.format}")
     private String DATE_FORMAT;
     private DateTimeFormatter formatter;
-
-
+    private File directory;
     private static Logger LOGGER = LoggerFactory.getLogger(FileUploadService.class);
     @Autowired
-    public FileUploadService(FileServiceOrchestrator fileServiceOrchestrator, UserService userService) {
+    public FileUploadService(FileServiceOrchestrator fileServiceOrchestrator, UserService userService, FileMetaDataService fileMetaDataService) {
         this.fileServiceOrchestrator = fileServiceOrchestrator;
         this.userService = userService;
+        this.fileMetaDataService = fileMetaDataService;
     }
 
     @PostConstruct
     public void init() {
         this.formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        directory = new File(PENDING_PATH);
     }
 
 
     public void manageFilesProcessing() {
-        File directory = new File(PENDING_PATH);
-        var files = directory.listFiles(File::isFile);
-        if (files != null) {
-            for (File file : files) {
-                this.manageFileProcessing(file);
+        for (File file : FileUtils.listFiles(directory)) {
+            if (fileMetaDataService.checkFileExists(new FileMetadata())) {
+                fileServiceOrchestrator.uploadFile(file, userService.getOwnerId(userDTO));
+                FileUtils.move(file, Path.of(BACKUP_PATH, LocalDate.now().format(formatter)));
+                LOGGER.info("File {} successfully uploaded", file.getName());
+            } else {
+                FileUtils.move(file, Path.of(BACKUP_PATH, LocalDate.now().format(formatter)));
+                LOGGER.info("Duplicated File  {} moving to backup without db update", file.getName());
             }
         }
     }
 
-    public void manageFileProcessing(File file) {
-        try {
-            processFile(file);
-            return;
-        } catch (DuplicatedFile e) {
-            LOGGER.info(e.getMessage());
-            return;
-        } catch (IOException e) {
-            LOGGER.warn("IO error, retrying file: {}", file.getName());
-        }
-
-        try {
-            processFile(file);
-        } catch (DuplicatedFile e) {
-            LOGGER.info(e.getMessage());
-        } catch (IOException e) {
-            moveToFailed(file);
-        }
-    }
-
-    private void processFile(File file) throws IOException, DuplicatedFile {
-        fileServiceOrchestrator.uploadFile(file, userService.getOwnerId(userDTO));
-        FileUtils.move(file, Path.of(BACKUP_PATH, LocalDate.now().format(formatter)));
-        LOGGER.info("File {} successfully uploaded", file.getName());
-    }
-
     private void moveToFailed(File file) {
-        LOGGER.error("Move to Failed file: {}", file.getName());
         try {
             FileUtils.move(file, Path.of(FAILED_PATH, LocalDate.now().format(formatter)));
+            LOGGER.error("Move to Failed file: {}", file.getName());
         }catch (Exception e){
             throw new RuntimeException(e);
         }

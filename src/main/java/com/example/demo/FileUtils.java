@@ -20,10 +20,14 @@ public class FileUtils {
         );
     }
 
-    public static void move(File file, Path destination) throws IOException {
-        createDirectory(destination);
-        FileUtils.copyFile(file, destination);
-        deleteFile(file);
+    public static void move(File file, Path destination) {
+        try {
+            createDirectory(destination);
+            FileUtils.copyFile(file, destination);
+            deleteFile(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void createDirectory(Path destination) throws IOException {
@@ -48,6 +52,10 @@ public class FileUtils {
                 f.delete();
             }
         }
+    }
+
+    public static File[] listFiles(File directory) {
+        return directory.listFiles() != null ? directory.listFiles() : new File[0];
     }
 
     public static void createFiles(List<MultipartFile> files, Path backupDirectoryWithDate) throws IOException {

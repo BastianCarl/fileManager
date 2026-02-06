@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.demo.model.FileMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,7 @@ public class AwsImplementationFileService implements FileService {
     private static final Regions REGION = Regions.EU_CENTRAL_1;
     private static final String ACCESS_KEY = "AWS_ACCESS_KEY_ID";
     private static final String SECRET_KEY = "AWS_SECRET_ACCESS_KEY";
+    private static Logger LOGGER = LoggerFactory.getLogger(AwsImplementationFileService.class);
     private static AmazonS3 s3client;
     static {
         s3client = AmazonS3ClientBuilder.standard()
@@ -40,22 +43,31 @@ public class AwsImplementationFileService implements FileService {
 //    public Bucket getBucket() {
 //        return s3client.listBuckets().stream().filter(element -> element.getName().equals(BUCKET_NAME)).findFirst().get();
 //    }
-    public void uploadFile(MultipartFile file) throws IOException {
+    public void uploadFile(MultipartFile file) {
         ObjectMetadata meta = new ObjectMetadata();
+        InputStream in = null;
         meta.setContentLength(file.getSize());
         meta.setContentType(file.getContentType());
-        InputStream in = file.getInputStream();
+        try {
+            in = file.getInputStream();
+        } catch (IOException exception) {
+            LOGGER.error(exception.getMessage());
+        }
         PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, generateKey(file), in, meta);
         s3client.putObject(req);
 //        return in.readAllBytes();
     }
     
-    public void uploadFile(File file) throws IOException {
+    public void uploadFile(File file) {
         ObjectMetadata meta = new ObjectMetadata();
+        InputStream in = null;
         meta.setContentLength(file.length());
-        meta.setContentType(Files.probeContentType(file.toPath()));
-
-        InputStream in = new FileInputStream(file);
+        try {
+            meta.setContentType(Files.probeContentType(file.toPath()));
+            in = new FileInputStream(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         PutObjectRequest req =
                 new PutObjectRequest(BUCKET_NAME, file.getName(), in, meta);
 

@@ -1,9 +1,8 @@
 package com.example.demo.files;
 
 import com.example.demo.FileUtils;
-import com.example.demo.exception.DuplicatedFile;
-import com.example.demo.exception.FailedRestoreProcedure;
 import com.example.demo.model.FileMetadata;
+import com.example.demo.model.FileMetadataFactory;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
@@ -30,6 +29,7 @@ public class FileServiceOrchestrator {
     private final FileMetadataRepository fileMetadataRepository;
     private final UserService userService;
     private final Archiver archiver;
+    private final FileMetadataFactory fileMetadataFactory;
     private final FileMetaDataService fileMetaDataService;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
 
@@ -38,24 +38,25 @@ public class FileServiceOrchestrator {
                                    FileMetadataRepository fileMetadataRepository,
                                    UserService userService,
                                    FileMetaDataService fileMetaDataService,
-                                   Archiver archiver)
+                                   Archiver archiver,
+                                   FileMetadataFactory fileMetadataFactory)
     {
         this.fileService = awsImplementationFileService;
         this.fileMetadataRepository = fileMetadataRepository;
         this.userService = userService;
         this.archiver = archiver;
         this.fileMetaDataService = fileMetaDataService;
+        this.fileMetadataFactory = fileMetadataFactory;
     }
 
     public FileMetadata uploadFile(MultipartFile file, Long ownerId) throws IOException {
         fileService.uploadFile(file);
-        return this.fileMetaDataService.uploadFileMetaData(file, ownerId);
+        return this.fileMetaDataService.uploadFileMetaData(fileMetadataFactory.create(file, ownerId));
     }
 
-    public FileMetadata uploadFile(File file, Long ownerId) throws IOException, DuplicatedFile {
-        FileMetadata fileMetadata = this.fileMetaDataService.uploadFileMetaData(file, ownerId);
+    public FileMetadata uploadFile(File file, Long ownerId){
         fileService.uploadFile(file);
-        return fileMetadata;
+        return this.fileMetaDataService.uploadFileMetaData(fileMetadataFactory.create(file, ownerId));
     }
 
     private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
@@ -153,7 +154,7 @@ public class FileServiceOrchestrator {
         try {
             FileUtils.createFiles(files,backupDirectoryWithDate);
         } catch (IOException e) {
-            throw new FailedRestoreProcedure(String.format("Failed to restore files for %s", date));
+            throw new RuntimeException(e);
         }
     }
 

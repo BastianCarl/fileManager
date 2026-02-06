@@ -24,14 +24,12 @@ public class FileMetadata {
     private String awsKey;
     private String hashValue;
 
-    public FileMetadata(String name, String mimeType, Long ownerId, Long size, String awsKey) {
+    public FileMetadata(String name, String mimeType, Long ownerId, Long size, String awsKey, String hashValue) {
         this.name = name;
         this.mimeType = mimeType;
         this.ownerId = ownerId;
         this.size = size;
         this.awsKey = awsKey;
-    }
-    public static String generateHashValue(byte[] bytes){
-       return HexFormat.of().formatHex(sha256(bytes));
+        this.hashValue = hashValue;
     }
 }

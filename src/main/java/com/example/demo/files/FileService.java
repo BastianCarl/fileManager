@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 public interface FileService {
-    void uploadFile(MultipartFile file) throws IOException;
-    void uploadFile(File file) throws IOException;
+    void uploadFile(MultipartFile file);
+    void uploadFile(File file);
      byte[] downloadFile(FileMetadata fileMetadata) throws IOException;
 
      default String generateKey(MultipartFile file) {
