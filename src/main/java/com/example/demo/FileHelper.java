@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -62,6 +63,41 @@ public class FileHelper {
             for (MultipartFile file : files) {
                 Path destination = Path.of(backupDirectoryWithDate.toString(), file.getOriginalFilename());
                 file.transferTo(destination);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void checkDirectory(Path path) {
+        File file = new File(String.valueOf(path));
+        if (!file.exists() || !file.isDirectory() || !file.canRead() || !file.canWrite()) {
+            throw new RuntimeException();
+        }
+    }
+
+    public void copyFolder(Path sourceFolder, Path targetFolder){
+        try {
+            createDirectory(targetFolder);
+            try (DirectoryStream<Path> files = Files.newDirectoryStream(sourceFolder)) {
+                for (Path file : files) {
+                    if (Files.isRegularFile(file)) {
+                        Path targetFile = targetFolder.resolve(file.getFileName());
+                        Files.copy(file, targetFile, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteAllFiles(Path folder) {
+        try (DirectoryStream<Path> files = Files.newDirectoryStream(folder)) {
+            for (Path file : files) {
+                if (Files.isRegularFile(file)) {
+                    Files.delete(file);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
