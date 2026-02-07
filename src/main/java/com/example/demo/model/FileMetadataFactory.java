@@ -3,6 +3,7 @@ package com.example.demo.model;
 
 import com.example.demo.files.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,7 @@ public class FileMetadataFactory {
         this.fileService = fileService;
     }
 
-    public FileMetadata create(Object source, Long ownerId){
+    public FileMetadata create(Object source, Long ownerId) {
         try {
             return switch (source) {
                 case File file -> new FileMetadata(

@@ -1,6 +1,6 @@
 package com.example.demo.files;
 
-import com.example.demo.FileUtils;
+import com.example.demo.FileHelper;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataFactory;
 import com.example.demo.repository.FileMetadataRepository;
@@ -23,7 +23,7 @@ public class FileServiceOrchestrator {
 
     @Value("${limit.for.downloading}")
     private int LIMIT_FOR_DOWNLOADING;
-    @Value("${cron.job.backup.path}")
+    @Value("${file.uploader.job.backup.path}")
     private String BACKUP_PATH;
     private final FileService fileService;
     private final FileMetadataRepository fileMetadataRepository;
@@ -31,6 +31,7 @@ public class FileServiceOrchestrator {
     private final Archiver archiver;
     private final FileMetadataFactory fileMetadataFactory;
     private final FileMetaDataService fileMetaDataService;
+    private final FileHelper fileHelper;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
 
     @Autowired
@@ -39,7 +40,9 @@ public class FileServiceOrchestrator {
                                    UserService userService,
                                    FileMetaDataService fileMetaDataService,
                                    Archiver archiver,
-                                   FileMetadataFactory fileMetadataFactory)
+                                   FileMetadataFactory fileMetadataFactory,
+                                   FileHelper fileHelper
+    )
     {
         this.fileService = awsImplementationFileService;
         this.fileMetadataRepository = fileMetadataRepository;
@@ -47,16 +50,27 @@ public class FileServiceOrchestrator {
         this.archiver = archiver;
         this.fileMetaDataService = fileMetaDataService;
         this.fileMetadataFactory = fileMetadataFactory;
+        this.fileHelper = fileHelper;
     }
 
-    public FileMetadata uploadFile(MultipartFile file, Long ownerId) throws IOException {
+    public FileMetadata uploadFile(MultipartFile file, Long ownerId) {
         fileService.uploadFile(file);
         return this.fileMetaDataService.uploadFileMetaData(fileMetadataFactory.create(file, ownerId));
     }
 
-    public FileMetadata uploadFile(File file, Long ownerId){
-        fileService.uploadFile(file);
-        return this.fileMetaDataService.uploadFileMetaData(fileMetadataFactory.create(file, ownerId));
+    public FileMetadata uploadFile(File file, FileMetadata fileMetadata) {
+        FileMetadata fileMetadataWithId = this.fileMetaDataService.uploadFileMetaData(fileMetadata);
+        try {
+            fileService.uploadFile(file);
+        } catch (Exception e) {
+            fileMetaDataService.deleteFileMetaData(fileMetadata);
+            throw new RuntimeException("Error while uploading file", e);
+        }
+        return fileMetadataWithId;
+    }
+
+    public void deleteMetadata(FileMetadata fileMetadata) {
+        this.fileMetaDataService.deleteFileMetaData(fileMetadata);
     }
 
     private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
@@ -150,12 +164,8 @@ public class FileServiceOrchestrator {
 
     public void restoreFolder(List<MultipartFile> files, String date) {
         Path backupDirectoryWithDate = Path.of(BACKUP_PATH, date);
-        FileUtils.deleteFilesOnly(backupDirectoryWithDate);
-        try {
-            FileUtils.createFiles(files,backupDirectoryWithDate);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        fileHelper.deleteFilesOnly(backupDirectoryWithDate);
+        fileHelper.createFiles(files,backupDirectoryWithDate);
     }
 
     public static class ThreadManagerContext {

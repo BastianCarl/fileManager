@@ -924,3 +924,10 @@ foreign function
     - an alternative for JNI
     - downcall
     - upcall
+-------------
+ce fac daca in timpul job-ului pentru unul dintre fisiere se intampla ceva? Continui cu restul sau se opreste totul?
+Medii
+    db
+    aws
+    local
+ce se intampla daca se scrie doar pe db si aws dar nu si pe local?

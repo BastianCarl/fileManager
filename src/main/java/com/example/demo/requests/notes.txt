@@ -168,7 +168,7 @@ background job care stie sa asculte intr-o cale configurabila(pe disk) si sa imp
 ---------------------------------------------
 redenumire cronJob
 mutat fisierele de back/failed/pending intr-un alt fisier pe disk care sa nu faca parte din aplicatie
-cron.job.date.format redenumire
+file.uploader.job.date.format redenumire
 1. Quartz job să ruleze la un timp predefinit setat prin cron in application properties.
 2. ⁠Jobul trebuie să scaneze folderul și să uploadeze fișierele dar să logheze explicit ce a făcut. Spre ex: Uploaded successful for file xxx. / Error for file xxx. ( in caz de eroare fișierele rămân pe loc și reîncărcăm la următorul run )
 3. ⁠după upload cu succes fișierul este mutat intr un backup folder. Structura tine cont de data măcar: backup/20260124/xxx

@@ -21,7 +21,11 @@ public class FileMetaDataService {
     }
 
     public boolean checkFileExists(FileMetadata file) {
-        return repository.findByHashValue(file.getHashValue()) == null;
+        return repository.findByHashValue(file.getHashValue()) != null;
+    }
+
+    public void deleteFileMetaData(FileMetadata file) {
+        repository.deleteById(file.getId());
     }
 
     public FileMetadata getFilesMetadata(Long fileId, Long ownerId) {

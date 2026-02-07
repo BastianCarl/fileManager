@@ -35,15 +35,8 @@ public class FileController {
 
     @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
-        try {
-            Long ownerId = userService.getOwnerId(authToken);
-            FileMetadata metadata = fileServiceOrchestrator.uploadFile(file, ownerId);
-            return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
-        } catch (IOException var4) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (IllegalArgumentException var5) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        FileMetadata metadata = fileServiceOrchestrator.uploadFile(file,  userService.getOwnerId(authToken));
+        return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
     }
 
     @GetMapping("/{fileId}")

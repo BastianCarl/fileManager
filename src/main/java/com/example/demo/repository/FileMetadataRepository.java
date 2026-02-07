@@ -8,4 +8,5 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
     List<FileMetadata> findByOwnerId(Long ownerId);
     FileMetadata findByName(String name);
     FileMetadata findByHashValue(String hashValue);
+    void deleteById(Long id);
 }
