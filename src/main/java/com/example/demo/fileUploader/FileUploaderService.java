@@ -65,11 +65,11 @@ public class FileUploaderService {
         if (!fileMetaDataService.checkFileExists(fileMetadata)) {
             fileServiceOrchestrator.uploadFile(file, fileMetadata);
         }
-        fileHelper.move(file, Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
+        fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
     }
 
     @Recover
     public void recover(Exception e, File file) throws IOException {
-        fileHelper.move(file, Path.of(failedPath.toString(), LocalDate.now().format(formatter)));
+        fileHelper.move(file.toPath(), Path.of(failedPath.toString(), LocalDate.now().format(formatter)));
     }
 }

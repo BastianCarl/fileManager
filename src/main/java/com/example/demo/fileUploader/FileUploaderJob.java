@@ -35,7 +35,7 @@ public class FileUploaderJob implements Job {
     @Override
     public void execute(JobExecutionContext arg0) {
         fileHelper.copyFolder(Path.of(PENDING_PATH), Path.of(WORKING_PATH));
-        for (File file : fileHelper.listFiles(directory)) {
+        for (File file : fileHelper.listFiles(Path.of(WORKING_PATH))) {
             fileUploaderService.process(file);
         }
         fileHelper.deleteAllFiles(Path.of(PENDING_PATH));

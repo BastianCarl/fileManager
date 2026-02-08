@@ -13811,3 +13811,582 @@ at com.example.demo.DemoApplication.main(DemoApplication.java:12)
 2026-02-08 11:17:47.191 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
 2026-02-08 11:17:47.196 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-02-08 11:17:47.201 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.pool.HikariPool - HikariCP pool HikariPool-0 is shutting down.
+2026-02-08 11:25:29.277 [main] INFO  com.example.demo.DemoApplication - Starting DemoApplication using Java 21.0.2 with PID 18556 (E:\db\demo\target\classes started by Seby in E:\db\demo)
+2026-02-08 11:25:29.279 [main] INFO  com.example.demo.DemoApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-08 11:25:29.778 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-02-08 11:25:29.779 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-08 11:25:29.857 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 72 ms. Found 2 JPA repository interfaces.
+2026-02-08 11:25:29.867 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-02-08 11:25:29.867 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-02-08 11:25:29.875 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.demo.repository.FileMetadataRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-02-08 11:25:29.876 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.demo.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-02-08 11:25:29.876 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-02-08 11:25:30.259 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8089 (http)
+2026-02-08 11:25:30.266 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8089"]
+2026-02-08 11:25:30.267 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-08 11:25:30.268 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-02-08 11:25:30.303 [main] INFO  o.a.c.c.C.[.[localhost].[/api/v1] - Initializing Spring embedded WebApplicationContext
+2026-02-08 11:25:30.303 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 989 ms
+2026-02-08 11:25:30.376 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-08 11:25:30.401 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-02-08 11:25:30.417 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-02-08 11:25:30.585 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-08 11:25:30.600 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariCP pool HikariPool-0 is starting.
+2026-02-08 11:25:30.714 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-08 11:25:30.723 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-0)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-08 11:25:31.246 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-08 11:25:31.266 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-08 11:25:31.479 [main] WARN  com.amazonaws.util.VersionInfoUtils - The AWS SDK for Java 1.x entered maintenance mode starting July 31, 2024 and will reach end of support on December 31, 2025. For more information, see https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-1-x-is-in-maintenance-mode-effective-july-31-2024/
+You can print where on the file system the AWS SDK for Java 1.x core runtime is located by setting the AWS_JAVA_V1_PRINT_LOCATION environment variable or aws.java.v1.printLocation system property to 'true'.
+This message can be disabled by setting the AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT environment variable or aws.java.v1.disableDeprecationAnnouncement system property to 'true'.
+The AWS SDK for Java 1.x is being used here:
+at java.base/java.lang.Thread.getStackTrace(Thread.java:2450)
+at com.amazonaws.util.VersionInfoUtils.printDeprecationAnnouncement(VersionInfoUtils.java:81)
+at com.amazonaws.util.VersionInfoUtils.<clinit>(VersionInfoUtils.java:59)
+at com.amazonaws.internal.EC2ResourceFetcher.<clinit>(EC2ResourceFetcher.java:44)
+at com.amazonaws.auth.InstanceMetadataServiceCredentialsFetcher.<init>(InstanceMetadataServiceCredentialsFetcher.java:38)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:111)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:91)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:75)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<clinit>(InstanceProfileCredentialsProvider.java:58)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.initializeProvider(EC2ContainerCredentialsProviderWrapper.java:66)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.<init>(EC2ContainerCredentialsProviderWrapper.java:55)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<init>(DefaultAWSCredentialsProviderChain.java:60)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<clinit>(DefaultAWSCredentialsProviderChain.java:54)
+at com.amazonaws.services.s3.AmazonS3ClientBuilder.standard(AmazonS3ClientBuilder.java:46)
+at com.example.demo.files.AwsImplementationFileService.<clinit>(AwsImplementationFileService.java:34)
+at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160)
+at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:300)
+at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newConstructorAccessor(MethodHandleAccessorFactory.java:103)
+at java.base/jdk.internal.reflect.ReflectionFactory.newConstructorAccessor(ReflectionFactory.java:200)
+at java.base/java.lang.reflect.Constructor.acquireConstructorAccessor(Constructor.java:549)
+at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:197)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:123)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1351)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1242)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+at com.example.demo.DemoApplication.main(DemoApplication.java:12)
+2026-02-08 11:25:32.025 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-02-08 11:25:32.026 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-02-08 11:25:32.246 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-08 11:25:32.462 [main] INFO  o.s.v.b.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-02-08 11:25:32.679 [main] INFO  org.quartz.impl.StdSchedulerFactory - Using default implementation for ThreadExecutor
+2026-02-08 11:25:32.685 [main] INFO  o.quartz.core.SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2026-02-08 11:25:32.685 [main] INFO  org.quartz.core.QuartzScheduler - Quartz Scheduler v.2.3.0 created.
+2026-02-08 11:25:32.687 [main] INFO  org.quartz.simpl.RAMJobStore - RAMJobStore initialized.
+2026-02-08 11:25:32.688 [main] INFO  org.quartz.core.QuartzScheduler - Scheduler meta-data: Quartz Scheduler (v2.3.0) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 1 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2026-02-08 11:25:32.688 [main] INFO  org.quartz.impl.StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2026-02-08 11:25:32.688 [main] INFO  org.quartz.impl.StdSchedulerFactory - Quartz scheduler version: 2.3.0
+2026-02-08 11:25:32.688 [main] INFO  org.quartz.core.QuartzScheduler - JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@4b7272d6
+2026-02-08 11:25:32.715 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8089"]
+2026-02-08 11:25:32.724 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8089 (http) with context path '/api/v1'
+2026-02-08 11:25:32.726 [main] INFO  o.s.s.quartz.SchedulerFactoryBean - Starting Quartz Scheduler now
+2026-02-08 11:25:32.726 [main] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2026-02-08 11:25:32.732 [main] INFO  com.example.demo.DemoApplication - Started DemoApplication in 3.658 seconds (process running for 4.109)
+2026-02-08 11:26:16.024 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:26:16.733 [quartzScheduler_Worker-1] WARN  com.amazonaws.util.Base64 - JAXB is unavailable. Will fallback to SDK implementation which may be less performant.If you are using Java 9+, you will need to include javax.xml.bind:jaxb-api as a dependency.
+2026-02-08 11:26:16.735 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:26:16.900 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:26:17.049 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:26:17.147 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:26:17.248 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:26:17.352 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:26:17.451 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\login.http
+2026-02-08 11:26:52.002 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:26:52.236 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:26:52.335 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:26:52.503 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:26:52.602 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:30:01.422 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:30:01.423 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-08 11:30:01.427 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-02-08 11:30:01.436 [SpringApplicationShutdownHook] INFO  o.s.s.quartz.SchedulerFactoryBean - Shutting down Quartz Scheduler
+2026-02-08 11:30:01.436 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2026-02-08 11:30:01.436 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:30:01.436 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2026-02-08 11:30:01.443 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-02-08 11:30:01.449 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.pool.HikariPool - HikariCP pool HikariPool-0 is shutting down.
+2026-02-08 11:30:05.169 [main] INFO  com.example.demo.DemoApplication - Starting DemoApplication using Java 21.0.2 with PID 8052 (E:\db\demo\target\classes started by Seby in E:\db\demo)
+2026-02-08 11:30:05.173 [main] INFO  com.example.demo.DemoApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-08 11:30:05.722 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-02-08 11:30:05.723 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-08 11:30:05.822 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 92 ms. Found 2 JPA repository interfaces.
+2026-02-08 11:30:05.834 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-02-08 11:30:05.835 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-02-08 11:30:05.848 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.demo.repository.FileMetadataRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-02-08 11:30:05.850 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.demo.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-02-08 11:30:05.850 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2026-02-08 11:30:06.269 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8089 (http)
+2026-02-08 11:30:06.278 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8089"]
+2026-02-08 11:30:06.279 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-08 11:30:06.279 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-02-08 11:30:06.327 [main] INFO  o.a.c.c.C.[.[localhost].[/api/v1] - Initializing Spring embedded WebApplicationContext
+2026-02-08 11:30:06.327 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1120 ms
+2026-02-08 11:30:06.415 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-08 11:30:06.445 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-02-08 11:30:06.464 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-02-08 11:30:06.633 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-08 11:30:06.652 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariCP pool HikariPool-0 is starting.
+2026-02-08 11:30:06.791 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-08 11:30:06.808 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-0)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-08 11:30:07.358 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-08 11:30:07.382 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-08 11:30:07.713 [main] WARN  com.amazonaws.util.VersionInfoUtils - The AWS SDK for Java 1.x entered maintenance mode starting July 31, 2024 and will reach end of support on December 31, 2025. For more information, see https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-1-x-is-in-maintenance-mode-effective-july-31-2024/
+You can print where on the file system the AWS SDK for Java 1.x core runtime is located by setting the AWS_JAVA_V1_PRINT_LOCATION environment variable or aws.java.v1.printLocation system property to 'true'.
+This message can be disabled by setting the AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT environment variable or aws.java.v1.disableDeprecationAnnouncement system property to 'true'.
+The AWS SDK for Java 1.x is being used here:
+at java.base/java.lang.Thread.getStackTrace(Thread.java:2450)
+at com.amazonaws.util.VersionInfoUtils.printDeprecationAnnouncement(VersionInfoUtils.java:81)
+at com.amazonaws.util.VersionInfoUtils.<clinit>(VersionInfoUtils.java:59)
+at com.amazonaws.internal.EC2ResourceFetcher.<clinit>(EC2ResourceFetcher.java:44)
+at com.amazonaws.auth.InstanceMetadataServiceCredentialsFetcher.<init>(InstanceMetadataServiceCredentialsFetcher.java:38)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:111)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:91)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:75)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<clinit>(InstanceProfileCredentialsProvider.java:58)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.initializeProvider(EC2ContainerCredentialsProviderWrapper.java:66)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.<init>(EC2ContainerCredentialsProviderWrapper.java:55)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<init>(DefaultAWSCredentialsProviderChain.java:60)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<clinit>(DefaultAWSCredentialsProviderChain.java:54)
+at com.amazonaws.services.s3.AmazonS3ClientBuilder.standard(AmazonS3ClientBuilder.java:46)
+at com.example.demo.files.AwsImplementationFileService.<clinit>(AwsImplementationFileService.java:34)
+at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160)
+at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:300)
+at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newConstructorAccessor(MethodHandleAccessorFactory.java:103)
+at java.base/jdk.internal.reflect.ReflectionFactory.newConstructorAccessor(ReflectionFactory.java:200)
+at java.base/java.lang.reflect.Constructor.acquireConstructorAccessor(Constructor.java:549)
+at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:197)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:123)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1351)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1242)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+at com.example.demo.DemoApplication.main(DemoApplication.java:12)
+2026-02-08 11:30:08.427 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-02-08 11:30:08.428 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-02-08 11:30:08.702 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-08 11:30:08.979 [main] INFO  o.s.v.b.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-02-08 11:30:09.304 [main] INFO  org.quartz.impl.StdSchedulerFactory - Using default implementation for ThreadExecutor
+2026-02-08 11:30:09.313 [main] INFO  o.quartz.core.SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2026-02-08 11:30:09.313 [main] INFO  org.quartz.core.QuartzScheduler - Quartz Scheduler v.2.3.0 created.
+2026-02-08 11:30:09.315 [main] INFO  org.quartz.simpl.RAMJobStore - RAMJobStore initialized.
+2026-02-08 11:30:09.316 [main] INFO  org.quartz.core.QuartzScheduler - Scheduler meta-data: Quartz Scheduler (v2.3.0) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 1 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2026-02-08 11:30:09.316 [main] INFO  org.quartz.impl.StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2026-02-08 11:30:09.316 [main] INFO  org.quartz.impl.StdSchedulerFactory - Quartz scheduler version: 2.3.0
+2026-02-08 11:30:09.316 [main] INFO  org.quartz.core.QuartzScheduler - JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@5f735240
+2026-02-08 11:30:09.352 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8089"]
+2026-02-08 11:30:09.367 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8089 (http) with context path '/api/v1'
+2026-02-08 11:30:09.369 [main] INFO  o.s.s.quartz.SchedulerFactoryBean - Starting Quartz Scheduler now
+2026-02-08 11:30:09.369 [main] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2026-02-08 11:30:09.378 [main] INFO  com.example.demo.DemoApplication - Started DemoApplication in 4.424 seconds (process running for 4.889)
+2026-02-08 11:32:40.015 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:32:40.813 [quartzScheduler_Worker-1] WARN  com.amazonaws.util.Base64 - JAXB is unavailable. Will fallback to SDK implementation which may be less performant.If you are using Java 9+, you will need to include javax.xml.bind:jaxb-api as a dependency.
+2026-02-08 11:32:40.817 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:32:41.011 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:32:41.149 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:32:41.293 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:32:41.421 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:32:41.551 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:32:41.678 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\login.http
+2026-02-08 11:32:41.812 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:32:41.943 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:32:42.128 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:32:42.261 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:32:42.412 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\register.http
+2026-02-08 11:32:42.544 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:32:42.718 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:32:42.844 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:32:42.990 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:32:43.115 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:32:48.247 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:32:48.248 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-08 11:32:48.252 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-02-08 11:32:48.259 [SpringApplicationShutdownHook] INFO  o.s.s.quartz.SchedulerFactoryBean - Shutting down Quartz Scheduler
+2026-02-08 11:32:48.259 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2026-02-08 11:32:48.259 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:32:48.259 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2026-02-08 11:32:48.270 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-02-08 11:32:48.277 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.pool.HikariPool - HikariCP pool HikariPool-0 is shutting down.
+2026-02-08 11:34:55.376 [main] INFO  com.example.demo.DemoApplication - Starting DemoApplication using Java 21.0.2 with PID 6296 (E:\db\demo\target\classes started by Seby in E:\db\demo)
+2026-02-08 11:34:55.378 [main] INFO  com.example.demo.DemoApplication - No active profile set, falling back to 1 default profile: "default"
+2026-02-08 11:34:55.921 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-02-08 11:34:55.922 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-08 11:34:56.008 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 81 ms. Found 2 JPA repository interfaces.
+2026-02-08 11:34:56.019 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2026-02-08 11:34:56.020 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-02-08 11:34:56.027 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.demo.repository.FileMetadataRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-02-08 11:34:56.028 [main] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.example.demo.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-02-08 11:34:56.028 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2026-02-08 11:34:56.419 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8089 (http)
+2026-02-08 11:34:56.427 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8089"]
+2026-02-08 11:34:56.428 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-02-08 11:34:56.428 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.44]
+2026-02-08 11:34:56.469 [main] INFO  o.a.c.c.C.[.[localhost].[/api/v1] - Initializing Spring embedded WebApplicationContext
+2026-02-08 11:34:56.470 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1050 ms
+2026-02-08 11:34:56.542 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-08 11:34:56.567 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.26.Final
+2026-02-08 11:34:56.584 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-02-08 11:34:56.759 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-08 11:34:56.775 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariCP pool HikariPool-0 is starting.
+2026-02-08 11:34:56.897 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-02-08 11:34:56.914 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-0)']
+	Database driver: undefined/unknown
+	Database version: 17.5
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-08 11:34:57.396 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-08 11:34:57.417 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-08 11:34:57.623 [main] WARN  com.amazonaws.util.VersionInfoUtils - The AWS SDK for Java 1.x entered maintenance mode starting July 31, 2024 and will reach end of support on December 31, 2025. For more information, see https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-1-x-is-in-maintenance-mode-effective-july-31-2024/
+You can print where on the file system the AWS SDK for Java 1.x core runtime is located by setting the AWS_JAVA_V1_PRINT_LOCATION environment variable or aws.java.v1.printLocation system property to 'true'.
+This message can be disabled by setting the AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT environment variable or aws.java.v1.disableDeprecationAnnouncement system property to 'true'.
+The AWS SDK for Java 1.x is being used here:
+at java.base/java.lang.Thread.getStackTrace(Thread.java:2450)
+at com.amazonaws.util.VersionInfoUtils.printDeprecationAnnouncement(VersionInfoUtils.java:81)
+at com.amazonaws.util.VersionInfoUtils.<clinit>(VersionInfoUtils.java:59)
+at com.amazonaws.internal.EC2ResourceFetcher.<clinit>(EC2ResourceFetcher.java:44)
+at com.amazonaws.auth.InstanceMetadataServiceCredentialsFetcher.<init>(InstanceMetadataServiceCredentialsFetcher.java:38)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:111)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:91)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<init>(InstanceProfileCredentialsProvider.java:75)
+at com.amazonaws.auth.InstanceProfileCredentialsProvider.<clinit>(InstanceProfileCredentialsProvider.java:58)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.initializeProvider(EC2ContainerCredentialsProviderWrapper.java:66)
+at com.amazonaws.auth.EC2ContainerCredentialsProviderWrapper.<init>(EC2ContainerCredentialsProviderWrapper.java:55)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<init>(DefaultAWSCredentialsProviderChain.java:60)
+at com.amazonaws.auth.DefaultAWSCredentialsProviderChain.<clinit>(DefaultAWSCredentialsProviderChain.java:54)
+at com.amazonaws.services.s3.AmazonS3ClientBuilder.standard(AmazonS3ClientBuilder.java:46)
+at com.example.demo.files.AwsImplementationFileService.<clinit>(AwsImplementationFileService.java:34)
+at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1160)
+at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:300)
+at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newConstructorAccessor(MethodHandleAccessorFactory.java:103)
+at java.base/jdk.internal.reflect.ReflectionFactory.newConstructorAccessor(ReflectionFactory.java:200)
+at java.base/java.lang.reflect.Constructor.acquireConstructorAccessor(Constructor.java:549)
+at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+at org.springframework.beans.BeanUtils.instantiateClass(BeanUtils.java:197)
+at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:123)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateBean(AbstractAutowireCapableBeanFactory.java:1351)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1242)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+at com.example.demo.DemoApplication.main(DemoApplication.java:12)
+2026-02-08 11:34:58.207 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-02-08 11:34:58.207 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-02-08 11:34:58.421 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-08 11:34:58.671 [main] INFO  o.s.v.b.OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2026-02-08 11:34:58.894 [main] INFO  org.quartz.impl.StdSchedulerFactory - Using default implementation for ThreadExecutor
+2026-02-08 11:34:58.900 [main] INFO  o.quartz.core.SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2026-02-08 11:34:58.900 [main] INFO  org.quartz.core.QuartzScheduler - Quartz Scheduler v.2.3.0 created.
+2026-02-08 11:34:58.901 [main] INFO  org.quartz.simpl.RAMJobStore - RAMJobStore initialized.
+2026-02-08 11:34:58.901 [main] INFO  org.quartz.core.QuartzScheduler - Scheduler meta-data: Quartz Scheduler (v2.3.0) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 1 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2026-02-08 11:34:58.901 [main] INFO  org.quartz.impl.StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2026-02-08 11:34:58.901 [main] INFO  org.quartz.impl.StdSchedulerFactory - Quartz scheduler version: 2.3.0
+2026-02-08 11:34:58.901 [main] INFO  org.quartz.core.QuartzScheduler - JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@2af781f3
+2026-02-08 11:34:58.927 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8089"]
+2026-02-08 11:34:58.937 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8089 (http) with context path '/api/v1'
+2026-02-08 11:34:58.939 [main] INFO  o.s.s.quartz.SchedulerFactoryBean - Starting Quartz Scheduler now
+2026-02-08 11:34:58.939 [main] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2026-02-08 11:34:58.943 [main] INFO  com.example.demo.DemoApplication - Started DemoApplication in 3.754 seconds (process running for 4.18)
+2026-02-08 11:35:18.010 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:35:18.096 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:35:19.101 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:35:19.108 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:35:20.115 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:35:20.121 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:35:20.123 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\CacheStampede.png
+2026-02-08 11:35:20.128 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:35:20.130 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:35:21.133 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:35:21.139 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:35:22.144 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:35:22.146 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:35:22.146 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\CleanArhitecture.png
+2026-02-08 11:35:22.147 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:35:22.148 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:35:23.158 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:35:23.161 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:35:24.170 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:35:24.173 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:35:24.173 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\CompletableFuture.png
+2026-02-08 11:35:24.174 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:35:24.175 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:35:25.177 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:35:25.179 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:35:26.189 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:35:26.195 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:35:26.195 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\FutureHierarchy.jpg
+2026-02-08 11:35:26.196 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:35:26.198 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:35:27.205 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:35:27.207 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:35:28.217 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:35:28.223 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:35:28.224 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\getAllFilesFlow.http
+2026-02-08 11:35:28.225 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:35:28.227 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:35:29.242 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:35:29.246 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:35:30.252 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:35:30.258 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:35:30.258 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\getFile.http
+2026-02-08 11:35:30.261 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:35:30.263 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:35:31.278 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:35:31.280 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:35:32.283 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:35:32.285 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:35:32.285 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\getFileFlow.http
+2026-02-08 11:35:32.286 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\login.http
+2026-02-08 11:35:32.289 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\login.http
+2026-02-08 11:35:33.297 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\login.http
+2026-02-08 11:35:33.301 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\login.http
+2026-02-08 11:35:34.315 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\login.http
+2026-02-08 11:35:34.316 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\login.http
+2026-02-08 11:35:34.316 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\login.http
+2026-02-08 11:35:34.317 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:35:34.319 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:35:35.326 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:35:35.332 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:35:36.343 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:35:36.346 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:35:36.346 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\notes.txt
+2026-02-08 11:35:36.347 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:35:36.349 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:35:37.359 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:35:37.365 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:35:38.368 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:35:38.370 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:35:38.371 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\problems.png
+2026-02-08 11:35:38.372 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:35:38.374 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:35:39.381 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:35:39.383 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:35:40.385 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:35:40.387 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:35:40.387 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\raspunsuri.txt
+2026-02-08 11:35:40.388 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:35:40.389 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:35:41.392 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:35:41.394 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:35:42.407 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:35:42.412 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:35:42.413 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\ReferentialInconsistency.png
+2026-02-08 11:35:42.415 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\register.http
+2026-02-08 11:35:42.417 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\register.http
+2026-02-08 11:35:43.421 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\register.http
+2026-02-08 11:35:43.424 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\register.http
+2026-02-08 11:35:44.434 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\register.http
+2026-02-08 11:35:44.438 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\register.http
+2026-02-08 11:35:44.438 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\register.http
+2026-02-08 11:35:44.440 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:35:44.441 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:35:45.449 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:35:45.451 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:35:46.460 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:35:46.462 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:35:46.463 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\restoreFolderFlow.http
+2026-02-08 11:35:46.464 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:35:46.466 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:35:47.474 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:35:47.476 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:35:48.486 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:35:48.492 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:35:48.492 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\searchFileFlow.http
+2026-02-08 11:35:48.493 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:35:48.495 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:35:49.497 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:35:49.503 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:35:50.509 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:35:50.515 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:35:50.515 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\steam.jpg
+2026-02-08 11:35:50.518 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:35:50.520 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:35:51.520 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:35:51.526 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:35:52.532 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:35:52.536 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:35:52.537 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\uploadFile.http
+2026-02-08 11:35:52.538 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:35:52.540 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:35:53.548 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:35:53.550 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:35:54.559 [quartzScheduler_Worker-1] INFO  c.example.demo.aspect.LoggingAspect - FileUploaderService.process called for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:35:54.565 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - process failed for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:35:54.565 [quartzScheduler_Worker-1] WARN  c.example.demo.aspect.LoggingAspect - Recover called for file E:\db\fileUploader\working\uploadFileFlow.http
+2026-02-08 11:36:08.014 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:36:08.015 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-08 11:36:08.019 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-02-08 11:36:08.026 [SpringApplicationShutdownHook] INFO  o.s.s.quartz.SchedulerFactoryBean - Shutting down Quartz Scheduler
+2026-02-08 11:36:08.027 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2026-02-08 11:36:08.027 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:36:08.027 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2026-02-08 11:36:08.037 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-02-08 11:36:08.042 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.pool.HikariPool - HikariCP pool HikariPool-0 is shutting down.

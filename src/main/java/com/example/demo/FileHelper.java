@@ -11,26 +11,23 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
-
 @Component
-
 public class FileHelper {
 
-    public void copyFile(File source, Path target) throws IOException {
-        Path sourcePath = source.toPath();
-        Path targetPath = Path.of(target.toString(), source.getName());
+    public void copyFile(Path source, Path targetDirectory) throws IOException {
+        Path targetPath = targetDirectory.resolve(source.getFileName());
         Files.copy(
-                sourcePath,
+                source,
                 targetPath,
                 StandardCopyOption.REPLACE_EXISTING
         );
     }
 
-    public void move(File file, Path destination) {
+    public void move(Path source, Path destination) {
         try {
             createDirectory(destination);
-            copyFile(file, destination);
-            deleteFile(file);
+            copyFile(source, destination);
+            deleteFile(source);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -40,28 +37,31 @@ public class FileHelper {
         Files.createDirectories(destination);
     }
 
-    public void deleteFile(File file) throws IOException {
-        Files.delete(file.toPath());
+    public void deleteFile(Path file) throws IOException {
+        Files.delete(file);
     }
 
     public void deleteFilesOnly(Path directoryPath) {
-        File dir = new File(String.valueOf(directoryPath));
-        File[] files = dir.listFiles();
-        for (File f : files) {
-            if (f.isFile()) {
-                f.delete();
+        try (DirectoryStream<Path> files = Files.newDirectoryStream(directoryPath)) {
+            for (Path f : files) {
+                if (Files.isRegularFile(f)) {
+                    Files.delete(f);
+                }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public File[] listFiles(File directory) {
+    public File[] listFiles(Path path) {
+        File directory = path.toFile();
         return directory.listFiles() != null ? directory.listFiles() : new File[0];
     }
 
     public void createFiles(List<MultipartFile> files, Path backupDirectoryWithDate) {
         try {
             for (MultipartFile file : files) {
-                Path destination = Path.of(backupDirectoryWithDate.toString(), file.getOriginalFilename());
+                Path destination = backupDirectoryWithDate.resolve(file.getOriginalFilename());
                 file.transferTo(destination);
             }
         } catch (IOException e) {
@@ -70,13 +70,12 @@ public class FileHelper {
     }
 
     public void checkDirectory(Path path) {
-        File file = new File(String.valueOf(path));
-        if (!file.exists() || !file.isDirectory() || !file.canRead() || !file.canWrite()) {
+        if (!Files.exists(path) || !Files.isDirectory(path) || !Files.isReadable(path) || !Files.isWritable(path)) {
             throw new RuntimeException();
         }
     }
 
-    public void copyFolder(Path sourceFolder, Path targetFolder){
+    public void copyFolder(Path sourceFolder, Path targetFolder) {
         try {
             createDirectory(targetFolder);
             try (DirectoryStream<Path> files = Files.newDirectoryStream(sourceFolder)) {
