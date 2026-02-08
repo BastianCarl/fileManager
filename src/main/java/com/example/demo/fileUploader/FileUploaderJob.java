@@ -14,11 +14,10 @@ public class FileUploaderJob implements Job {
 
     private final FileUploaderService fileUploaderService;
     private final FileHelper fileHelper;
-    private File directory;
-    @Value("${file.uploader.job.pending.path}")
-    private String PENDING_PATH;
-    @Value("${file.uploader.job.working.path}")
-    private String WORKING_PATH;
+    @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.pending.path}')}")
+    private Path pendingPath;
+    @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.working.path}')}")
+    private Path workingPath;
     @Autowired
     public FileUploaderJob(
             FileUploaderService fileUploaderService
@@ -29,15 +28,16 @@ public class FileUploaderJob implements Job {
 
     @PostConstruct
     public void init() {
-        directory = new File(WORKING_PATH);
+        fileHelper.checkDirectory(pendingPath);
+        fileHelper.checkDirectory(workingPath);
     }
 
     @Override
     public void execute(JobExecutionContext arg0) {
-        fileHelper.copyFolder(Path.of(PENDING_PATH), Path.of(WORKING_PATH));
-        for (File file : fileHelper.listFiles(Path.of(WORKING_PATH))) {
+        fileHelper.copyFolder(pendingPath, workingPath);
+        for (File file : fileHelper.listFiles(workingPath)) {
             fileUploaderService.process(file);
         }
-        fileHelper.deleteAllFiles(Path.of(PENDING_PATH));
+        fileHelper.deleteAllFiles(pendingPath);
     }
 }
