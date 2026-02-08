@@ -1,6 +1,7 @@
 package com.example.demo.fileUploader;
 
 import com.example.demo.FileHelper;
+import com.example.demo.files.FileService;
 import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
@@ -22,13 +23,12 @@ import java.time.format.DateTimeFormatter;
 import static com.example.demo.service.UserService.userDTO;
 @Service
 public class FileUploaderService {
-
-
     private final FileServiceOrchestrator fileServiceOrchestrator;
     private final UserService userService;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
     private final FileMetadataMapper fileMetadataMapper;
+    private final FileService fileService;
     @Value("${file.uploader.job.date.format}")
     private String DATE_FORMAT;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
@@ -43,13 +43,15 @@ public class FileUploaderService {
             UserService userService,
             FileMetaDataService fileMetaDataService,
             FileHelper fileHelper,
-            FileMetadataMapper fileMetadataMapper
+            FileMetadataMapper fileMetadataMapper,
+            FileService fileService
     ) {
         this.fileServiceOrchestrator = fileServiceOrchestrator;
         this.userService = userService;
         this.fileMetaDataService = fileMetaDataService;
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
+        this.fileService = fileService;
     }
 
     @PostConstruct
@@ -64,6 +66,10 @@ public class FileUploaderService {
         FileMetadata fileMetadata = fileMetadataMapper.map(file, userService.getOwnerId(userDTO));
         if (!fileMetaDataService.checkFileExists(fileMetadata)) {
             fileServiceOrchestrator.uploadFile(file, fileMetadata);
+        } else {
+            if (!fileService.checkKeyExists(fileMetadata.getAwsKey())) {
+                fileService.uploadFile(file);
+            }
         }
         fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
     }

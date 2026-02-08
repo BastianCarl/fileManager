@@ -57,7 +57,7 @@ public class AwsImplementationFileService implements FileService {
         s3client.putObject(req);
 //        return in.readAllBytes();
     }
-    
+
     public void uploadFile(File file) {
         ObjectMetadata meta = new ObjectMetadata();
         InputStream in = null;
@@ -99,5 +99,10 @@ public class AwsImplementationFileService implements FileService {
         } finally {
             con.disconnect();
         }
+    }
+
+    @Override
+    public boolean checkKeyExists(String key) {
+        return s3client.doesObjectExist(BUCKET_NAME, key);
     }
 }

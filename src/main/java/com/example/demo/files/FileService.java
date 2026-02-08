@@ -8,12 +8,13 @@ import java.io.IOException;
 public interface FileService {
     void uploadFile(MultipartFile file);
     void uploadFile(File file);
-     byte[] downloadFile(FileMetadata fileMetadata) throws IOException;
+    byte[] downloadFile(FileMetadata fileMetadata) throws IOException;
 
      default String generateKey(MultipartFile file) {
         return file.getOriginalFilename().split("\\.")[0] + file.getSize();
     }
 
+    boolean checkKeyExists(String key);
     default String generateKey(File file) {
         return file.getName().split("\\.")[0] + file.length();
     }
