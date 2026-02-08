@@ -1805,7 +1805,7 @@ at com.example.demo.DemoApplication.main(DemoApplication.java:12)
 2026-02-07 16:29:48.223 [main] INFO  com.example.demo.DemoApplication - Started DemoApplication in 3.781 seconds (process running for 4.204)
 2026-02-07 16:31:00.097 [quartzScheduler_Worker-1] ERROR org.quartz.core.JobRunShell - Job DEFAULT.FileUploaderJob threw an unhandled Exception: 
 java.lang.RuntimeException: null
-	at com.example.demo.model.FileMetadataFactory.create(FileMetadataFactory.java:27)
+	at com.example.demo.model.FileMetadataMapper.create(FileMetadataFactory.java:27)
 	at com.example.demo.fileUploader.FileUploaderService.process(FileUploaderService.java:75)
 	at com.example.demo.fileUploader.FileUploaderService.processAll(FileUploaderService.java:69)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
@@ -1827,7 +1827,7 @@ org.quartz.SchedulerException: Job threw an unhandled exception.
 	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
 	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)
 Caused by: java.lang.RuntimeException: null
-	at com.example.demo.model.FileMetadataFactory.create(FileMetadataFactory.java:27)
+	at com.example.demo.model.FileMetadataMapper.create(FileMetadataFactory.java:27)
 	at com.example.demo.fileUploader.FileUploaderService.process(FileUploaderService.java:75)
 	at com.example.demo.fileUploader.FileUploaderService.processAll(FileUploaderService.java:69)
 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
@@ -13802,3 +13802,12 @@ at com.example.demo.DemoApplication.main(DemoApplication.java:12)
 2026-02-08 11:06:05.759 [main] INFO  o.s.s.quartz.SchedulerFactoryBean - Starting Quartz Scheduler now
 2026-02-08 11:06:05.759 [main] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
 2026-02-08 11:06:05.765 [main] INFO  com.example.demo.DemoApplication - Started DemoApplication in 5.051 seconds (process running for 5.621)
+2026-02-08 11:17:47.182 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:17:47.182 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-08 11:17:47.184 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-02-08 11:17:47.190 [SpringApplicationShutdownHook] INFO  o.s.s.quartz.SchedulerFactoryBean - Shutting down Quartz Scheduler
+2026-02-08 11:17:47.191 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2026-02-08 11:17:47.191 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2026-02-08 11:17:47.191 [SpringApplicationShutdownHook] INFO  org.quartz.core.QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2026-02-08 11:17:47.196 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-02-08 11:17:47.201 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.pool.HikariPool - HikariCP pool HikariPool-0 is shutting down.

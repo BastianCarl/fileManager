@@ -3,23 +3,23 @@ package com.example.demo.model;
 
 import com.example.demo.files.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.HexFormat;
 
 import static org.apache.commons.codec.digest.DigestUtils.sha256;
 
 @Component
-public class FileMetadataFactory {
+public class FileMetadataMapper {
     private final FileService fileService;
 
     @Autowired
-    public FileMetadataFactory(FileService fileService) {
+    public FileMetadataMapper(FileService fileService) {
         this.fileService = fileService;
     }
 
@@ -31,7 +31,7 @@ public class FileMetadataFactory {
                     ownerId,
                     file.length(),
                     fileService.generateKey(file),
-                    HexFormat.of().formatHex(sha256(Files.readAllBytes(file.toPath())))
+                    sha256Hex(Files.newInputStream(file.toPath()))
             );
         }catch (IOException e) {
             throw new RuntimeException(e);
@@ -46,10 +46,14 @@ public class FileMetadataFactory {
                     ownerId,
                     file.getSize(),
                     fileService.generateKey(file),
-                    HexFormat.of().formatHex(sha256(file.getBytes()))
+                    sha256Hex(file.getInputStream())
             );
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String sha256Hex(InputStream is) throws IOException {
+        return HexFormat.of().formatHex(sha256(is));
     }
 }

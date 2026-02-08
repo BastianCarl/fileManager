@@ -2,7 +2,7 @@ package com.example.demo.files;
 
 import com.example.demo.FileHelper;
 import com.example.demo.model.FileMetadata;
-import com.example.demo.model.FileMetadataFactory;
+import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
@@ -29,7 +29,7 @@ public class FileServiceOrchestrator {
     private final FileMetadataRepository fileMetadataRepository;
     private final UserService userService;
     private final Archiver archiver;
-    private final FileMetadataFactory fileMetadataFactory;
+    private final FileMetadataMapper fileMetadataMapper;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
@@ -40,7 +40,7 @@ public class FileServiceOrchestrator {
                                    UserService userService,
                                    FileMetaDataService fileMetaDataService,
                                    Archiver archiver,
-                                   FileMetadataFactory fileMetadataFactory,
+                                   FileMetadataMapper fileMetadataMapper,
                                    FileHelper fileHelper
     )
     {
@@ -49,13 +49,13 @@ public class FileServiceOrchestrator {
         this.userService = userService;
         this.archiver = archiver;
         this.fileMetaDataService = fileMetaDataService;
-        this.fileMetadataFactory = fileMetadataFactory;
+        this.fileMetadataMapper = fileMetadataMapper;
         this.fileHelper = fileHelper;
     }
 
     public FileMetadata uploadFile(MultipartFile file, Long ownerId) {
         fileService.uploadFile(file);
-        return this.fileMetaDataService.uploadFileMetaData(fileMetadataFactory.map(file, ownerId));
+        return this.fileMetaDataService.uploadFileMetaData(fileMetadataMapper.map(file, ownerId));
     }
 
     public FileMetadata uploadFile(File file, FileMetadata fileMetadata) {

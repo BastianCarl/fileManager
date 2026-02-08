@@ -3,7 +3,7 @@ package com.example.demo.fileUploader;
 import com.example.demo.FileHelper;
 import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.FileMetadata;
-import com.example.demo.model.FileMetadataFactory;
+import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -29,7 +28,7 @@ public class FileUploaderService {
     private final UserService userService;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
-    private final FileMetadataFactory fileMetadataFactory;
+    private final FileMetadataMapper fileMetadataMapper;
     @Value("${file.uploader.job.date.format}")
     private String DATE_FORMAT;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
@@ -44,25 +43,25 @@ public class FileUploaderService {
             UserService userService,
             FileMetaDataService fileMetaDataService,
             FileHelper fileHelper,
-            FileMetadataFactory fileMetadataFactory
+            FileMetadataMapper fileMetadataMapper
     ) {
         this.fileServiceOrchestrator = fileServiceOrchestrator;
         this.userService = userService;
         this.fileMetaDataService = fileMetaDataService;
         this.fileHelper = fileHelper;
-        this.fileMetadataFactory = fileMetadataFactory;
+        this.fileMetadataMapper = fileMetadataMapper;
     }
 
     @PostConstruct
     public void init() {
-        this.formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         fileHelper.checkDirectory(backupPath);
         fileHelper.checkDirectory(failedPath);
     }
 
     @Retryable(retryFor = Exception.class)
     public void process(File file) {
-        FileMetadata fileMetadata = fileMetadataFactory.map(file, userService.getOwnerId(userDTO));
+        FileMetadata fileMetadata = fileMetadataMapper.map(file, userService.getOwnerId(userDTO));
         if (!fileMetaDataService.checkFileExists(fileMetadata)) {
             fileServiceOrchestrator.uploadFile(file, fileMetadata);
         }
