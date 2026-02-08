@@ -55,7 +55,7 @@ public class FileServiceOrchestrator {
 
     public FileMetadata uploadFile(MultipartFile file, Long ownerId) {
         fileService.uploadFile(file);
-        return this.fileMetaDataService.uploadFileMetaData(fileMetadataFactory.create(file, ownerId));
+        return this.fileMetaDataService.uploadFileMetaData(fileMetadataFactory.map(file, ownerId));
     }
 
     public FileMetadata uploadFile(File file, FileMetadata fileMetadata) {

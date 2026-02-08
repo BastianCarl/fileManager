@@ -62,7 +62,7 @@ public class FileUploaderService {
 
     @Retryable(retryFor = Exception.class)
     public void process(File file) {
-        FileMetadata fileMetadata = fileMetadataFactory.create(file, userService.getOwnerId(userDTO));
+        FileMetadata fileMetadata = fileMetadataFactory.map(file, userService.getOwnerId(userDTO));
         if (!fileMetaDataService.checkFileExists(fileMetadata)) {
             fileServiceOrchestrator.uploadFile(file, fileMetadata);
         }
