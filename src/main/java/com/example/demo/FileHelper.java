@@ -5,10 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.List;
 
 @Component
@@ -28,6 +25,28 @@ public class FileHelper {
             createDirectory(destination);
             copyFile(source, destination);
             deleteFile(source);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void moveWithRenaming(Path source, Path destination, String newFileName ) {
+        move(source, destination);
+        rename(
+                Path.of(destination.toString(), source.getFileName().toString()),
+                newFileName
+        );
+    }
+
+    public void rename(Path file, String newFileName) {
+        try {
+            Path target = file.resolveSibling(newFileName);
+
+            Files.move(
+                    file,
+                    target,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

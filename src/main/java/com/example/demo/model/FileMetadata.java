@@ -6,8 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.HexFormat;
-import static org.apache.commons.codec.digest.DigestUtils.sha256;
 
 @Entity(name = "file_metadata")
 @Data

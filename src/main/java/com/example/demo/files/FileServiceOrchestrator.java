@@ -3,10 +3,12 @@ package com.example.demo.files;
 import com.example.demo.FileHelper;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
+import com.example.demo.model.Resource;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,7 +31,6 @@ public class FileServiceOrchestrator {
     private final FileMetadataRepository fileMetadataRepository;
     private final UserService userService;
     private final Archiver archiver;
-    private final FileMetadataMapper fileMetadataMapper;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
@@ -49,24 +50,23 @@ public class FileServiceOrchestrator {
         this.userService = userService;
         this.archiver = archiver;
         this.fileMetaDataService = fileMetaDataService;
-        this.fileMetadataMapper = fileMetadataMapper;
         this.fileHelper = fileHelper;
     }
 
-    public FileMetadata uploadFile(MultipartFile file, Long ownerId) {
-        fileService.uploadFile(file);
-        return this.fileMetaDataService.uploadFileMetaData(fileMetadataMapper.map(file, ownerId));
-    }
-
-    public FileMetadata uploadFile(File file, FileMetadata fileMetadata) {
-        FileMetadata fileMetadataWithId = this.fileMetaDataService.uploadFileMetaData(fileMetadata);
-        try {
-            fileService.uploadFile(file);
-        } catch (Exception e) {
-            fileMetaDataService.deleteFileMetaData(fileMetadata);
-            throw new RuntimeException("Error while uploading file", e);
-        }
-        return fileMetadataWithId;
+    public FileMetadata uploadResource(Resource resource) {
+        throw new RuntimeException();
+//        FileMetadata fileMetadata = null;
+//        if (!fileMetaDataService.checkFileExists(resource.getFileMetadata())) {
+//            fileMetadata = fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
+//        }
+//        if (!fileService.checkKeyExists(resource.getFileMetadata().getAwsKey())) {
+//            switch (resource.getSource()) {
+//                case File file -> fileService.uploadFile(file);
+//                case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);
+//                default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
+//            }
+//        }
+//        return fileMetadata;
     }
 
     public void deleteMetadata(FileMetadata fileMetadata) {
@@ -115,8 +115,7 @@ public class FileServiceOrchestrator {
             try {
                 return fileService.downloadFile(fileMetadata);
             } catch (IOException ex) {
-                ex.printStackTrace();
-                return null;
+                throw new RuntimeException(ex);
             }
         }
     }

@@ -49,6 +49,6 @@ public class UserService {
 
     @PostConstruct
     public void init() {
-//        this.saveUser(new User(userDTO));
+        this.saveUser(new User(userDTO));
     }
 }

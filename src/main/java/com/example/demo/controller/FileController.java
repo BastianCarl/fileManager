@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.FileMetadata;
 import com.example.demo.files.FileServiceOrchestrator;
+import com.example.demo.model.FileMetadataMapper;
+import com.example.demo.model.Resource;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
 import lombok.AllArgsConstructor;
@@ -25,17 +27,19 @@ public class FileController {
     private final Archiver archiver;
     private final FileServiceOrchestrator fileServiceOrchestrator;
     private final UserService userService;
+    private final FileMetadataMapper fileMetadataMapper;
 
     @Autowired
-    public FileController(Archiver archiver, FileServiceOrchestrator fileServiceOrchestrator, UserService userService) {
+    public FileController(Archiver archiver, FileServiceOrchestrator fileServiceOrchestrator, UserService userService, FileMetadataMapper fileMetadataMapper) {
         this.archiver = archiver;
         this.fileServiceOrchestrator = fileServiceOrchestrator;
         this.userService = userService;
+        this.fileMetadataMapper = fileMetadataMapper;
     }
 
     @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
-        FileMetadata metadata = fileServiceOrchestrator.uploadFile(file,  userService.getOwnerId(authToken));
+        FileMetadata metadata = fileServiceOrchestrator.uploadResource(new Resource(file, fileMetadataMapper.map(file,  userService.getOwnerId(authToken))));
         return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
     }
 

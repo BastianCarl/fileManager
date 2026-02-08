@@ -5,6 +5,7 @@ import com.example.demo.files.FileService;
 import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
+import com.example.demo.model.Resource;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -63,19 +64,12 @@ public class FileUploaderService {
 
     @Retryable(retryFor = Exception.class)
     public void process(File file) {
-        FileMetadata fileMetadata = fileMetadataMapper.map(file, userService.getOwnerId(userDTO));
-        if (!fileMetaDataService.checkFileExists(fileMetadata)) {
-            fileServiceOrchestrator.uploadFile(file, fileMetadata);
-        } else {
-            if (!fileService.checkKeyExists(fileMetadata.getAwsKey())) {
-                fileService.uploadFile(file);
-            }
-        }
+        fileServiceOrchestrator.uploadResource(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO))));
         fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
     }
 
     @Recover
     public void recover(Exception e, File file) throws IOException {
-        fileHelper.move(file.toPath(), Path.of(failedPath.toString(), LocalDate.now().format(formatter)));
+        fileHelper.moveWithRenaming(file.toPath(), Path.of(failedPath.toString()), LocalDate.now().format(formatter) + "-" + file.getName());
     }
 }
