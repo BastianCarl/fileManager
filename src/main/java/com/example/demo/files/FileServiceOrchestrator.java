@@ -173,7 +173,7 @@ public class FileServiceOrchestrator {
         }
     }
 
-    public void restoreFolder(String date) {
+    public void restoreBackup(String date, Long ownerId) {
         Path backup = Path.of(BACKUP_PATH, date);
         Path destination = Path.of(BACKUP_PATH, LocalDate.now().format(formatter));
         fileHelper.copyFolder(backup, destination);

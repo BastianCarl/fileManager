@@ -9,6 +9,14 @@ import java.io.File;
 @Aspect
 public class LoggingAspect {
     private static Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
+
+    @Before("execution(* com.example.demo.files.FileServiceOrchestrator.restoreBackup(..))")
+    public void logRestoreBackupCall(JoinPoint joinPoint) {
+        String date = (String) joinPoint.getArgs()[0];
+        Long userId = (Long) joinPoint.getArgs()[1];
+        LOGGER.info("FileController.restoreBackup called for {} by the userId = {}", date, userId);
+    }
+
     @Before("execution(* com.example.demo.fileUploader.FileUploaderService.process(..))")
     public void logProcessCall(JoinPoint joinPoint) {
         File file = (File) joinPoint.getArgs()[0];
