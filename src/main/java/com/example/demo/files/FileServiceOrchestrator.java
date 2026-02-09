@@ -8,7 +8,8 @@ import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
-import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -35,6 +36,8 @@ public class FileServiceOrchestrator {
     private final FileHelper fileHelper;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
 
+    private static Logger LOGGER = LoggerFactory.getLogger(FileServiceOrchestrator.class);
+
     @Autowired
     public FileServiceOrchestrator(AwsImplementationFileService awsImplementationFileService,
                                    FileMetadataRepository fileMetadataRepository,
@@ -53,20 +56,19 @@ public class FileServiceOrchestrator {
         this.fileHelper = fileHelper;
     }
 
-    public FileMetadata uploadResource(Resource resource) {
-        throw new RuntimeException();
-//        FileMetadata fileMetadata = null;
-//        if (!fileMetaDataService.checkFileExists(resource.getFileMetadata())) {
-//            fileMetadata = fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
-//        }
-//        if (!fileService.checkKeyExists(resource.getFileMetadata().getAwsKey())) {
-//            switch (resource.getSource()) {
-//                case File file -> fileService.uploadFile(file);
-//                case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);
-//                default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
-//            }
-//        }
-//        return fileMetadata;
+    public void uploadIfMissing(Resource resource) {
+        if (!fileMetaDataService.checkFileExists(resource.getFileMetadata())) {
+            fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
+        } else {
+            LOGGER.info("Duplicated File: {}. Skipping db update moving directly to backup", resource.getFileMetadata().getName());
+        }
+        if (!fileService.checkKeyExists(resource.getFileMetadata().getKey())) {
+            switch (resource.getSource()) {
+                case File file -> fileService.uploadFile(file);
+                case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);
+                default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
+            }
+        }
     }
 
     public void deleteMetadata(FileMetadata fileMetadata) {

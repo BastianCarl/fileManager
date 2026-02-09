@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping({"/files"})
@@ -39,8 +40,8 @@ public class FileController {
 
     @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
-        FileMetadata metadata = fileServiceOrchestrator.uploadResource(new Resource(file, fileMetadataMapper.map(file,  userService.getOwnerId(authToken))));
-        return ResponseEntity.ok(Map.ofEntries(Map.entry("imageId", Long.toHexString(metadata.getId())), Map.entry("name", metadata.getName()), Map.entry("size", metadata.getSize())));
+       fileServiceOrchestrator.uploadIfMissing(new Resource(file, fileMetadataMapper.map(file,  userService.getOwnerId(authToken))));
+       return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{fileId}")

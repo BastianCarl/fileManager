@@ -931,3 +931,4 @@ Medii
     aws
     local
 ce se intampla daca se scrie doar pe db si aws dar nu si pe local?
+ce ar trebui sa intoarca o metoda de update/create/read/delete?

@@ -3,7 +3,6 @@ package com.example.demo.fileUploader;
 import com.example.demo.FileHelper;
 import com.example.demo.files.FileService;
 import com.example.demo.files.FileServiceOrchestrator;
-import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.FileMetaDataService;
@@ -64,7 +63,7 @@ public class FileUploaderService {
 
     @Retryable(retryFor = Exception.class)
     public void process(File file) {
-        fileServiceOrchestrator.uploadResource(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO))));
+        fileServiceOrchestrator.uploadIfMissing(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO))));
         fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
     }
 
