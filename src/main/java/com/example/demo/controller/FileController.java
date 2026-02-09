@@ -84,7 +84,7 @@ public class FileController {
     }
 
     @PostMapping("/restore")
-    public void restoreFolder(@RequestParam("file") List<MultipartFile> files, @RequestParam("restoreDate") String date) throws IOException {
-        fileServiceOrchestrator.restoreFolder(files, date);
+    public void restoreFolder(@RequestParam("restoreDate") String date) throws IOException {
+        fileServiceOrchestrator.restoreFolder(date);
     }
 }

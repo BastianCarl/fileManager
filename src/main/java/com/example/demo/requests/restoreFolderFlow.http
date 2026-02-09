@@ -42,22 +42,7 @@ Content-Type: multipart/form-data; boundary={{boundary}}
 --{{boundary}}
 Content-Disposition: form-data; name="restoreDate"
 
-2026-01-31
+2026-02-08
 --{{boundary}}
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="file"; filename="problems.png"
-Content-Type: image/png
-
-< ./problems.png
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="file"; filename="problems.png"
-Content-Type: image/png
-
-< ./problems.png
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="file"; filename="problems.png"
-Content-Type: image/png
-
-< ./problems.png
-------WebKitFormBoundary7MA4YWxkTrZu0gW--

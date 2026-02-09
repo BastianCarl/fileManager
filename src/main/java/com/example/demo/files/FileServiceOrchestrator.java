@@ -8,6 +8,7 @@ import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 
 @Component
 public class FileServiceOrchestrator {
-
+    @Value("${file.uploader.job.date.format}")
+    private String DATE_FORMAT;
     @Value("${limit.for.downloading}")
     private int LIMIT_FOR_DOWNLOADING;
     @Value("${file.uploader.job.backup.path}")
@@ -34,6 +38,7 @@ public class FileServiceOrchestrator {
     private final Archiver archiver;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
+    private DateTimeFormatter formatter;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
 
     private static Logger LOGGER = LoggerFactory.getLogger(FileServiceOrchestrator.class);
@@ -56,11 +61,16 @@ public class FileServiceOrchestrator {
         this.fileHelper = fileHelper;
     }
 
+    @PostConstruct
+    public void init() {
+        formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+    }
+
     public void uploadIfMissing(Resource resource) {
         if (!fileMetaDataService.checkFileExists(resource.getFileMetadata())) {
             fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
         } else {
-            LOGGER.info("Duplicated File: {}. Skipping db update moving directly to backup", resource.getFileMetadata().getName());
+            LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
         }
         if (!fileService.checkKeyExists(resource.getFileMetadata().getKey())) {
             switch (resource.getSource()) {
@@ -163,10 +173,10 @@ public class FileServiceOrchestrator {
         }
     }
 
-    public void restoreFolder(List<MultipartFile> files, String date) {
-        Path backupDirectoryWithDate = Path.of(BACKUP_PATH, date);
-        fileHelper.deleteFilesOnly(backupDirectoryWithDate);
-        fileHelper.createFiles(files,backupDirectoryWithDate);
+    public void restoreFolder(String date) {
+        Path backup = Path.of(BACKUP_PATH, date);
+        Path destination = Path.of(BACKUP_PATH, LocalDate.now().format(formatter));
+        fileHelper.copyFolder(backup, destination);
     }
 
     public static class ThreadManagerContext {

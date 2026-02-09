@@ -21,6 +21,12 @@ public class LoggingAspect {
         LOGGER.warn("process failed for file {}", file.getAbsolutePath());
     }
 
+    @AfterReturning(pointcut = "execution(* com.example.demo.fileUploader.FileUploaderService.process(..))")
+    public void logProcessSuccessful(JoinPoint joinPoint) {
+        File file = (File) joinPoint.getArgs()[0];
+        LOGGER.info("FileUploaderService.process successful for file {}", file.getAbsolutePath());
+    }
+
     @Before("execution(* com.example.demo.fileUploader.FileUploaderService.recover(..))")
     public void logRecoverCall(JoinPoint joinPoint) {
         File file = (File) joinPoint.getArgs()[1];

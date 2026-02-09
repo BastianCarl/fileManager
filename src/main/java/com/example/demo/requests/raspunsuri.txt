@@ -926,9 +926,8 @@ foreign function
     - upcall
 -------------
 ce fac daca in timpul job-ului pentru unul dintre fisiere se intampla ceva? Continui cu restul sau se opreste totul?
-Medii
-    db
-    aws
-    local
-ce se intampla daca se scrie doar pe db si aws dar nu si pe local?
 ce ar trebui sa intoarca o metoda de update/create/read/delete?
+Restaurare
+    back-ul pentru tate veche ramane sau nu?
+    cine poate face restore?
+    asocierile pentru acele documente raman si se fac altele noi sau se sterg si se fac altele noi?
