@@ -29,7 +29,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 //        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/files/downloadAllFilesAsArchive/**").hasAnyRole("ADMIN"));
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(
-                "/registration", "/login", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html"
+                "/registration", "/login", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html", "/hello"
                 )
                 .permitAll()
                 .anyRequest()

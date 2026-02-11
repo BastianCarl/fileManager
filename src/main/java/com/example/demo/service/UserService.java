@@ -47,8 +47,8 @@ public class UserService {
         return userRepository.findByUserName(userDTO.getUserName()).getId();
     }
 
-    @PostConstruct
-    public void init() {
-        this.saveUser(new User(userDTO));
-    }
+//    @PostConstruct
+//    public void init() {
+//        this.saveUser(new User(userDTO));
+//    }
 }
