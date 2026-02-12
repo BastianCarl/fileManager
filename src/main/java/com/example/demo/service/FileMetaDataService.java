@@ -1,4 +1,5 @@
 package com.example.demo.service;
+import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.files.AwsImplementationFileService;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
@@ -16,12 +17,20 @@ public class FileMetaDataService {
     private final FileMetadataRepository repository;
     private final AwsImplementationFileService awsImplementationFileService;
     private static Logger LOGGER = LoggerFactory.getLogger(FileMetaDataService.class);
-    public FileMetadata uploadFileMetaData(FileMetadata metadata) {
-        return repository.save(metadata);
+    public FileMetadata uploadFileMetaData(FileMetadata metadata){
+        try {
+            return repository.save(metadata);
+        }catch (Exception e) {
+            throw new DatabaseFailure();
+        }
     }
 
-    public boolean checkFileExists(FileMetadata file) {
-        return repository.findByHashValue(file.getHashValue()) != null;
+    public boolean checkFileExists(FileMetadata file){
+        try {
+            return repository.findByHashValue(file.getHashValue()) != null;
+        }catch (Exception e) {
+            throw new DatabaseFailure();
+        }
     }
 
     public void deleteFileMetaData(FileMetadata file) {

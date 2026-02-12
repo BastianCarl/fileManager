@@ -1,5 +1,6 @@
 package com.example.demo.files;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -7,6 +8,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.demo.exception.FileServiceFailure;
 import com.example.demo.model.FileMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +60,7 @@ public class AwsImplementationFileService implements FileService {
 //        return in.readAllBytes();
     }
 
-    public void uploadFile(File file) {
+    public void uploadFile(File file) throws FileServiceFailure {
         ObjectMetadata meta = new ObjectMetadata();
         InputStream in = null;
         meta.setContentLength(file.length());
@@ -71,7 +73,11 @@ public class AwsImplementationFileService implements FileService {
         PutObjectRequest req =
                 new PutObjectRequest(BUCKET_NAME, file.getName(), in, meta);
 
-        s3client.putObject(req);
+        try {
+            s3client.putObject(req);
+        }catch (AmazonClientException exception) {
+            throw new FileServiceFailure();
+        }
     }
 
     private String generatePresignedUrl(String awsKey) {
@@ -102,7 +108,11 @@ public class AwsImplementationFileService implements FileService {
     }
 
     @Override
-    public boolean checkKeyExists(String key) {
-        return s3client.doesObjectExist(BUCKET_NAME, key);
+    public boolean checkKeyExists(String key) throws FileServiceFailure {
+        try {
+            return s3client.doesObjectExist(BUCKET_NAME, key);
+        }catch (Exception e) {
+            throw new FileServiceFailure();
+        }
     }
 }

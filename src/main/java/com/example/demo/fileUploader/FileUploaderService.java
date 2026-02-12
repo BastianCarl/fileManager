@@ -1,6 +1,8 @@
 package com.example.demo.fileUploader;
 
 import com.example.demo.FileHelper;
+import com.example.demo.exception.DatabaseFailure;
+import com.example.demo.exception.FileServiceFailure;
 import com.example.demo.files.FileService;
 import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.FileMetadataMapper;
@@ -61,7 +63,7 @@ public class FileUploaderService {
         fileHelper.checkDirectory(failedPath);
     }
 
-    @Retryable(retryFor = Exception.class)
+    @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
         fileServiceOrchestrator.uploadIfMissing(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO))));
         fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
