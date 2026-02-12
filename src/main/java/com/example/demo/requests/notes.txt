@@ -186,3 +186,24 @@ job-ul muta intr-un pending folder cand ruleaza pentru a nu fie afectat de alti 
 ce se intampla in timp ce procesez dau un restart
 fara exceptii checked mai bine metoda intoarce un resultat si in functie de el fac bussiness flow
 restaurez = le procesez pe toate din foolderul de back pentru o cea data si le copiez in fisierul de astazi dar trebuie sa apara in baza si amazon ca ultima versiune
+------
+tabel de auditare
+
+masina de stari
+flow
+starting
+metadata_done
+starting_aws_upload
+finished_aws_upload
+sending_email
+email_sent
+finished
+
+Retryable doar pentru exceptii pentru care are sens
+    @Override
+    public boolean checkKeyExists(String key) {
+        return s3client.doesObjectExist(BUCKET_NAME, key);
+    }
+
+ versionare
+ si get sa intoarca ultima versiune pentru fisier inclusiv zip-ul
