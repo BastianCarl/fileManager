@@ -56,7 +56,11 @@ public class AwsImplementationFileService implements FileService {
             LOGGER.error(exception.getMessage());
         }
         PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, generateKey(file), in, meta);
-        s3client.putObject(req);
+        try {
+            s3client.putObject(req);
+        } catch (AmazonClientException exception) {
+            throw new FileServiceFailure();
+        }
 //        return in.readAllBytes();
     }
 
@@ -86,7 +90,6 @@ public class AwsImplementationFileService implements FileService {
 
 //    @Cacheable(value = "myCache", key = "#fileMetadata.name")
     public byte[] downloadFile(FileMetadata fileMetadata) throws IOException {
-        System.err.println("No download happened");
         String awsUrl = generatePresignedUrl(generateKey(fileMetadata));
         URL url = new URL(awsUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();

@@ -6,6 +6,7 @@ import com.example.demo.repository.FileMetadataRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
@@ -28,7 +29,7 @@ public class FileMetaDataService {
     public boolean checkFileExists(FileMetadata file){
         try {
             return repository.findByHashValue(file.getHashValue()) != null;
-        }catch (Exception e) {
+        } catch (DataAccessException e) {
             throw new DatabaseFailure();
         }
     }
