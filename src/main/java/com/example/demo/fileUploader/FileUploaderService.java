@@ -73,9 +73,8 @@ public class FileUploaderService {
 
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
-        while (state.process(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)))));
-//        fileServiceOrchestrator.uploadIfMissing(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO))));
-//        fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
+        Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
+        while (state.process(resource));
     }
 
     @Recover
