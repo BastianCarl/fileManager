@@ -15,6 +15,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import static org.hibernate.type.descriptor.java.JdbcDateJavaType.DATE_FORMAT;
 
 @Component
@@ -24,11 +25,14 @@ public final class DiskWorkState extends State{
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
     private Path backupPath;
     @Value("${file.uploader.job.date.format}")
-    private String DATE_FORM;
+    private String DATE_FORMAT;
     private DateTimeFormatter formatter;
 
     @Autowired
-    public DiskWorkState(@Lazy FileUploaderService fileUploaderService, @Lazy AuditService auditService, @Lazy FileHelper fileHelper) {
+    public DiskWorkState(@Lazy FileUploaderService fileUploaderService,
+                         @Lazy AuditService auditService,
+                         @Lazy FileHelper fileHelper)
+    {
         super(fileUploaderService, auditService);
         this.fileHelper = fileHelper;
     }
@@ -42,9 +46,9 @@ public final class DiskWorkState extends State{
     public boolean process(Resource resource) {
         System.err.println("DiskWorkState process");
         AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getHashValue());
-        if (auditState.ordinal() <= AuditState.DISK_WORK.ordinal()) {
+        if (shouldProcess(auditState, AuditState.DISK_WORK)){
             File file = (File) resource.getSource();
-            fileHelper.move(Path.of(file.toURI()), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
+            fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
             auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.DISK_WORK);
         }
         return false;

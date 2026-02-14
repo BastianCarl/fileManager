@@ -32,7 +32,7 @@ public final class ExternalProvider extends State {
     public boolean process(Resource resource) {
         System.err.println("EXTERNAL PROVIDER");
         AuditState auditState =  auditService.getAuditState(resource.getFileMetadata().getHashValue());
-        if (auditState.ordinal() <= AuditState.EXTERNAL_PROVIDE.ordinal()) {
+        if (shouldProcess(auditState, AuditState.EXTERNAL_PROVIDE)){
             switch (resource.getSource()) {
                 case File file -> fileService.uploadFile(file);
                 case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);

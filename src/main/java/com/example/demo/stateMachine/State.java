@@ -1,6 +1,7 @@
 package com.example.demo.stateMachine;
 
 import com.example.demo.fileUploader.FileUploaderService;
+import com.example.demo.model.AuditState;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 
@@ -12,4 +13,8 @@ public abstract class State  {
         this.auditService = auditService;
     }
     public abstract boolean process(Resource resource);
+
+    public boolean shouldProcess(AuditState previousState, AuditState currentState) {
+        return (previousState.getOrder() <= currentState.getOrder());
+    }
 }

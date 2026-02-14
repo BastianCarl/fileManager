@@ -27,7 +27,7 @@ public final class MetadataState extends State {
     public boolean process(Resource resource) {
         System.err.println("MetadataState process");
         AuditState auditState =  auditService.getAuditState(resource.getFileMetadata().getHashValue());
-        if (auditState.ordinal() <= AuditState.METADATA.ordinal()) {
+        if (shouldProcess(auditState, AuditState.METADATA)){
             fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
             auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.METADATA);
         }
