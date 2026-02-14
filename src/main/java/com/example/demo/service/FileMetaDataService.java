@@ -29,7 +29,7 @@ public class FileMetaDataService {
 
     public boolean checkFileExists(FileMetadata file){
         try {
-            return repository.findByHashValue(file.getHashValue()) != null;
+            return repository.findByCode(file.getCode()) != null;
         } catch (DataAccessException e) {
             throw new DatabaseFailure();
         }

@@ -14,17 +14,17 @@ public class AuditService {
         this.auditRepository = auditRepository;
     }
 
-    public AuditState getAuditState(String hashValue) {
-        return auditRepository.findByHashValue(hashValue)
+    public AuditState getAuditState(String code) {
+        return auditRepository.findByCode(code)
                 .map(Audit::getState)
                 .orElse(AuditState.NOT_FOUND);
     }
 
-    public Audit updateOrCreate(String hashValue, AuditState newState) {
-        Audit audit = auditRepository.findByHashValue(hashValue)
+    public Audit updateOrCreate(String code, AuditState newState) {
+        Audit audit = auditRepository.findByCode(code)
                 .orElseGet(() -> {
                     Audit a = new Audit();
-                    a.setHashValue(hashValue);
+                    a.setCode(code);
                     return a;
                 });
 

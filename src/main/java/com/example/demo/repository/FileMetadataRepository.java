@@ -7,6 +7,6 @@ import java.util.List;
 public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long> {
     List<FileMetadata> findByOwnerId(Long ownerId);
     FileMetadata findByName(String name);
-    FileMetadata findByHashValue(String hashValue);
+    FileMetadata findByCode(String code);
     void deleteById(Long id);
 }

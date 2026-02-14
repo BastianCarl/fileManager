@@ -44,7 +44,7 @@ public final class DiskState extends State {
         if (shouldProcess(auditState, this.auditState)){
             File file = (File) resource.getSource();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), this.auditState);
+            auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
         }
         return null;
     }

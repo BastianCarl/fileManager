@@ -28,7 +28,7 @@ public final class MetadataState extends State {
         AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getHashValue());
         if (shouldProcess(auditState,this.auditState)){
             fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
-            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), this.auditState);
+            auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
         }
        return fileServiceState;
     }

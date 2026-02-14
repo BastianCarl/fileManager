@@ -13,5 +13,5 @@ public class Audit {
     private Long id;
     @Enumerated(EnumType.STRING)
     private AuditState state;
-    private String hashValue;
+    private String code;
 }

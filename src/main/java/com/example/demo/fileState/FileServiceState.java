@@ -35,7 +35,7 @@ public final class FileServiceState extends State {
                 case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);
                 default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
             }
-            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), this.auditState);
+            auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
         }
         return diskState;
     }
