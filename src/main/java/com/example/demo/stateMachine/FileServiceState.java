@@ -12,13 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 
 @Component
-public final class ExternalProvider extends State {
+public final class FileServiceState extends State {
 
     private final DiskWorkState diskWorkState;
     private final FileService fileService;
 
     @Autowired
-    public ExternalProvider(@Lazy FileUploaderService fileUploaderService,
+    public FileServiceState(@Lazy FileUploaderService fileUploaderService,
                             @Lazy AuditService auditService,
                             @Lazy FileService fileService,
                             DiskWorkState diskWorkState)

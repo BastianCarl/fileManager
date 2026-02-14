@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 @Component
 public final class MetadataState extends State {
-    private final ExternalProvider externalProvider;
+    private final FileServiceState fileServiceState;
     private final FileMetaDataService fileMetaDataService;
     @Autowired
     public MetadataState(@Lazy FileUploaderService fileUploaderService,
                          @Lazy AuditService auditService,
-                         ExternalProvider externalProvider,
+                         FileServiceState fileServiceState,
                          FileMetaDataService fileMetaDataService)
     {
         super(fileUploaderService, auditService);
-        this.externalProvider = externalProvider;
+        this.fileServiceState = fileServiceState;
         this.fileMetaDataService = fileMetaDataService;
     }
 
@@ -31,6 +31,6 @@ public final class MetadataState extends State {
             fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
             auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.METADATA);
         }
-       return externalProvider;
+       return fileServiceState;
     }
 }
