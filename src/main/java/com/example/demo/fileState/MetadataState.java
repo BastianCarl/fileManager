@@ -1,6 +1,5 @@
-package com.example.demo.stateMachine;
+package com.example.demo.fileState;
 
-import com.example.demo.fileUploader.FileUploaderService;
 import com.example.demo.model.AuditState;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
@@ -12,24 +11,24 @@ import org.springframework.stereotype.Component;
 public final class MetadataState extends State {
     private final FileServiceState fileServiceState;
     private final FileMetaDataService fileMetaDataService;
+    private final AuditState auditState;
     @Autowired
-    public MetadataState(@Lazy FileUploaderService fileUploaderService,
-                         @Lazy AuditService auditService,
-                         FileServiceState fileServiceState,
-                         FileMetaDataService fileMetaDataService)
+    public MetadataState(@Lazy AuditService auditService,
+                         @Lazy FileMetaDataService fileMetaDataService,
+                         FileServiceState fileServiceState)
     {
-        super(fileUploaderService, auditService);
+        super(auditService);
         this.fileServiceState = fileServiceState;
         this.fileMetaDataService = fileMetaDataService;
+        this.auditState = AuditState.METADATA;
     }
 
     @Override
     public State process(Resource resource) {
-        System.err.println("MetadataState process");
-        AuditState auditState =  auditService.getAuditState(resource.getFileMetadata().getHashValue());
-        if (shouldProcess(auditState, AuditState.METADATA)){
+        AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getHashValue());
+        if (shouldProcess(auditState,this.auditState)){
             fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
-            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.METADATA);
+            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), this.auditState);
         }
        return fileServiceState;
     }

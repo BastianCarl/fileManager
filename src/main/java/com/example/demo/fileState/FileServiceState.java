@@ -1,6 +1,5 @@
-package com.example.demo.stateMachine;
+package com.example.demo.fileState;
 
-import com.example.demo.fileUploader.FileUploaderService;
 import com.example.demo.files.FileService;
 import com.example.demo.model.AuditState;
 import com.example.demo.model.Resource;
@@ -13,33 +12,31 @@ import java.io.File;
 
 @Component
 public final class FileServiceState extends State {
-
-    private final DiskWorkState diskWorkState;
+    private final DiskState diskState;
     private final FileService fileService;
-
+    private final AuditState auditState;
     @Autowired
-    public FileServiceState(@Lazy FileUploaderService fileUploaderService,
-                            @Lazy AuditService auditService,
+    public FileServiceState(@Lazy AuditService auditService,
                             @Lazy FileService fileService,
-                            DiskWorkState diskWorkState)
+                            DiskState diskState)
     {
-        super(fileUploaderService, auditService);
-        this.diskWorkState = diskWorkState;
+        super(auditService);
+        this.diskState = diskState;
         this.fileService = fileService;
+        this.auditState = AuditState.FILE_SERVICE;
     }
 
     @Override
     public State process(Resource resource) {
-        System.err.println("EXTERNAL PROVIDER");
         AuditState auditState =  auditService.getAuditState(resource.getFileMetadata().getHashValue());
-        if (shouldProcess(auditState, AuditState.EXTERNAL_PROVIDE)){
+        if (shouldProcess(auditState, this.auditState)){
             switch (resource.getSource()) {
                 case File file -> fileService.uploadFile(file);
                 case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);
                 default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
             }
-            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.EXTERNAL_PROVIDE);
+            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), this.auditState);
         }
-        return diskWorkState;
+        return diskState;
     }
 }

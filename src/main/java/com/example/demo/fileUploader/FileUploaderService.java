@@ -3,14 +3,11 @@ package com.example.demo.fileUploader;
 import com.example.demo.FileHelper;
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
-import com.example.demo.files.FileService;
-import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.Resource;
-import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
-import com.example.demo.stateMachine.MetadataState;
-import com.example.demo.stateMachine.State;
+import com.example.demo.fileState.MetadataState;
+import com.example.demo.fileState.State;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +16,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -28,13 +24,10 @@ import static com.example.demo.service.UserService.userDTO;
 
 @Service
 public class FileUploaderService {
-    private final FileServiceOrchestrator fileServiceOrchestrator;
     private State initialState;
     private final UserService userService;
-    private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
     private final FileMetadataMapper fileMetadataMapper;
-    private final FileService fileService;
     @Value("${file.uploader.job.date.format}")
     private String DATE_FORMAT;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
@@ -45,20 +38,14 @@ public class FileUploaderService {
 
     @Autowired
     public FileUploaderService(
-            FileServiceOrchestrator fileServiceOrchestrator,
             UserService userService,
-            FileMetaDataService fileMetaDataService,
             FileHelper fileHelper,
             FileMetadataMapper fileMetadataMapper,
-            FileService fileService,
             MetadataState metadataState
     ) {
-        this.fileServiceOrchestrator = fileServiceOrchestrator;
         this.userService = userService;
-        this.fileMetaDataService = fileMetaDataService;
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
-        this.fileService = fileService;
         this.initialState = metadataState;
     }
 
@@ -79,7 +66,7 @@ public class FileUploaderService {
     }
 
     @Recover
-    public void recover(Exception e, File file) throws IOException {
+    public void recover(Exception e, File file){
         fileHelper.moveWithRenaming(file.toPath(), Path.of(failedPath.toString()), LocalDate.now().format(formatter) + "-" + file.getName());
     }
 }

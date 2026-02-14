@@ -1,7 +1,6 @@
-package com.example.demo.stateMachine;
+package com.example.demo.fileState;
 
 import com.example.demo.FileHelper;
-import com.example.demo.fileUploader.FileUploaderService;
 import com.example.demo.model.AuditState;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
@@ -17,9 +16,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public final class DiskWorkState extends State{
-
+public final class DiskState extends State {
     private final FileHelper fileHelper;
+    private final AuditState auditState;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
     private Path backupPath;
     @Value("${file.uploader.job.date.format}")
@@ -27,12 +26,11 @@ public final class DiskWorkState extends State{
     private DateTimeFormatter formatter;
 
     @Autowired
-    public DiskWorkState(@Lazy FileUploaderService fileUploaderService,
-                         @Lazy AuditService auditService,
-                         @Lazy FileHelper fileHelper)
+    public DiskState(@Lazy AuditService auditService, @Lazy FileHelper fileHelper)
     {
-        super(fileUploaderService, auditService);
+        super(auditService);
         this.fileHelper = fileHelper;
+        auditState = AuditState.DISK;
     }
 
     @PostConstruct
@@ -42,12 +40,11 @@ public final class DiskWorkState extends State{
 
     @Override
     public State process(Resource resource) {
-        System.err.println("DiskWorkState process");
         AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getHashValue());
-        if (shouldProcess(auditState, AuditState.DISK_WORK)){
+        if (shouldProcess(auditState, this.auditState)){
             File file = (File) resource.getSource();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.DISK_WORK);
+            auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), this.auditState);
         }
         return null;
     }
