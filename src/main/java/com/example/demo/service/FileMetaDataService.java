@@ -6,7 +6,10 @@ import com.example.demo.repository.FileMetadataRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.dao.TransientDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
@@ -16,12 +19,10 @@ import java.util.*;
 public class FileMetaDataService {
 
     private final FileMetadataRepository repository;
-    private final AwsImplementationFileService awsImplementationFileService;
-    private static Logger LOGGER = LoggerFactory.getLogger(FileMetaDataService.class);
     public FileMetadata uploadFileMetaData(FileMetadata metadata){
         try {
             return repository.save(metadata);
-        }catch (Exception e) {
+        }catch (DataAccessException exception ) {
             throw new DatabaseFailure();
         }
     }

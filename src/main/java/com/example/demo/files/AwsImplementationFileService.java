@@ -64,7 +64,7 @@ public class AwsImplementationFileService implements FileService {
 //        return in.readAllBytes();
     }
 
-    public void uploadFile(File file) throws FileServiceFailure {
+    public void uploadFile(File file) {
         ObjectMetadata meta = new ObjectMetadata();
         InputStream in = null;
         meta.setContentLength(file.length());
@@ -111,10 +111,10 @@ public class AwsImplementationFileService implements FileService {
     }
 
     @Override
-    public boolean checkKeyExists(String key) throws FileServiceFailure {
+    public boolean checkKeyExists(String key){
         try {
             return s3client.doesObjectExist(BUCKET_NAME, key);
-        }catch (Exception e) {
+        }catch (AmazonClientException e) {
             throw new FileServiceFailure();
         }
     }
