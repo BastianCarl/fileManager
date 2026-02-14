@@ -29,7 +29,7 @@ public final class ExternalProvider extends State {
     }
 
     @Override
-    public boolean process(Resource resource) {
+    public State process(Resource resource) {
         System.err.println("EXTERNAL PROVIDER");
         AuditState auditState =  auditService.getAuditState(resource.getFileMetadata().getHashValue());
         if (shouldProcess(auditState, AuditState.EXTERNAL_PROVIDE)){
@@ -40,7 +40,6 @@ public final class ExternalProvider extends State {
             }
             auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.EXTERNAL_PROVIDE);
         }
-        fileUploaderService.setState(diskWorkState);
-        return true;
+        return diskWorkState;
     }
 }

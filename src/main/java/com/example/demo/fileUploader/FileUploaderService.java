@@ -12,7 +12,6 @@ import com.example.demo.service.UserService;
 import com.example.demo.stateMachine.MetadataState;
 import com.example.demo.stateMachine.State;
 import jakarta.annotation.PostConstruct;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Recover;
@@ -30,8 +29,7 @@ import static com.example.demo.service.UserService.userDTO;
 @Service
 public class FileUploaderService {
     private final FileServiceOrchestrator fileServiceOrchestrator;
-    @Setter
-    private State state;
+    private State initialState;
     private final UserService userService;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
@@ -61,7 +59,7 @@ public class FileUploaderService {
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
         this.fileService = fileService;
-        this.state = metadataState;
+        this.initialState = metadataState;
     }
 
     @PostConstruct
@@ -73,8 +71,11 @@ public class FileUploaderService {
 
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
+        State state = initialState;
         Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
-        while (state.process(resource));
+        while (state != null){
+            state = state.process(resource);
+        }
     }
 
     @Recover

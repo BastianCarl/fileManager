@@ -12,7 +12,7 @@ public abstract class State  {
         this.fileUploaderService = fileUploaderService;
         this.auditService = auditService;
     }
-    public abstract boolean process(Resource resource);
+    public abstract State process(Resource resource);
 
     public boolean shouldProcess(AuditState previousState, AuditState currentState) {
         return (previousState.getOrder() <= currentState.getOrder());

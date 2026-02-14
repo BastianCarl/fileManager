@@ -16,8 +16,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static org.hibernate.type.descriptor.java.JdbcDateJavaType.DATE_FORMAT;
-
 @Component
 public final class DiskWorkState extends State{
 
@@ -43,7 +41,7 @@ public final class DiskWorkState extends State{
     }
 
     @Override
-    public boolean process(Resource resource) {
+    public State process(Resource resource) {
         System.err.println("DiskWorkState process");
         AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getHashValue());
         if (shouldProcess(auditState, AuditState.DISK_WORK)){
@@ -51,6 +49,6 @@ public final class DiskWorkState extends State{
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
             auditService.updateOrCreate(resource.getFileMetadata().getHashValue(), AuditState.DISK_WORK);
         }
-        return false;
+        return null;
     }
 }
