@@ -9,7 +9,10 @@ import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
+import com.example.demo.stateMachine.MetadataState;
+import com.example.demo.stateMachine.State;
 import jakarta.annotation.PostConstruct;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Recover;
@@ -23,9 +26,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static com.example.demo.service.UserService.userDTO;
+
 @Service
 public class FileUploaderService {
     private final FileServiceOrchestrator fileServiceOrchestrator;
+    @Setter
+    private State state;
     private final UserService userService;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
@@ -46,7 +52,8 @@ public class FileUploaderService {
             FileMetaDataService fileMetaDataService,
             FileHelper fileHelper,
             FileMetadataMapper fileMetadataMapper,
-            FileService fileService
+            FileService fileService,
+            MetadataState metadataState
     ) {
         this.fileServiceOrchestrator = fileServiceOrchestrator;
         this.userService = userService;
@@ -54,6 +61,7 @@ public class FileUploaderService {
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
         this.fileService = fileService;
+        this.state = metadataState;
     }
 
     @PostConstruct
@@ -65,8 +73,9 @@ public class FileUploaderService {
 
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
-        fileServiceOrchestrator.uploadIfMissing(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO))));
-        fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
+        while (state.process(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)))));
+//        fileServiceOrchestrator.uploadIfMissing(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO))));
+//        fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
     }
 
     @Recover

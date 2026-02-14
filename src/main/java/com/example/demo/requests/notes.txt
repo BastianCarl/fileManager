@@ -207,3 +207,6 @@ Retryable doar pentru exceptii pentru care are sens
 
  versionare
  si get sa intoarca ultima versiune pentru fisier inclusiv zip-ul
+
+
+ STARTING = adauga fisierul in tabela de audit -> Metadata = verificare si la nevoie adaugare -> ExternalProvider = verificare in aws si la nevoie adaugare  -> DiskWork = mutare dintr-un fisier in altul
