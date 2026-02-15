@@ -3,7 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.User;
 import com.example.demo.model.UserDTO;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.utility.JwtHelper;
+import com.example.demo.utility.JWTHelper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,15 +15,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-    private final JWTService jwtService;
+    private final JWTHelper jwtHelper;
     private static final String ADMIN_NAME = "ADMIN_QUARTZ";
     private static final String ADMIN_PASSWORD = "PASSWORD";
     private static final String ADMIN_ROLE = "ROLE_ADMIN";
     public static final UserDTO userDTO = new UserDTO(ADMIN_NAME, ADMIN_PASSWORD, ADMIN_ROLE);
 
     @Autowired
-    public UserService(UserRepository userRepo, JWTService jwtService, UserRepository userRepository) {
-        this.jwtService = jwtService;
+    public UserService(JWTHelper jwtHelper, UserRepository userRepository) {
+        this.jwtHelper = jwtHelper;
         this.userRepository = userRepository;
     }
 
@@ -38,8 +38,8 @@ public class UserService {
     }
 
     public Long getOwnerId(String authToken) {
-        String jwtTokenValue = JwtHelper.getJwtTokenValue(authToken);
-        String username = jwtService.extractUserName(jwtTokenValue);
+        String jwtTokenValue = jwtHelper.getJwtTokenValue(authToken);
+        String username = jwtHelper.extractUserName(jwtTokenValue);
         return userRepository.findByUserName(username).getId();
     }
 

@@ -1,6 +1,6 @@
 package com.example.demo.files;
 
-import com.example.demo.FileHelper;
+import com.example.demo.utility.FileHelper;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.Resource;

@@ -1,6 +1,6 @@
 package com.example.demo.fileUploader.state;
 
-import com.example.demo.FileHelper;
+import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

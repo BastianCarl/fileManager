@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.utility;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -12,11 +12,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
-public class JWTService {
+public class JWTHelper {
 
     private static final String SECRET = "secretSecretSecretsecretSecretSecretsecretSecretSecret";
+    private static final String AUTHENTICATION_PREFIX = "Bearer ";
     public String generateToken(String username) {
 
         Map<String, Object> claims = new HashMap<String, Object>();
@@ -51,6 +54,16 @@ public class JWTService {
         final String userName = extractUserName(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+    public String getJwtTokenValue(String token) {
+        Pattern pattern = Pattern.compile(AUTHENTICATION_PREFIX + "(.*)");
+        Matcher matcher = pattern.matcher(token);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        throw new IllegalArgumentException("Auth header doesn't match expected pattern");
+    }
+
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

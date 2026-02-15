@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.User;
 import com.example.demo.model.UserDTO;
-import com.example.demo.service.JWTService;
 import com.example.demo.service.UserService;
+import com.example.demo.utility.JWTHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +18,7 @@ public class UserController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final JWTService jwtService;
+    private final JWTHelper jwtHelper;
 
     @PostMapping("registration")
     public User register(@RequestBody UserDTO user) {
@@ -29,7 +29,7 @@ public class UserController {
     public String login(@RequestBody UserDTO user) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getUserName());
+            return jwtHelper.generateToken(user.getUserName());
         } else {
             return "fail";
         }

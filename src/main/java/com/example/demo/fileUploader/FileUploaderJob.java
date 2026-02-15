@@ -1,5 +1,5 @@
 package com.example.demo.fileUploader;
-import com.example.demo.FileHelper;
+import com.example.demo.utility.FileHelper;
 import jakarta.annotation.PostConstruct;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

@@ -1,6 +1,6 @@
 package com.example.demo.fileUploader;
 
-import com.example.demo.FileHelper;
+import com.example.demo.utility.FileHelper;
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
 import com.example.demo.fileUploader.state.CheckingState;
