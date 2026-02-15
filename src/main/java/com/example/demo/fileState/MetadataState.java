@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 @Component
-public final class MetadataState extends AuditStateState {
+public class MetadataState extends AuditStateState {
     private final FileServiceState fileServiceState;
     private final FileMetaDataService fileMetaDataService;
     @Autowired
@@ -24,7 +24,7 @@ public final class MetadataState extends AuditStateState {
     @Override
     public AuditStateState process(Resource resource) {
         AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getCode());
-        if (shouldProcess(auditState,this.auditState)){
+        if (shouldProcess(auditState, this.auditState)){
             fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
             auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
         }

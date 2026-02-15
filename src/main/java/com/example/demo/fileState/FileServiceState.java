@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 
 @Component
-public final class FileServiceState extends AuditStateState {
+public class FileServiceState extends AuditStateState {
     private final DiskState diskState;
     private final FileService fileService;
     @Autowired

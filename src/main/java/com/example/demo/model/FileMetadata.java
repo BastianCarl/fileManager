@@ -1,9 +1,6 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +24,8 @@ public class FileMetadata {
     private String key;
     private String hashValue;
     private String code;
+    @Version
+    private Long version;
     public FileMetadata(String name, String mimeType, Long ownerId, Long size, String key, String hashValue) {
         this.name = name;
         this.mimeType = mimeType;

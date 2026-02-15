@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public final class DiskState extends AuditStateState {
+public class DiskState extends AuditStateState {
     private final FileHelper fileHelper;
     private final DoneState doneState;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
