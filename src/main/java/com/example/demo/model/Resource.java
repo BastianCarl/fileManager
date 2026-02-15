@@ -27,4 +27,12 @@ public class Resource {
     public Object getSource() {
         return file != null ? file : multipartFile;
     }
+
+    public File getFile() {
+        return file;
+    }
+
+    public MultipartFile getMultipartFile() {
+        return multipartFile;
+    }
 }

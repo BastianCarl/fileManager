@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.demo.exception.FileServiceFailure;
 import com.example.demo.model.FileMetadata;
+import com.example.demo.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,10 +43,16 @@ public class AwsImplementationFileService implements FileService {
                 )
                 .build();
     }
-//    public Bucket getBucket() {
-//        return s3client.listBuckets().stream().filter(element -> element.getName().equals(BUCKET_NAME)).findFirst().get();
-//    }
-    public void uploadFile(MultipartFile file) {
+
+    public void uploadFile(Resource resource) {
+        switch (resource.getSource()) {
+            case File file -> this.uploadFile(file, resource.getFileMetadata());
+            case MultipartFile multipartFile -> this.uploadMultipartFile(multipartFile, resource.getFileMetadata());
+            default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
+        }
+
+    }
+    private void uploadMultipartFile(MultipartFile file, FileMetadata fileMetadata) {
         ObjectMetadata meta = new ObjectMetadata();
         InputStream in = null;
         meta.setContentLength(file.getSize());
@@ -55,16 +62,10 @@ public class AwsImplementationFileService implements FileService {
         } catch (IOException exception) {
             LOGGER.error(exception.getMessage());
         }
-        PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, generateKey(file), in, meta);
-        try {
-            s3client.putObject(req);
-        } catch (AmazonClientException exception) {
-            throw new FileServiceFailure();
-        }
-//        return in.readAllBytes();
+        callS3Client(fileMetadata.getKey(), in, meta);
     }
 
-    public void uploadFile(File file) {
+    private void uploadFile(File file, FileMetadata fileMetadata) {
         ObjectMetadata meta = new ObjectMetadata();
         InputStream in = null;
         meta.setContentLength(file.length());
@@ -74,12 +75,14 @@ public class AwsImplementationFileService implements FileService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        PutObjectRequest req =
-                new PutObjectRequest(BUCKET_NAME, generateKey(file), in, meta);
+        callS3Client(fileMetadata.getKey(), in, meta);
+    }
 
+    private void callS3Client(String key, InputStream in, ObjectMetadata meta) {
+        PutObjectRequest req = new PutObjectRequest(BUCKET_NAME, key, in, meta);
         try {
             s3client.putObject(req);
-        }catch (AmazonClientException exception) {
+        } catch (AmazonClientException exception) {
             throw new FileServiceFailure();
         }
     }

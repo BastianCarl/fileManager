@@ -1,6 +1,7 @@
 package com.example.demo.files;
 
 import com.example.demo.model.FileMetadata;
+import com.example.demo.model.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +9,7 @@ import java.nio.file.Files;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 public interface FileService {
-    void uploadFile(MultipartFile file);
-    void uploadFile(File file);
+    void uploadFile(Resource resource);
     byte[] downloadFile(FileMetadata fileMetadata) throws IOException;
     default String generateKey(MultipartFile file) {
         try {

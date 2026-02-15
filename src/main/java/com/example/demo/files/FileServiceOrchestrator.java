@@ -3,13 +3,12 @@ package com.example.demo.files;
 import com.example.demo.FileHelper;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
+import com.example.demo.model.Resource;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -64,10 +63,10 @@ public class FileServiceOrchestrator {
         formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
     }
 
-    public void uploadIfMissing(MultipartFile file, Long ownerId) {
+    public void upload(MultipartFile file, Long ownerId) {
        FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
         fileMetaDataService.uploadFileMetaData(fileMetadata);
-        fileService.uploadFile(file);
+        fileService.uploadFile(new Resource(file, fileMetadata));
     }
 
     public void deleteMetadata(FileMetadata fileMetadata) {
@@ -167,7 +166,7 @@ public class FileServiceOrchestrator {
         for (File file : files) {
             FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
             fileMetaDataService.save(fileMetadata);
-            fileService.uploadFile(file);
+            fileService.uploadFile(new Resource(file, fileMetadata));
         }
         fileHelper.copyFolder(backup, destination);
     }

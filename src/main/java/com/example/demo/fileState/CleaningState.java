@@ -17,7 +17,7 @@ public class CleaningState implements State{
 
     @Override
     public AuditStateState process(Resource resource) {
-        File file = (File) resource.getSource();
+        File file = resource.getFile();
         try {
             fileHelper.deleteFile(file.toPath());
             return null;

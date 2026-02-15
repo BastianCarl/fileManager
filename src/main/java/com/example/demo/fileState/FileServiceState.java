@@ -28,11 +28,7 @@ public class FileServiceState extends AuditStateState {
     public AuditStateState process(Resource resource) {
         AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getCode());
         if (shouldProcess(auditState, this.auditState)){
-            switch (resource.getSource()) {
-                case File file -> fileService.uploadFile(file);
-                case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);
-                default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
-            }
+            fileService.uploadFile(resource);
             auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
         }
         return diskState;

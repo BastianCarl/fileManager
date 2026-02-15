@@ -35,7 +35,7 @@ public class FileController {
 
     @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
-       fileServiceOrchestrator.uploadIfMissing(file, userService.getOwnerId(authToken));
+       fileServiceOrchestrator.upload(file, userService.getOwnerId(authToken));
        return ResponseEntity.ok().build();
     }
 
