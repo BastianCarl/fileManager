@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwtToken = null;
         String username = null;
 
-        var interator =  new LinkedList<>().iterator();
+        var interator = new LinkedList<>().iterator();
         if (authHeader != null && authHeader.startsWith(AUTHENTICATION_PREFIX)) {
             jwtToken = JwtHelper.getJwtTokenValue(authHeader);
             username = jwtService.extractUserName(jwtToken);

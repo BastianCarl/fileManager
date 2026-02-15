@@ -11,24 +11,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 
 @Component
-public final class FileServiceState extends State {
+public final class FileServiceState extends AuditStateState {
     private final DiskState diskState;
     private final FileService fileService;
-    private final AuditState auditState;
     @Autowired
     public FileServiceState(@Lazy AuditService auditService,
                             @Lazy FileService fileService,
                             DiskState diskState)
     {
-        super(auditService);
+        super(auditService, AuditState.FILE_SERVICE);
         this.diskState = diskState;
         this.fileService = fileService;
-        this.auditState = AuditState.FILE_SERVICE;
     }
 
     @Override
-    public State process(Resource resource) {
-        AuditState auditState =  auditService.getAuditState(resource.getFileMetadata().getHashValue());
+    public AuditStateState process(Resource resource) {
+        AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getCode());
         if (shouldProcess(auditState, this.auditState)){
             switch (resource.getSource()) {
                 case File file -> fileService.uploadFile(file);

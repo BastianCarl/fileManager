@@ -3,11 +3,11 @@ package com.example.demo.fileUploader;
 import com.example.demo.FileHelper;
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
+import com.example.demo.fileState.CheckingState;
+import com.example.demo.fileState.State;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.UserService;
-import com.example.demo.fileState.MetadataState;
-import com.example.demo.fileState.State;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,7 @@ import static com.example.demo.service.UserService.userDTO;
 
 @Service
 public class FileUploaderService {
-    private State initialState;
+    private State initialOperationalState;
     private final UserService userService;
     private final FileHelper fileHelper;
     private final FileMetadataMapper fileMetadataMapper;
@@ -41,12 +41,12 @@ public class FileUploaderService {
             UserService userService,
             FileHelper fileHelper,
             FileMetadataMapper fileMetadataMapper,
-            MetadataState metadataState
+            CheckingState checkingState
     ) {
         this.userService = userService;
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
-        this.initialState = metadataState;
+        this.initialOperationalState = checkingState;
     }
 
     @PostConstruct
@@ -58,9 +58,9 @@ public class FileUploaderService {
 
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
-        State state = initialState;
+        State state = initialOperationalState;
         Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
-        while (state != null){
+        while (state != null) {
             state = state.process(resource);
         }
     }

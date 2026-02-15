@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public boolean isAdmin(Long userId) {
-        Optional<User> user =  userRepository.findById(userId);
+        Optional<User> user = userRepository.findById(userId);
         return user.map(value -> value.getRole().contains("ROLE_ADMIN")).orElse(false);
     }
 

@@ -338,7 +338,7 @@ Pattern Matching
 -------------
 
 CAS(Compare and swap)
-    - a lock free lock solution to update the state
+    - a lock free lock solution to update the operationalState
     - more performance
     - more complex
 Lock
@@ -543,11 +543,11 @@ Behavioral Patterns
         - families of algorithms
         - help reuse code for non-hierarchy relationship
      State
-        - behave differently depending on the current state
+        - behave differently depending on the current operationalState
         - events
         - actions(events)
-        - action + state = transition(new sta te)
-        - replace conditions such as if (state == sth & action == sth2) with polymorphic;
+        - action + operationalState = transition(new sta te)
+        - replace conditions such as if (operationalState == sth & action == sth2) with polymorphic;
         - avoid to miss a particular case
      ChainOfResponsibility
         - Chain of handlers
@@ -592,7 +592,7 @@ Behavioral Patterns
         - all component just notify Mediator
         - Mediator acts as God
     Momento
-        - save and restore the previous state of an object
+        - save and restore the previous operationalState of an object
         - can be used with command
 Transactional
     - it wraps your method call in a transactional boundary
@@ -654,7 +654,7 @@ Domain Driven Design
         - a group of entities
     - Service
         - logic
-        - no state
+        - no operationalState
 AOP
     - complementary for OOP
     - used for crosscutting concern

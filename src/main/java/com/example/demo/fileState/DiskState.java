@@ -16,9 +16,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public final class DiskState extends State {
+public final class DiskState extends AuditStateState {
     private final FileHelper fileHelper;
-    private final AuditState auditState;
+    private final DoneState doneState;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
     private Path backupPath;
     @Value("${file.uploader.job.date.format}")
@@ -26,11 +26,11 @@ public final class DiskState extends State {
     private DateTimeFormatter formatter;
 
     @Autowired
-    public DiskState(@Lazy AuditService auditService, @Lazy FileHelper fileHelper)
+    public DiskState(@Lazy AuditService auditService, @Lazy FileHelper fileHelper, DoneState doneState)
     {
-        super(auditService);
+        super(auditService, AuditState.DISK);
         this.fileHelper = fileHelper;
-        auditState = AuditState.DISK;
+        this.doneState = doneState;
     }
 
     @PostConstruct
@@ -39,13 +39,13 @@ public final class DiskState extends State {
     }
 
     @Override
-    public State process(Resource resource) {
-        AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getHashValue());
+    public AuditStateState process(Resource resource) {
+        AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getCode());
         if (shouldProcess(auditState, this.auditState)){
             File file = (File) resource.getSource();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
             auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
         }
-        return null;
+        return doneState;
     }
 }

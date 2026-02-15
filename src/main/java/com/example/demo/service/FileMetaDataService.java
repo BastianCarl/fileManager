@@ -40,7 +40,7 @@ public class FileMetaDataService {
     }
 
     public FileMetadata getFilesMetadata(Long fileId, Long ownerId) {
-        List<FileMetadata> files =  repository.findByOwnerId(ownerId);
+        List<FileMetadata> files = repository.findByOwnerId(ownerId);
         return files.stream().filter(fileMetadata -> fileMetadata.getId().equals(fileId)).toList().getFirst();
     }
 
