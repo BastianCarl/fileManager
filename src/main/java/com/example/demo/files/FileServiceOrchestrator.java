@@ -40,9 +40,6 @@ public class FileServiceOrchestrator {
     private final FileMetadataMapper fileMetadataMapper;
     private DateTimeFormatter formatter;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
-
-    private static Logger LOGGER = LoggerFactory.getLogger(FileServiceOrchestrator.class);
-
     @Autowired
     public FileServiceOrchestrator(AwsImplementationFileService awsImplementationFileService,
                                    FileMetadataRepository fileMetadataRepository,
@@ -155,11 +152,9 @@ public class FileServiceOrchestrator {
 
     @Cacheable(value ="searchCache", key = "#name")
     public String searchFile(String name) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {}
-        try {
-        return fileMetadataRepository.findByName(name).getName();
+        try
+        {
+            return fileMetadataRepository.findByName(name).getName();
         } catch (Exception e) {
             return "File not found";
         }
