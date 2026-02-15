@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.FileMetadataMapper;
-import com.example.demo.model.Resource;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,7 @@ public class FileController {
 
     @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
-       fileServiceOrchestrator.uploadIfMissing(new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(authToken))));
+       fileServiceOrchestrator.uploadIfMissing(file, userService.getOwnerId(authToken));
        return ResponseEntity.ok().build();
     }
 

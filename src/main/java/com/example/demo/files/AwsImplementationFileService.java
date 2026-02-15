@@ -75,7 +75,7 @@ public class AwsImplementationFileService implements FileService {
             throw new RuntimeException(e);
         }
         PutObjectRequest req =
-                new PutObjectRequest(BUCKET_NAME, file.getName(), in, meta);
+                new PutObjectRequest(BUCKET_NAME, generateKey(file), in, meta);
 
         try {
             s3client.putObject(req);
@@ -90,7 +90,7 @@ public class AwsImplementationFileService implements FileService {
 
 //    @Cacheable(value = "myCache", key = "#fileMetadata.name")
     public byte[] downloadFile(FileMetadata fileMetadata) throws IOException {
-        String awsUrl = generatePresignedUrl(generateKey(fileMetadata));
+        String awsUrl = generatePresignedUrl(fileMetadata.getKey());
         URL url = new URL(awsUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         // move to constant
@@ -107,15 +107,6 @@ public class AwsImplementationFileService implements FileService {
             return buffer.toByteArray();
         } finally {
             con.disconnect();
-        }
-    }
-
-    @Override
-    public boolean checkKeyExists(String key){
-        try {
-            return s3client.doesObjectExist(BUCKET_NAME, key);
-        }catch (AmazonClientException e) {
-            throw new FileServiceFailure();
         }
     }
 }

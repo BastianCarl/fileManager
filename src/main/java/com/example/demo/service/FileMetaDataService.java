@@ -1,15 +1,9 @@
 package com.example.demo.service;
 import com.example.demo.exception.DatabaseFailure;
-import com.example.demo.files.AwsImplementationFileService;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.dao.TransientDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
@@ -27,13 +21,6 @@ public class FileMetaDataService {
         }
     }
 
-    public boolean checkFileExists(FileMetadata file){
-        try {
-            return repository.findByCode(file.getCode()) != null;
-        } catch (DataAccessException e) {
-            throw new DatabaseFailure();
-        }
-    }
 
     public void deleteFileMetaData(FileMetadata file) {
         repository.deleteById(file.getId());
@@ -46,6 +33,12 @@ public class FileMetaDataService {
 
     public List<FileMetadata> getImageMetadataList(Long userId) {
         return repository.findByOwnerId(userId);
+    }
+
+    public void save(FileMetadata fileMetadata) {
+        Long maxVersion = repository.findMaxVersionByName(fileMetadata.getName());
+        fileMetadata.setVersion(maxVersion + 1);
+        repository.save(fileMetadata);
     }
 
     private void validateFile(MultipartFile file) {

@@ -24,7 +24,6 @@ public class FileMetadata {
     private String key;
     private String hashValue;
     private String code;
-    @Version
     private Long version;
     public FileMetadata(String name, String mimeType, Long ownerId, Long size, String key, String hashValue) {
         this.name = name;
@@ -34,6 +33,13 @@ public class FileMetadata {
         this.key = key;
         this.hashValue = hashValue;
         this.code = generateCode(ownerId, size, key, hashValue);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (version == null) {
+            version = 0L;
+        }
     }
 
     public String generateCode(Long ownerId, Long size, String key, String hashValue) {

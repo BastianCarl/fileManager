@@ -3,7 +3,6 @@ package com.example.demo.files;
 import com.example.demo.FileHelper;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
-import com.example.demo.model.Resource;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
@@ -38,6 +37,7 @@ public class FileServiceOrchestrator {
     private final Archiver archiver;
     private final FileMetaDataService fileMetaDataService;
     private final FileHelper fileHelper;
+    private final FileMetadataMapper fileMetadataMapper;
     private DateTimeFormatter formatter;
     private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
 
@@ -59,6 +59,7 @@ public class FileServiceOrchestrator {
         this.archiver = archiver;
         this.fileMetaDataService = fileMetaDataService;
         this.fileHelper = fileHelper;
+        this.fileMetadataMapper = fileMetadataMapper;
     }
 
     @PostConstruct
@@ -66,19 +67,10 @@ public class FileServiceOrchestrator {
         formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
     }
 
-    public void uploadIfMissing(Resource resource) {
-        if (!fileMetaDataService.checkFileExists(resource.getFileMetadata())) {
-            fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
-        } else {
-            LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
-        }
-        if (!fileService.checkKeyExists(resource.getFileMetadata().getKey())) {
-            switch (resource.getSource()) {
-                case File file -> fileService.uploadFile(file);
-                case MultipartFile multipartFile -> fileService.uploadFile(multipartFile);
-                default -> throw new RuntimeException("Unsupported file type: " + resource.getSource());
-            }
-        }
+    public void uploadIfMissing(MultipartFile file, Long ownerId) {
+       FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
+        fileMetaDataService.uploadFileMetaData(fileMetadata);
+        fileService.uploadFile(file);
     }
 
     public void deleteMetadata(FileMetadata fileMetadata) {
@@ -176,6 +168,12 @@ public class FileServiceOrchestrator {
     public void restoreBackup(String date, Long ownerId) {
         Path backup = Path.of(BACKUP_PATH, date);
         Path destination = Path.of(BACKUP_PATH, LocalDate.now().format(formatter));
+        File[] files = fileHelper.listFiles(backup);
+        for (File file : files) {
+            FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
+            fileMetaDataService.save(fileMetadata);
+            fileService.uploadFile(file);
+        }
         fileHelper.copyFolder(backup, destination);
     }
 
