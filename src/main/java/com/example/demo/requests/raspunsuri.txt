@@ -931,3 +931,5 @@ Restaurare
     back-ul pentru tate veche ramane sau nu?
     cine poate face restore?
     asocierile pentru acele documente raman si se fac altele noi sau se sterg si se fac altele noi?
+----------
+daca intr-o fileUplaoder pune fiserul a.text, si maine pune tot a.txt, dar cu continut diferit e nevoie de versioning, dar daca un user prin api incarca un fisier a.txt care are sau nu acelasi continut?
