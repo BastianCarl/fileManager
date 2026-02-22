@@ -1,9 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
-import com.example.demo.model.FileMetadataMapper;
+import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
+import com.example.demo.utility.FileHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,20 +24,33 @@ public class FileController {
     private final Archiver archiver;
     private final FileServiceOrchestrator fileServiceOrchestrator;
     private final UserService userService;
-    private final FileMetadataMapper fileMetadataMapper;
+    private final FileMetaDataService fileMetaDataService;
+    private final FileHelper fileHelper;
 
     @Autowired
-    public FileController(Archiver archiver, FileServiceOrchestrator fileServiceOrchestrator, UserService userService, FileMetadataMapper fileMetadataMapper) {
+    public FileController(
+            Archiver archiver,
+            FileServiceOrchestrator fileServiceOrchestrator,
+            UserService userService,
+            FileMetaDataService fileMetaDataService,
+            FileHelper fileHelper
+    )
+    {
         this.archiver = archiver;
         this.fileServiceOrchestrator = fileServiceOrchestrator;
         this.userService = userService;
-        this.fileMetadataMapper = fileMetadataMapper;
+        this.fileMetaDataService = fileMetaDataService;
+        this.fileHelper = fileHelper;
     }
 
     @PostMapping()
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) {
-       fileServiceOrchestrator.upload(file, userService.getOwnerId(authToken));
-       return ResponseEntity.ok().build();
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) throws IOException {
+        if (fileMetaDataService.checkFileMetadataExists(fileHelper.sha256Hex(file.getInputStream()))) {
+            fileServiceOrchestrator.upload(file, userService.getOwnerId(authToken));
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.ok().body("Duplicated file");
+        }
     }
 
     @GetMapping("/{fileId}")

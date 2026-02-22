@@ -5,8 +5,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
+import java.util.HexFormat;
 import java.util.List;
+import static org.apache.commons.codec.digest.DigestUtils.sha256;
 
 @Component
 public class FileHelper {
@@ -120,5 +123,9 @@ public class FileHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String sha256Hex(InputStream is) throws IOException {
+        return HexFormat.of().formatHex(sha256(is));
     }
 }

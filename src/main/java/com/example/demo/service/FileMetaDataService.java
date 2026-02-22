@@ -21,6 +21,9 @@ public class FileMetaDataService {
         }
     }
 
+    public boolean checkFileMetadataExists(String hasValue){
+        return repository.existsByHashValue(hasValue);
+    }
 
     public void deleteFileMetaData(FileMetadata file) {
         repository.deleteById(file.getId());

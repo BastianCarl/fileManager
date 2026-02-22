@@ -10,7 +10,7 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
     List<FileMetadata> findByOwnerId(Long ownerId);
     FileMetadata findByName(String name);
     void deleteById(Long id);
-
+    boolean existsByHashValue(String hashValue);
     @Query("""
        SELECT COALESCE(MAX(f.version), 0)
        FROM file_metadata f
