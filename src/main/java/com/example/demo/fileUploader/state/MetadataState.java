@@ -24,7 +24,7 @@ public class MetadataState extends AuditState {
     public AuditState process(Resource resource) {
         com.example.demo.model.AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getCode());
         if (shouldProcess(auditState, this.auditState)){
-            fileMetaDataService.uploadFileMetaData(resource.getFileMetadata());
+            fileMetaDataService.save(resource.getFileMetadata());
             auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
         }
        return fileServiceState;

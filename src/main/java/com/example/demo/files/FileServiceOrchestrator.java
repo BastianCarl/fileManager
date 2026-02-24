@@ -65,7 +65,7 @@ public class FileServiceOrchestrator {
 
     public void upload(MultipartFile file, Long ownerId) {
        FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
-        fileMetaDataService.uploadFileMetaData(fileMetadata);
+        fileMetaDataService.save(fileMetadata);
         fileService.uploadFile(new Resource(file, fileMetadata));
     }
 
@@ -145,7 +145,7 @@ public class FileServiceOrchestrator {
     }
 
     public byte[] manageDownloadAllFilesAsArchive(Long ownerId) throws IOException {
-        List<FileMetadata> files = userService.isAdmin(ownerId) ? fileMetadataRepository.findAll() : fileMetadataRepository.findByOwnerId(ownerId);
+        List<FileMetadata> files = fileMetaDataService.getFiles();
         return archiver.createZip(manageDownloadAllFiles(files));
     }
 
@@ -161,14 +161,12 @@ public class FileServiceOrchestrator {
 
     public void restoreBackup(String date, Long ownerId) {
         Path backup = Path.of(BACKUP_PATH, date);
-        Path destination = Path.of(BACKUP_PATH, LocalDate.now().format(formatter));
         File[] files = fileHelper.listFiles(backup);
         for (File file : files) {
             FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
             fileMetaDataService.save(fileMetadata);
             fileService.uploadFile(new Resource(file, fileMetadata));
         }
-        fileHelper.copyFolder(backup, destination);
     }
 
     public static class ThreadManagerContext {

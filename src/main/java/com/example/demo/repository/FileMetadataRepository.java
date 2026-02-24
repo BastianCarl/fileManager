@@ -17,4 +17,14 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
        WHERE f.name = :name
        """)
     Long findMaxVersionByName(@Param("name") String name);
+    @Query("""
+        SELECT f
+        FROM file_metadata f
+        WHERE f.version = (
+            SELECT MAX(f2.version)
+            FROM file_metadata f2
+            WHERE f2.name = f.name
+        )
+    """)
+    List<FileMetadata> findLatestVersion();
 }

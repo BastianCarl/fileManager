@@ -13,20 +13,16 @@ import java.util.*;
 public class FileMetaDataService {
 
     private final FileMetadataRepository repository;
-    public FileMetadata uploadFileMetaData(FileMetadata metadata){
-        try {
-            return repository.save(metadata);
-        }catch (DataAccessException exception ) {
-            throw new DatabaseFailure();
-        }
-    }
-
     public boolean checkFileMetadataExists(String hasValue){
         return repository.existsByHashValue(hasValue);
     }
 
     public void deleteFileMetaData(FileMetadata file) {
         repository.deleteById(file.getId());
+    }
+
+    public List<FileMetadata> getFiles(){
+        return repository.findLatestVersion();
     }
 
     public FileMetadata getFilesMetadata(Long fileId, Long ownerId) {
@@ -41,7 +37,11 @@ public class FileMetaDataService {
     public void save(FileMetadata fileMetadata) {
         Long maxVersion = repository.findMaxVersionByName(fileMetadata.getName());
         fileMetadata.setVersion(maxVersion + 1);
-        repository.save(fileMetadata);
+        try {
+            repository.save(fileMetadata);
+        }catch (DataAccessException exception ) {
+            throw new DatabaseFailure();
+        }
     }
 
     private void validateFile(MultipartFile file) {
