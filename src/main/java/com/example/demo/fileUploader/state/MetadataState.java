@@ -7,13 +7,14 @@ import com.example.demo.service.FileMetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import static com.example.demo.model.AuditState.METADATA;
+import static com.example.demo.model.AuditState.*;
 
 @Component
 public class MetadataState implements State{
     private final FileServiceState fileServiceState;
     private final FileMetaDataService fileMetaDataService;
     private final AuditService auditService;
+
     @Autowired
     public MetadataState(@Lazy AuditService auditService,
                          @Lazy FileMetaDataService fileMetaDataService,
@@ -26,6 +27,7 @@ public class MetadataState implements State{
 
     @Override
     public State process(Resource resource) {
+        auditService.updateOrCreate(resource.getFileMetadata(), METADATA_STARTED);
         AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
         if (shouldProcess(previousState)){
             fileMetaDataService.save(resource.getFileMetadata());
@@ -36,6 +38,6 @@ public class MetadataState implements State{
 
     @Override
     public AuditState nextState() {
-        return METADATA;
+        return METADATA_DONE;
     }
 }

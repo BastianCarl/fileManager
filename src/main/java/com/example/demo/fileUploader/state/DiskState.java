@@ -13,7 +13,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import static com.example.demo.model.AuditState.DISK;
+import static com.example.demo.model.AuditState.*;
 
 @Component
 public class DiskState implements State {
@@ -41,6 +41,7 @@ public class DiskState implements State {
 
     @Override
     public State process(Resource resource) {
+        auditService.updateOrCreate(resource.getFileMetadata(), DISK_STARTED);
         AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
         if (shouldProcess(previousState)){
             File file = resource.getFile();
@@ -52,6 +53,6 @@ public class DiskState implements State {
 
     @Override
     public AuditState nextState() {
-        return DISK;
+        return DISK_DONE;
     }
 }

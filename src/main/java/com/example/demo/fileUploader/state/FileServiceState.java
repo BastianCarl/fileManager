@@ -7,13 +7,14 @@ import com.example.demo.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import static com.example.demo.model.AuditState.FILE_SERVICE;
+import static com.example.demo.model.AuditState.*;
 
 @Component
 public class FileServiceState implements State {
     private final DiskState diskState;
     private final FileService fileService;
     private final AuditService auditService;
+
     @Autowired
     public FileServiceState(@Lazy AuditService auditService,
                             @Lazy FileService fileService,
@@ -26,6 +27,7 @@ public class FileServiceState implements State {
 
     @Override
     public State process(Resource resource) {
+        auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
         AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
         if (shouldProcess(previousState)){
             fileService.uploadFile(resource);
@@ -36,6 +38,6 @@ public class FileServiceState implements State {
 
     @Override
     public AuditState nextState() {
-        return FILE_SERVICE;
+        return FILE_SERVICE_DONE;
     }
 }

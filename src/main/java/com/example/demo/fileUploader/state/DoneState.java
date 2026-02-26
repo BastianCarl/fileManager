@@ -10,6 +10,7 @@ import static com.example.demo.model.AuditState.DONE;
 @Component
 public class DoneState implements State {
     private final AuditService auditService;
+
     @Autowired
     public DoneState(AuditService auditService) {
        this.auditService = auditService;

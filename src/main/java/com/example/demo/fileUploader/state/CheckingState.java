@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import static com.example.demo.model.AuditState.CHECKING;
+import static com.example.demo.model.AuditState.*;
 
 @Component
 public class CheckingState implements State{
-    protected final AuditService auditService;
+    private final AuditService auditService;
     private final MetadataState metadataState;
     private final CleaningState cleaningState;
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckingState.class);
@@ -25,8 +25,10 @@ public class CheckingState implements State{
 
     @Override
     public State process(Resource resource) {
-       AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
+        auditService.updateOrCreate(resource.getFileMetadata(), CHECKING_STARTED);
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
        if (previousState != AuditState.DONE) {
+           auditService.updateOrCreate(resource.getFileMetadata(), nextState());
            return metadataState;
        }else {
            LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
@@ -36,6 +38,6 @@ public class CheckingState implements State{
 
     @Override
     public AuditState nextState() {
-        return CHECKING;
+        return CHECKING_DONE;
     }
 }
