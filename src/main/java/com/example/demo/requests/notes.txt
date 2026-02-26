@@ -210,3 +210,42 @@ Retryable doar pentru exceptii pentru care are sens
 
 
  STARTING = adauga fisierul in tabela de audit -> Metadata = verificare si la nevoie adaugare -> ExternalProvider = verificare in aws si la nevoie adaugare  -> DiskWork = mutare dintr-un fisier in altul
+ ----
+ sa nu mai iau starea de audit din db
+ stari mai granulare
+optimistic locking vs pessimistic locking
+composed unique constraint
+    public void save(FileMetadata fileMetadata) {
+        Long maxVersion = repository.findMaxVersionByName(fileMetadata.getName());
+        fileMetadata.setVersion(maxVersion + 1);
+        try {
+            repository.save(fileMetadata);
+        }catch (DataAccessException exception ) {
+            throw new DatabaseFailure();
+
+
+        adaug in sql query sa calculeze singur noua versiune
+cate tipuri de primary key sunt?
+
+    public void save(FileMetadata fileMetadata) {
+        Long maxVersion = repository.findMaxVersionByName(fileMetadata.getName());
+        fileMetadata.setVersion(maxVersion + 1);
+        try {
+            repository.save(fileMetadata);
+        }catch (DataAccessException exception ) {
+            throw new DatabaseFailure();
+        }
+    }
+
+     2 variante pentru calcul la versions
+
+    private void validateFile(MultipartFile file) {
+        if(file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty.");
+        }
+
+        cum o pot scrie mai bine
+
+        getAllFiles sa primeasca parametru care permie fie lates sau toate vesiunile?
+     
+sa caut pe net cum sa scriu un prompt

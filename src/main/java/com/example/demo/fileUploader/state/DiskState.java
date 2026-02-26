@@ -1,5 +1,6 @@
 package com.example.demo.fileUploader.state;
 
+import com.example.demo.model.AuditState;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
@@ -8,14 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import static com.example.demo.model.AuditState.DISK;
 
 @Component
-public class DiskState extends AuditState {
+public class DiskState implements State {
+    private final AuditService auditService;
     private final FileHelper fileHelper;
     private final DoneState doneState;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
@@ -27,7 +29,7 @@ public class DiskState extends AuditState {
     @Autowired
     public DiskState(@Lazy AuditService auditService, @Lazy FileHelper fileHelper, DoneState doneState)
     {
-        super(auditService, com.example.demo.model.AuditState.DISK);
+        this.auditService = auditService;
         this.fileHelper = fileHelper;
         this.doneState = doneState;
     }
@@ -38,13 +40,18 @@ public class DiskState extends AuditState {
     }
 
     @Override
-    public AuditState process(Resource resource) {
-        com.example.demo.model.AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getCode());
-        if (shouldProcess(auditState, this.auditState)){
+    public State process(Resource resource) {
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
+        if (shouldProcess(previousState)){
             File file = resource.getFile();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-            auditService.updateOrCreate(resource.getFileMetadata().getCode(), this.auditState);
+            auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
         return doneState;
+    }
+
+    @Override
+    public AuditState nextState() {
+        return DISK;
     }
 }

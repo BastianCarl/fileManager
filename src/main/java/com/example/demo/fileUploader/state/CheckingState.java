@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import static com.example.demo.model.AuditState.CHECKING;
 
 @Component
 public class CheckingState implements State{
@@ -24,12 +25,17 @@ public class CheckingState implements State{
 
     @Override
     public State process(Resource resource) {
-       AuditState auditState = auditService.getAuditState(resource.getFileMetadata().getCode());
-       if (auditState != AuditState.DONE) {
+       AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
+       if (previousState != AuditState.DONE) {
            return metadataState;
        }else {
            LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
            return cleaningState;
        }
+    }
+
+    @Override
+    public AuditState nextState() {
+        return CHECKING;
     }
 }

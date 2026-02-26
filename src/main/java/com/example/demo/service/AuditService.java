@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Audit;
 import com.example.demo.model.AuditState;
+import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.AuditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ public class AuditService {
                 .orElse(AuditState.NOT_FOUND);
     }
 
-    public Audit updateOrCreate(String code, AuditState newState) {
+    public Audit updateOrCreate(FileMetadata fileMetadata, AuditState newState) {
+        String code  = fileMetadata.getCode();
         Audit audit = auditRepository.findByCode(code)
                 .orElseGet(() -> {
                     Audit a = new Audit();
