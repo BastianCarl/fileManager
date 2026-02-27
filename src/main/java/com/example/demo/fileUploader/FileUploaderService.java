@@ -24,7 +24,7 @@ import static com.example.demo.service.UserService.userDTO;
 
 @Service
 public class FileUploaderService {
-    private State initialOperationalState;
+    private State initialState;
     private final UserService userService;
     private final FileHelper fileHelper;
     private final FileMetadataMapper fileMetadataMapper;
@@ -46,7 +46,7 @@ public class FileUploaderService {
         this.userService = userService;
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
-        this.initialOperationalState = checkingState;
+        this.initialState = checkingState;
     }
 
     @PostConstruct
@@ -58,7 +58,7 @@ public class FileUploaderService {
 
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
-        State state = initialOperationalState;
+        State state = initialState;
         Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
         while (state != null) {
             state = state.process(resource);
