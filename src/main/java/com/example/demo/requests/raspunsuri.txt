@@ -933,3 +933,21 @@ Restaurare
     asocierile pentru acele documente raman si se fac altele noi sau se sterg si se fac altele noi?
 ----------
 daca intr-o fileUplaoder pune fiserul a.text, si maine pune tot a.txt, dar cu continut diferit e nevoie de versioning, dar daca un user prin api incarca un fisier a.txt care are sau nu acelasi continut?
+----------
+optimistic locking vs pessimistic locking
+pessimistic locking
+    - try to avoid de conflict
+    - uses lock so no other transaction can modified the row
+    - weak performance
+    - used when conflicts are frequently
+    - may cause deadlock
+    - used for critical operations
+optimistic locking
+    - allow the conflict to happen and need to detect it upon committing your transactions
+    - uses version to detect possible changes
+    - in case the version is wrong the transaction fails
+    - retry mechanism
+    - strong performance
+    - used when conflicts are rare
+composed unique constraint
+    -

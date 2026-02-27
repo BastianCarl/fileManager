@@ -45,7 +45,7 @@ public class FileController {
 
     @PostMapping()
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @RequestHeader("Authentication") String authToken) throws IOException {
-        if (fileMetaDataService.checkFileMetadataExists(fileHelper.sha256Hex(file.getInputStream()))) {
+        if (!fileMetaDataService.checkFileMetadataExists(fileHelper.sha256Hex(file.getInputStream()))) {
             fileServiceOrchestrator.upload(file, userService.getOwnerId(authToken));
             return ResponseEntity.ok().build();
         } else {

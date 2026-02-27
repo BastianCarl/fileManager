@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+@Table(uniqueConstraints = {@UniqueConstraint(name = "version_name", columnNames = { "version", "name" })})
 @Entity(name = "file_metadata")
 @Data
 @NoArgsConstructor
