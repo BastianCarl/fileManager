@@ -18,7 +18,10 @@ public class DoneState implements State {
 
     @Override
     public State process(Resource resource) {
-        auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
+        if (shouldProcess(previousState)) {
+            auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+        }
         return null;
     }
 

@@ -25,8 +25,8 @@ public class CheckingState implements State{
 
     @Override
     public State process(Resource resource) {
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
         auditService.updateOrCreate(resource.getFileMetadata(), CHECKING_STARTED);
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
        if (previousState != AuditState.DONE) {
            auditService.updateOrCreate(resource.getFileMetadata(), nextState());
            return metadataState;

@@ -15,7 +15,8 @@ public class AuditService {
         this.auditRepository = auditRepository;
     }
 
-    public AuditState getAuditState(String code) {
+    public AuditState getAuditState(FileMetadata fileMetadata) {
+        String code = fileMetadata.getCode();
         return auditRepository.findByCode(code)
                 .map(Audit::getState)
                 .orElse(AuditState.NOT_FOUND);

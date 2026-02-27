@@ -27,9 +27,9 @@ public class MetadataState implements State{
 
     @Override
     public State process(Resource resource) {
-        auditService.updateOrCreate(resource.getFileMetadata(), METADATA_STARTED);
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
         if (shouldProcess(previousState)){
+            auditService.updateOrCreate(resource.getFileMetadata(), METADATA_STARTED);
             fileMetaDataService.save(resource.getFileMetadata());
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }

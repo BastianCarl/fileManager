@@ -27,9 +27,9 @@ public class FileServiceState implements State {
 
     @Override
     public State process(Resource resource) {
-        auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
         if (shouldProcess(previousState)){
+            auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
             fileService.uploadFile(resource);
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }

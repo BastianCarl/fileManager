@@ -24,15 +24,18 @@ public class CleaningState implements State{
 
     @Override
     public State process(Resource resource) {
-        auditService.updateOrCreate(resource.getFileMetadata(), CLEANING_STARTED);
-        File file = resource.getFile();
-        try {
-            fileHelper.deleteFile(file.toPath());
-            auditService.updateOrCreate(resource.getFileMetadata(), nextState());
-            return doneState;
-        }catch (Exception e){
-            throw new RuntimeException();
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
+        if (shouldProcess(previousState)) {
+            auditService.updateOrCreate(resource.getFileMetadata(), CLEANING_STARTED);
+            File file = resource.getFile();
+            try {
+                fileHelper.deleteFile(file.toPath());
+                auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
         }
+        return doneState;
     }
 
     @Override

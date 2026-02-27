@@ -41,9 +41,9 @@ public class DiskState implements State {
 
     @Override
     public State process(Resource resource) {
-        auditService.updateOrCreate(resource.getFileMetadata(), DISK_STARTED);
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata().getCode());
+        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
         if (shouldProcess(previousState)){
+            auditService.updateOrCreate(resource.getFileMetadata(), DISK_STARTED);
             File file = resource.getFile();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
