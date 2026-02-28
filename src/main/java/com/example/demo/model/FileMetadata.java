@@ -36,12 +36,6 @@ public class FileMetadata {
         this.code = generateCode(ownerId, size, key, hashValue);
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (version == null) {
-            version = 0L;
-        }
-    }
 
     public String generateCode(Long ownerId, Long size, String key, String hashValue) {
         try {

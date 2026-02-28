@@ -1,5 +1,6 @@
 package com.example.demo.files;
 
+import com.example.demo.model.Option;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileMetadataMapper;
@@ -17,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
@@ -65,8 +65,8 @@ public class FileServiceOrchestrator {
 
     public void upload(MultipartFile file, Long ownerId) {
        FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
-        fileMetaDataService.save(fileMetadata);
-        fileService.uploadFile(new Resource(file, fileMetadata));
+       fileMetaDataService.save(fileMetadata);
+       fileService.uploadFile(new Resource(file, fileMetadata));
     }
 
     public void deleteMetadata(FileMetadata fileMetadata) {
@@ -96,7 +96,7 @@ public class FileServiceOrchestrator {
             Future<?> future = executor.submit(() -> {
                 byte[] fileContent = downloadFileWithRetry(fileMetadata);
                 if (fileContent != null) {
-                    threadContext.addElement(fileMetadata.getName(), fileContent);
+                    threadContext.addElement("v" + fileMetadata.getVersion() + fileMetadata.getName(), fileContent);
                 }
             });
 
@@ -144,8 +144,8 @@ public class FileServiceOrchestrator {
         return new byte[0];
     }
 
-    public byte[] manageDownloadAllFilesAsArchive(Long ownerId) throws IOException {
-        List<FileMetadata> files = fileMetaDataService.getFiles();
+    public byte[] manageDownloadAllFilesAsArchive(Option option) throws IOException {
+        List<FileMetadata> files = option.getFiles(fileMetaDataService);
         return archiver.createZip(manageDownloadAllFiles(files));
     }
 

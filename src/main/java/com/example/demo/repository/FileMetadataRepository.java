@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.model.FileMetadata;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.List;
@@ -26,5 +27,33 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
             WHERE f2.name = f.name
         )
     """)
-    List<FileMetadata> findLatestVersion();
+    List<FileMetadata> getFilesWithLatestVersion();
+
+    @Modifying
+    @Query(value = """
+        INSERT INTO file_metadata
+            (name,
+             mime_type,
+             owner_id,
+             size,
+             key,
+             hash_value,
+             code,
+             version)
+        VALUES (
+            :#{#file.name},
+            :#{#file.mimeType},
+            :#{#file.ownerId},
+            :#{#file.size},
+            :#{#file.key},
+            :#{#file.hashValue},
+            :#{#file.code},
+            (
+                SELECT COALESCE(MAX(f2.version), 0) + 1
+                FROM file_metadata f2
+                WHERE f2.name = :#{#file.name}
+            )
+        )
+        """, nativeQuery = true)
+    int saveWithVersioning(FileMetadata file);
 }

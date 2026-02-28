@@ -43,5 +43,5 @@ Content-Type: multipart/form-data; boundary={{boundary}}
 Content-Disposition: form-data; name="file"; filename="problems.png"
 Content-Type: text/plain
 
-< ./steam.jpg
+< ./problems.png
 --{{boundary}}--

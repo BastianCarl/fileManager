@@ -949,5 +949,23 @@ optimistic locking
     - retry mechanism
     - strong performance
     - used when conflicts are rare
-composed unique constraint
-    -
+Primary keys
+    - IDENTITY
+        - the db generates the id when inserting the row incrementally. Tells the db this is an autoincrement colum
+    - SEQUENCE
+        - Uses a database sequence object
+        - IDENTITY → DB generates ID after insert
+        - SEQUENCE → ID generated before insert
+        - CREATE SEQUENCE user_sequence START WITH 1 INCREMENT BY 1;
+        - the step can be configurable
+        - undependable from a table
+    - TABLE
+        - uses an auxiliary table
+        - works with all dbs
+    - UUID
+        - Universal unique identifier
+        - more secured than identity, especially for frontend
+    - AUTO
+        - depends on the db. Uses de default of db
+    - Custom
+        - using a custom generator

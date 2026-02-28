@@ -35,5 +35,5 @@ Accept: application/json
     }
 %}
 ###
-GET {{rootURL}}/files/all/zip
+GET {{rootURL}}/files/all/zip?option=latest
 Authentication: Bearer {{token}}

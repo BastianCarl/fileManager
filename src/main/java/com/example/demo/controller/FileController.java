@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
+import com.example.demo.model.Option;
 import com.example.demo.service.FileMetaDataService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
@@ -74,9 +75,9 @@ public class FileController {
     }
 
     @GetMapping("/all/{type}")
-    public ResponseEntity<byte[]> getAllFiles(@RequestHeader("Authentication") String authToken, @PathVariable String type) throws Exception {
+    public ResponseEntity<byte[]> getAllFiles(@RequestHeader("Authentication") String authToken, @PathVariable String type, @RequestParam Option option) throws Exception {
         if (archiver.isArchiveTypeAccepted(type)) {
-            byte[] zipBytes = fileServiceOrchestrator.manageDownloadAllFilesAsArchive(userService.getOwnerId(authToken));
+            byte[] zipBytes = fileServiceOrchestrator.manageDownloadAllFilesAsArchive(option);
             return ResponseEntity.ok()
                     .header(
                             HttpHeaders.CONTENT_DISPOSITION,
