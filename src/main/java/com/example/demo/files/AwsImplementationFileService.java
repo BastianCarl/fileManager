@@ -83,7 +83,7 @@ public class AwsImplementationFileService implements FileService {
         try {
             s3client.putObject(req);
         } catch (AmazonClientException exception) {
-            throw new FileServiceFailure();
+            throw new FileServiceFailure("Failed to upload file to AWS", exception);
         }
     }
 

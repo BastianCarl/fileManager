@@ -46,7 +46,7 @@ public class FileMetaDataService {
         try {
             repository.saveWithVersioning(fileMetadata);
         }catch (DataAccessException exception ) {
-            throw new DatabaseFailure();
+            throw new DatabaseFailure("Failed to save entity", exception);
         }
     }
 
