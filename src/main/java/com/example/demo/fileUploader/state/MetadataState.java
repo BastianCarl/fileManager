@@ -4,6 +4,7 @@ import com.example.demo.model.AuditState;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.FileMetaDataService;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -26,14 +27,13 @@ public class MetadataState implements State{
     }
 
     @Override
-    public State process(Resource resource) {
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
-        if (shouldProcess(previousState)){
+    public Pair<State, AuditState> process(Resource resource, AuditState currentAuditState) {
+        if (shouldProcess(currentAuditState)){
             auditService.updateOrCreate(resource.getFileMetadata(), METADATA_STARTED);
             fileMetaDataService.save(resource.getFileMetadata());
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
-       return fileServiceState;
+       return Pair.of(fileServiceState, nextState());
     }
 
     @Override

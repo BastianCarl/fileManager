@@ -4,6 +4,7 @@ import com.example.demo.model.AuditState;
 import com.example.demo.service.AuditService;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.io.File;
@@ -23,9 +24,8 @@ public class CleaningState implements State{
     }
 
     @Override
-    public State process(Resource resource) {
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
-        if (shouldProcess(previousState)) {
+    public Pair<State, AuditState> process(Resource resource, AuditState previousAuditState) {
+        if (shouldProcess(previousAuditState)) {
             auditService.updateOrCreate(resource.getFileMetadata(), CLEANING_STARTED);
             File file = resource.getFile();
             try {
@@ -35,7 +35,7 @@ public class CleaningState implements State{
                 throw new RuntimeException();
             }
         }
-        return doneState;
+        return Pair.of(doneState, nextState());
     }
 
     @Override

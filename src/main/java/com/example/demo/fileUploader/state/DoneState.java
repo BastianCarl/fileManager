@@ -3,6 +3,7 @@ package com.example.demo.fileUploader.state;
 import com.example.demo.model.AuditState;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import static com.example.demo.model.AuditState.DONE;
@@ -17,12 +18,11 @@ public class DoneState implements State {
     }
 
     @Override
-    public State process(Resource resource) {
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
-        if (shouldProcess(previousState)) {
+    public Pair<State, AuditState> process(Resource resource, AuditState previousAuditState) {
+        if (shouldProcess(previousAuditState)) {
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
-        return null;
+        return Pair.of(null, nextState());
     }
 
     @Override

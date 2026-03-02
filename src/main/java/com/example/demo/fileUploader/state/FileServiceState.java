@@ -4,6 +4,7 @@ import com.example.demo.files.FileService;
 import com.example.demo.model.AuditState;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -26,14 +27,13 @@ public class FileServiceState implements State {
     }
 
     @Override
-    public State process(Resource resource) {
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
-        if (shouldProcess(previousState)){
+    public Pair<State, AuditState> process(Resource resource, AuditState currentAuditState) {
+        if (shouldProcess(currentAuditState)){
             auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
             fileService.uploadFile(resource);
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
-        return diskState;
+        return Pair.of(diskState, nextState());
     }
 
     @Override

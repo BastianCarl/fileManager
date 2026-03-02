@@ -1,5 +1,6 @@
 package com.example.demo.fileUploader;
 
+import com.example.demo.model.AuditState;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -24,7 +26,7 @@ import static com.example.demo.service.UserService.userDTO;
 
 @Service
 public class FileUploaderService {
-    private State initialState;
+    private final State initialState;
     private final UserService userService;
     private final FileHelper fileHelper;
     private final FileMetadataMapper fileMetadataMapper;
@@ -59,9 +61,12 @@ public class FileUploaderService {
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
         State state = initialState;
+        AuditState auditState = AuditState.CHECKING;
         Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
         while (state != null) {
-            state = state.process(resource);
+            Pair<State, AuditState> pair = state.process(resource, auditState);
+            state = pair.getLeft();
+            auditState = pair.getRight();
         }
     }
 

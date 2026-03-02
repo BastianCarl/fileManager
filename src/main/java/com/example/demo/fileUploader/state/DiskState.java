@@ -5,6 +5,7 @@ import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 import jakarta.annotation.PostConstruct;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -40,15 +41,14 @@ public class DiskState implements State {
     }
 
     @Override
-    public State process(Resource resource) {
-        AuditState previousState = auditService.getAuditState(resource.getFileMetadata());
-        if (shouldProcess(previousState)){
+    public Pair<State, AuditState> process(Resource resource, AuditState previousAuditState) {
+        if (shouldProcess(previousAuditState)){
             auditService.updateOrCreate(resource.getFileMetadata(), DISK_STARTED);
             File file = resource.getFile();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
-        return doneState;
+        return Pair.of(doneState, nextState());
     }
 
     @Override
