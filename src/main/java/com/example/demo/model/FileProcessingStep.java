@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 import lombok.Getter;
 @Getter
-public enum AuditState {
+public enum FileProcessingStep {
     NOT_FOUND(0),
     CHECKING(1),
     METADATA_STARTED(2),
@@ -15,7 +15,7 @@ public enum AuditState {
     CLEANING_DONE(9),
     DONE(10);
     final int order;
-    AuditState(int order) {
+    FileProcessingStep(int order) {
         this.order = order;
     }
 }

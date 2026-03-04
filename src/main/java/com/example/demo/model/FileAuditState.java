@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Audit {
+public class FileAuditState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-    private AuditState state;
+    private FileProcessingStep step;
     private String code;
 }

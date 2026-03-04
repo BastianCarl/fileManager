@@ -1,11 +1,11 @@
 package com.example.demo.fileUploader;
 
-import com.example.demo.model.AuditState;
+import com.example.demo.model.FileProcessingStep;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
-import com.example.demo.fileUploader.state.CheckingState;
-import com.example.demo.fileUploader.state.State;
+import com.example.demo.fileUploader.step.CheckingStep;
+import com.example.demo.fileUploader.step.Step;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.UserService;
@@ -26,7 +26,7 @@ import static com.example.demo.service.UserService.userDTO;
 
 @Service
 public class FileUploaderService {
-    private final State initialState;
+    private final Step initialStep;
     private final UserService userService;
     private final FileHelper fileHelper;
     private final FileMetadataMapper fileMetadataMapper;
@@ -43,12 +43,12 @@ public class FileUploaderService {
             UserService userService,
             FileHelper fileHelper,
             FileMetadataMapper fileMetadataMapper,
-            CheckingState checkingState
+            CheckingStep checkingState
     ) {
         this.userService = userService;
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
-        this.initialState = checkingState;
+        this.initialStep = checkingState;
     }
 
     @PostConstruct
@@ -60,13 +60,13 @@ public class FileUploaderService {
 
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
-        State state = initialState;
-        AuditState auditState = AuditState.CHECKING;
+        Step step = initialStep;
+        FileProcessingStep fileProcessingStep = FileProcessingStep.CHECKING;
         Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
-        while (state != null) {
-            Pair<State, AuditState> pair = state.process(resource, auditState);
-            state = pair.getLeft();
-            auditState = pair.getRight();
+        while (step != null) {
+            Pair<Step, FileProcessingStep> pair = step.process(resource, fileProcessingStep);
+            step = pair.getLeft();
+            fileProcessingStep = pair.getRight();
         }
     }
 

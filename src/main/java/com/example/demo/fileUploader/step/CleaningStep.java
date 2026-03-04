@@ -1,6 +1,6 @@
-package com.example.demo.fileUploader.state;
+package com.example.demo.fileUploader.step;
 
-import com.example.demo.model.AuditState;
+import com.example.demo.model.FileProcessingStep;
 import com.example.demo.service.AuditService;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
@@ -8,24 +8,24 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.io.File;
-import static com.example.demo.model.AuditState.*;
+import static com.example.demo.model.FileProcessingStep.*;
 
 @Component
-public class CleaningState implements State{
+public class CleaningStep implements Step {
     private final FileHelper fileHelper;
     private final AuditService auditService;
-    private final DoneState doneState;
+    private final DoneStep doneStep;
 
     @Autowired
-    public CleaningState(FileHelper fileHelper, AuditService auditService, DoneState doneState) {
+    public CleaningStep(FileHelper fileHelper, AuditService auditService, DoneStep doneStep) {
         this.fileHelper = fileHelper;
         this.auditService = auditService;
-        this.doneState = doneState;
+        this.doneStep = doneStep;
     }
 
     @Override
-    public Pair<State, AuditState> process(Resource resource, AuditState previousAuditState) {
-        if (shouldProcess(previousAuditState)) {
+    public Pair<Step, FileProcessingStep> process(Resource resource, FileProcessingStep previousFileProcessingStep) {
+        if (shouldProcess(previousFileProcessingStep)) {
             auditService.updateOrCreate(resource.getFileMetadata(), CLEANING_STARTED);
             File file = resource.getFile();
             try {
@@ -35,11 +35,11 @@ public class CleaningState implements State{
                 throw new RuntimeException();
             }
         }
-        return Pair.of(doneState, nextState());
+        return Pair.of(doneStep, nextState());
     }
 
     @Override
-    public AuditState nextState() {
+    public FileProcessingStep nextState() {
         return CLEANING_DONE;
     }
 }

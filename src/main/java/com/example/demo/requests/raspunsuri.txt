@@ -969,3 +969,31 @@ Primary keys
         - depends on the db. Uses de default of db
     - Custom
         - using a custom generator
+--------
+cum as face sa sterg un milion de rows tiand cont ca foloses o aplicatie de auditare
+    - batch (pentru o luna)
+    - rate limiter
+    - bulk delete
+    - Soft delete
+cum face hibernate sa retunreze id-ul setat ca primary key cu identity?
+    - Hibernate -> JDBC -> DB driver -> SQL
+    - Depends on the DB provider
+        - PostgreSQL
+            INSERT INTO users(name)
+            VALUES ('Ion')
+            RETURNING id;
+        - MySQL
+            INSERT INTO users(name)
+            VALUES ('Ion');
+
+            SELECT LAST_INSERT_ID();
+
+Cum as face eu de mana intr-un native query sa inserez si sa intorc inapoi
+    - depends on the used db provide
+        - for PostgreSQL can be used Returning
+        - for SQL Server can be used OUTPUT
+        - for other is necessary to use two queries
+sa folosec suquence si sa vad daca pot lua in avans mai multe id-uri? ce probleme sunt cu acesta abordare
+    - SELECT nextval('my_sequence') FROM generate_series(1, 10) generates 10 ids
+    - it's possible to end up with a series of non-cosecutive id (1,2,5,6)
+    - id's order might not be the same as the insertion order

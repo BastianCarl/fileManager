@@ -1,6 +1,6 @@
-package com.example.demo.fileUploader.state;
+package com.example.demo.fileUploader.step;
 
-import com.example.demo.model.AuditState;
+import com.example.demo.model.FileProcessingStep;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
@@ -14,13 +14,13 @@ import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import static com.example.demo.model.AuditState.*;
+import static com.example.demo.model.FileProcessingStep.*;
 
 @Component
-public class DiskState implements State {
+public class DiskStep implements Step {
     private final AuditService auditService;
     private final FileHelper fileHelper;
-    private final DoneState doneState;
+    private final DoneStep doneStep;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
     private Path backupPath;
     @Value("${file.uploader.job.date.format}")
@@ -28,11 +28,11 @@ public class DiskState implements State {
     private DateTimeFormatter formatter;
 
     @Autowired
-    public DiskState(@Lazy AuditService auditService, @Lazy FileHelper fileHelper, DoneState doneState)
+    public DiskStep(@Lazy AuditService auditService, @Lazy FileHelper fileHelper, DoneStep doneStep)
     {
         this.auditService = auditService;
         this.fileHelper = fileHelper;
-        this.doneState = doneState;
+        this.doneStep = doneStep;
     }
 
     @PostConstruct
@@ -41,18 +41,18 @@ public class DiskState implements State {
     }
 
     @Override
-    public Pair<State, AuditState> process(Resource resource, AuditState previousAuditState) {
-        if (shouldProcess(previousAuditState)){
+    public Pair<Step, FileProcessingStep> process(Resource resource, FileProcessingStep previousFileProcessingStep) {
+        if (shouldProcess(previousFileProcessingStep)){
             auditService.updateOrCreate(resource.getFileMetadata(), DISK_STARTED);
             File file = resource.getFile();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
-        return Pair.of(doneState, nextState());
+        return Pair.of(doneStep, nextState());
     }
 
     @Override
-    public AuditState nextState() {
+    public FileProcessingStep nextState() {
         return DISK_DONE;
     }
 }

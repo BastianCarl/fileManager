@@ -209,9 +209,9 @@ Retryable doar pentru exceptii pentru care are sens
  si get sa intoarca ultima versiune pentru fisier inclusiv zip-ul
 
 
- STARTING = adauga fisierul in tabela de audit -> Metadata = verificare si la nevoie adaugare -> ExternalProvider = verificare in aws si la nevoie adaugare  -> DiskWork = mutare dintr-un fisier in altul
+ STARTING = adauga fisierul in tabela de fileAuditState -> Metadata = verificare si la nevoie adaugare -> ExternalProvider = verificare in aws si la nevoie adaugare  -> DiskWork = mutare dintr-un fisier in altul
  ----
- sa nu mai iau starea de audit din db
+ sa nu mai iau starea de fileAuditState din db
  stari mai granulare
 optimistic locking vs pessimistic locking
 composed unique constraint
@@ -252,7 +252,7 @@ sa caut pe net cum sa scriu un prompt
 --------------
 redenumire State si AuditState
 ordonare pe bean-uri at @order
-cum as face sa sterg un milion de rows folosit de o aplicatie de auditare
+cum as face sa sterg un milion de rows tiand cont ca foloses o aplicatie de auditare
 cum face hibernate sa retunreze id-ul setat ca primary key cu identity? Daca e in acelasi round-trip sau mai face inca un select. Cum as face eu de mana intr-un native query sa inserez si sa intorc inapoi
 sa folosec suquence si sa vad daca pot lua in avans mai multe id-uri? ce probleme sunt cu acesta abordare
 sa folosesc un table pentru o entitate?

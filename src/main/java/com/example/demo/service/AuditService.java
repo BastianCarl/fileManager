@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Audit;
-import com.example.demo.model.AuditState;
+import com.example.demo.model.FileAuditState;
+import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.repository.AuditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +15,23 @@ public class AuditService {
         this.auditRepository = auditRepository;
     }
 
-    public AuditState getAuditState(FileMetadata fileMetadata) {
+    public FileProcessingStep getAuditState(FileMetadata fileMetadata) {
         String code = fileMetadata.getCode();
         return auditRepository.findByCode(code)
-                .map(Audit::getState)
-                .orElse(AuditState.NOT_FOUND);
+                .map(FileAuditState::getStep)
+                .orElse(FileProcessingStep.NOT_FOUND);
     }
 
-    public Audit updateOrCreate(FileMetadata fileMetadata, AuditState newState) {
+    public FileAuditState updateOrCreate(FileMetadata fileMetadata, FileProcessingStep newState) {
         String code  = fileMetadata.getCode();
-        Audit audit = auditRepository.findByCode(code)
+        FileAuditState fileAuditState = auditRepository.findByCode(code)
                 .orElseGet(() -> {
-                    Audit a = new Audit();
+                    FileAuditState a = new FileAuditState();
                     a.setCode(code);
                     return a;
                 });
 
-        audit.setState(newState);
-        return auditRepository.save(audit);
+        fileAuditState.setStep(newState);
+        return auditRepository.save(fileAuditState);
     }
 }
