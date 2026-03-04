@@ -249,3 +249,14 @@ cate tipuri de primary key sunt?
         getAllFiles sa primeasca parametru care permie fie lates sau toate vesiunile?
      
 sa caut pe net cum sa scriu un prompt
+--------------
+redenumire State si AuditState
+ordonare pe bean-uri at @order
+cum as face sa sterg un milion de rows folosit de o aplicatie de auditare
+cum face hibernate sa retunreze id-ul setat ca primary key cu identity? Daca e in acelasi round-trip sau mai face inca un select. Cum as face eu de mana intr-un native query sa inserez si sa intorc inapoi
+sa folosec suquence si sa vad daca pot lua in avans mai multe id-uri? ce probleme sunt cu acesta abordare
+sa folosesc un table pentru o entitate?
+uuid?
+sa fac un generator custom care si daca deployez aplicatie de 10 sa nu genereze aceleasi id-uri.
+sa caut pe net cum sa scriu un prompt bine 2026
+daca termin pot sa ma uit pe websockets
