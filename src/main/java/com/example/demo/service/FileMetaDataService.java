@@ -40,11 +40,9 @@ public class FileMetaDataService {
     }
 
     @Transactional
-    public void save(FileMetadata fileMetadata) {
-//        Long maxVersion = repository.findMaxVersionByName(fileMetadata.getName());
-//        fileMetadata.setVersion(maxVersion + 1);
+    public FileMetadata save(FileMetadata fileMetadata) {
         try {
-            repository.saveWithVersioning(fileMetadata);
+            return repository.saveWithVersioning(fileMetadata);
         }catch (DataAccessException exception ) {
             throw new DatabaseFailure("Failed to save entity", exception);
         }

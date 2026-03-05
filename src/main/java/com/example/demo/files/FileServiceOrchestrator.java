@@ -63,10 +63,19 @@ public class FileServiceOrchestrator {
         formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
     }
 
-    public void upload(MultipartFile file, Long ownerId) {
-       FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
-       fileMetaDataService.save(fileMetadata);
-       fileService.uploadFile(new Resource(file, fileMetadata));
+    public Optional<FileMetadata> upload(MultipartFile file, String authToken) {
+        try {
+            if (fileMetaDataService.checkFileMetadataExists(fileHelper.sha256Hex(file.getInputStream()))) {
+                return Optional.empty();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        Long ownerId = userService.getOwnerId(authToken);
+        FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
+        fileService.uploadFile(new Resource(file, fileMetadata));
+        FileMetadata saved = fileMetaDataService.save(fileMetadata);
+        return Optional.of(saved);
     }
 
     public void deleteMetadata(FileMetadata fileMetadata) {
@@ -132,21 +141,16 @@ public class FileServiceOrchestrator {
         }
     }
 
-    @Cacheable(value ="downloadCache", key = "#fileId")
-    public byte[] manageDownloadFile(Long ownerId, Long fileId) throws IOException {
-        List<FileMetadata> files = userService.isAdmin(ownerId) ? fileMetadataRepository.findAll() : fileMetadataRepository.findByOwnerId(ownerId);
-        Optional<FileMetadata> fileMetadata = files.stream().filter(file -> file.getId().equals(fileId)).findFirst();
-        if (fileMetadata.isPresent()) {
-            byte[] file = null;
-            file = fileService.downloadFile(fileMetadata.get());
-            return file;
+    public Optional<byte[]> manageDownloadAllFilesAsArchive(String type, Option option){
+        if (archiver.isArchiveTypeAccepted(type)) {
+            List<FileMetadata> files = option.getFiles(fileMetaDataService);
+            try {
+                return  Optional.of(archiver.createZip(manageDownloadAllFiles(files)));
+            }catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
         }
-        return new byte[0];
-    }
-
-    public byte[] manageDownloadAllFilesAsArchive(Option option) throws IOException {
-        List<FileMetadata> files = option.getFiles(fileMetaDataService);
-        return archiver.createZip(manageDownloadAllFiles(files));
+        return Optional.empty();
     }
 
     @Cacheable(value ="searchCache", key = "#name")

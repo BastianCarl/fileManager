@@ -29,7 +29,6 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
     """)
     List<FileMetadata> getFilesWithLatestVersion();
 
-    @Modifying
     @Query(value = """
         INSERT INTO file_metadata
             (name,
@@ -54,6 +53,7 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
                 WHERE f2.name = :#{#file.name}
             )
         )
+        RETURNING *
         """, nativeQuery = true)
-    int saveWithVersioning(FileMetadata file);
+    FileMetadata saveWithVersioning(FileMetadata file);
 }
