@@ -252,7 +252,7 @@ sa caut pe net cum sa scriu un prompt
 --------------
 redenumire State si AuditState
 ordonare pe bean-uri at @order
-cum as face sa sterg un milion de rows tiand cont ca foloses o aplicatie de auditare
+cum as face sa sterg un milion de rows tinand cont ca foloses o aplicatie de auditare
 cum face hibernate sa retunreze id-ul setat ca primary key cu identity? Daca e in acelasi round-trip sau mai face inca un select. Cum as face eu de mana intr-un native query sa inserez si sa intorc inapoi
 sa folosec suquence si sa vad daca pot lua in avans mai multe id-uri? ce probleme sunt cu acesta abordare
 sa folosesc un table pentru o entitate?
@@ -260,3 +260,11 @@ uuid?
 sa fac un generator custom care si daca deployez aplicatie de 10 sa nu genereze aceleasi id-uri.
 sa caut pe net cum sa scriu un prompt bine 2026
 daca termin pot sa ma uit pe websockets
+------------
+endpoint de progess(status)  cand un user face upload?
+sa obtin versiunii de diverse size-uri pentru poze e.g. un thumbnail, poza pentru un magazin online(o poza 2k dar nu vreau 2k sa o intorc) type=thumbnail, type=mainlist. Trebuie neaparat caching
+upload-ul facut de useri prin api sa apara in audit table
+un endpoint care sa faca un dashboard cu statistica: top uploaderi, clasament dupa extensie, datele cu volumulul de upload per zi pentru ultimele x zile(x se configureaza cand chem api-ul), failed uploads(via upi, via file job)
+Mellum https://blog.jetbrains.com/blog/2024/10/22/introducing-mellum-jetbrains-new-llm-built-for-developers/ configurat local
+GET {{rootURL}}/files/all/zip?option=latest
+swagger, iau swagger.json da-ti cu parerea

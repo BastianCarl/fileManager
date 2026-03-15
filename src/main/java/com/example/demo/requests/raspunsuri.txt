@@ -975,6 +975,9 @@ cum as face sa sterg un milion de rows tiand cont ca foloses o aplicatie de audi
     - rate limiter
     - bulk delete
     - Soft delete
+    - delete from db, not from Hibernate(avoid audit and better berformance)
+    - TRUNCATE
+    - SQL native delete > JPQL delete > Entities
 cum face hibernate sa retunreze id-ul setat ca primary key cu identity?
     - Hibernate -> JDBC -> DB driver -> SQL
     - Depends on the DB provider
@@ -995,7 +998,7 @@ Cum as face eu de mana intr-un native query sa inserez si sa intorc inapoi
         - for other is necessary to use two queries
 sa folosec suquence si sa vad daca pot lua in avans mai multe id-uri? ce probleme sunt cu acesta abordare
     - SELECT nextval('my_sequence') FROM generate_series(1, 10) generates 10 ids
-    - it's possible to end up with a series of non-cosecutive id (1,2,5,6)
+    - it's possible to end up with a series of non-consecutive id (1,2,5,6)
     - id's order might not be the same as the insertion order
     - highly effective because the number of interrogations is reduce
     - insert is 2 step process:
@@ -1006,3 +1009,56 @@ Table
     - stores the nextValue
     - can be used to store in Hibernate memory more ids
     - locking mechanism for nextValue
+
+UUID
+    - global unique
+    - can be generated without a db
+    - takes more space (128 bits)
+    - better for API
+    - less performant
+
+Custom Generator
+    - custom key structure
+    - key contains information about entity
+
+Prompt
+    - A prompt is some natural language text that describes and prescribes the task that an artificial intelligence should perform
+   - Best Practices
+        - the order of words in prompt matters. The most important content/instructions should either at begging or every end
+        - structures is more important than length(bullet points, ordered lists, titles)
+        - provide examples
+        - tells what not to do
+        - if the answer is not 100% correct, reiterate don't start from scratch again
+   - Pattern
+        - Speed layer
+            - voice over manual writing(content > structure)
+            -  ask for a general solution and then ask ai what answers it needs. Don't offer you the details, but let ai requires what it needs
+        - Persona handoff
+            - give to ai a specific role with specific task and afterwards offer the context
+        - Input Flip
+            - Work based on a reference and ask AI how to change it. Better to improve something than creating something from scratch.
+        - Constraint Box
+            - more constraint -> better results
+            - defines a box for ai to operate inside of
+   - Components(from the more important to lest important)
+        - Task
+            - start with a verb a clear state the goal
+        - Context
+            - User background
+            - How Success looks like
+            - environment
+        - Exemplar
+            - examples
+        - Persona
+            - like who should AI act like
+        - format
+            - How to structure the response
+        - tone
+            - casual, formal, show enthusiastic or pessimistic
+sa fac un generator custom care si daca deployez aplicatie de 10 sa nu genereze aceleasi id-uri.
+   - db sequence
+   - uuid
+   - Snowflake ID
+        - timeStamp
+        - machine id
+        - sequence number
