@@ -6,8 +6,11 @@ import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import java.io.File;
+
 import static com.example.demo.model.FileProcessingStep.*;
 
 @Component
@@ -24,7 +27,7 @@ public class CleaningStep implements Step {
     }
 
     @Override
-    public Pair<Step, FileProcessingStep> process(Resource resource, FileProcessingStep previousFileProcessingStep) {
+    public FileProcessingStep process(Resource resource, FileProcessingStep previousFileProcessingStep) {
         if (shouldProcess(previousFileProcessingStep)) {
             auditService.updateOrCreate(resource.getFileMetadata(), CLEANING_STARTED);
             File file = resource.getFile();
@@ -35,7 +38,7 @@ public class CleaningStep implements Step {
                 throw new RuntimeException();
             }
         }
-        return Pair.of(doneStep, nextState());
+        return nextState();
     }
 
     @Override

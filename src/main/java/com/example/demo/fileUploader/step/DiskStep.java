@@ -5,22 +5,25 @@ import com.example.demo.utility.FileHelper;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 import jakarta.annotation.PostConstruct;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import static com.example.demo.model.FileProcessingStep.*;
 
+@FileUploaderFlowStep
+@Order(4)
 @Component
 public class DiskStep implements Step {
     private final AuditService auditService;
     private final FileHelper fileHelper;
-    private final DoneStep doneStep;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
     private Path backupPath;
     @Value("${file.uploader.job.date.format}")
@@ -28,11 +31,9 @@ public class DiskStep implements Step {
     private DateTimeFormatter formatter;
 
     @Autowired
-    public DiskStep(@Lazy AuditService auditService, @Lazy FileHelper fileHelper, DoneStep doneStep)
-    {
+    public DiskStep(@Lazy AuditService auditService, @Lazy FileHelper fileHelper, DoneStep doneStep) {
         this.auditService = auditService;
         this.fileHelper = fileHelper;
-        this.doneStep = doneStep;
     }
 
     @PostConstruct
@@ -41,14 +42,14 @@ public class DiskStep implements Step {
     }
 
     @Override
-    public Pair<Step, FileProcessingStep> process(Resource resource, FileProcessingStep previousFileProcessingStep) {
-        if (shouldProcess(previousFileProcessingStep)){
+    public FileProcessingStep process(Resource resource, FileProcessingStep previousFileProcessingStep) {
+        if (shouldProcess(previousFileProcessingStep)) {
             auditService.updateOrCreate(resource.getFileMetadata(), DISK_STARTED);
             File file = resource.getFile();
             fileHelper.move(file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
-        return Pair.of(doneStep, nextState());
+        return nextState();
     }
 
     @Override

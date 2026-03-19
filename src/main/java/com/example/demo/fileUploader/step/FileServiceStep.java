@@ -4,36 +4,37 @@ import com.example.demo.files.FileService;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
 import static com.example.demo.model.FileProcessingStep.*;
 
+@FileUploaderFlowStep
 @Component
+@Order(3)
 public class FileServiceStep implements Step {
-    private final DiskStep diskStep;
     private final FileService fileService;
     private final AuditService auditService;
 
     @Autowired
     public FileServiceStep(@Lazy AuditService auditService,
                            @Lazy FileService fileService,
-                           DiskStep diskStep)
-    {
+                           DiskStep diskStep
+    ) {
         this.auditService = auditService;
-        this.diskStep = diskStep;
         this.fileService = fileService;
     }
 
     @Override
-    public Pair<Step, FileProcessingStep> process(Resource resource, FileProcessingStep currentFileProcessingStep) {
-        if (shouldProcess(currentFileProcessingStep)){
+    public FileProcessingStep process(Resource resource, FileProcessingStep currentFileProcessingStep) {
+        if (shouldProcess(currentFileProcessingStep)) {
             auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
             fileService.uploadFile(resource);
             auditService.updateOrCreate(resource.getFileMetadata(), nextState());
         }
-        return Pair.of(diskStep, nextState());
+        return nextState();
     }
 
     @Override

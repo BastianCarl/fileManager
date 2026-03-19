@@ -1,10 +1,10 @@
 package com.example.demo.fileUploader;
 
+import com.example.demo.fileUploader.step.FileUploaderFlowStep;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
-import com.example.demo.fileUploader.step.CheckingStep;
 import com.example.demo.fileUploader.step.Step;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.Resource;
@@ -15,21 +15,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static com.example.demo.service.UserService.userDTO;
 
 @Service
 public class FileUploaderService {
-    private final Step initialStep;
     private final UserService userService;
     private final FileHelper fileHelper;
     private final FileMetadataMapper fileMetadataMapper;
+    private final List<Step> steps;
     @Value("${file.uploader.job.date.format}")
     private String DATE_FORMAT;
     @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
@@ -43,12 +43,12 @@ public class FileUploaderService {
             UserService userService,
             FileHelper fileHelper,
             FileMetadataMapper fileMetadataMapper,
-            CheckingStep checkingState
+            @FileUploaderFlowStep List<Step> steps
     ) {
         this.userService = userService;
         this.fileHelper = fileHelper;
         this.fileMetadataMapper = fileMetadataMapper;
-        this.initialStep = checkingState;
+        this.steps = steps;
     }
 
     @PostConstruct
@@ -60,18 +60,15 @@ public class FileUploaderService {
 
     @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
     public void process(File file) {
-        Step step = initialStep;
         FileProcessingStep fileProcessingStep = FileProcessingStep.CHECKING;
         Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
-        while (step != null) {
-            Pair<Step, FileProcessingStep> pair = step.process(resource, fileProcessingStep);
-            step = pair.getLeft();
-            fileProcessingStep = pair.getRight();
+        for (Step currentStep : steps) {
+            fileProcessingStep = currentStep.process(resource, fileProcessingStep);
         }
     }
 
     @Recover
-    public void recover(Exception e, File file){
+    public void recover(Exception e, File file) {
         fileHelper.moveWithRenaming(file.toPath(), Path.of(failedPath.toString()), LocalDate.now().format(formatter) + "-" + file.getName());
     }
 }
