@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import static com.example.demo.model.FileProcessingStep.DONE;
 
-@FileUploaderFlowStep
+@UploaderJobStep
 @Component
 @Order(5)
 public class DoneStep implements Step {

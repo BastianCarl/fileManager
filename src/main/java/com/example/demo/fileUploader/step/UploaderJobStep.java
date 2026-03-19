@@ -10,4 +10,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
-public @interface FileUploaderFlowStep {}
+public @interface UploaderJobStep {}

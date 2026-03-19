@@ -1,6 +1,6 @@
 package com.example.demo.fileUploader;
 
-import com.example.demo.fileUploader.step.FileUploaderFlowStep;
+import com.example.demo.fileUploader.step.UploaderJobStep;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.exception.DatabaseFailure;
@@ -43,7 +43,7 @@ public class FileUploaderService {
             UserService userService,
             FileHelper fileHelper,
             FileMetadataMapper fileMetadataMapper,
-            @FileUploaderFlowStep List<Step> steps
+            @UploaderJobStep List<Step> steps
     ) {
         this.userService = userService;
         this.fileHelper = fileHelper;

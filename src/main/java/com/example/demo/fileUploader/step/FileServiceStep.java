@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import static com.example.demo.model.FileProcessingStep.*;
 
-@FileUploaderFlowStep
+@UploaderJobStep
 @Component
 @Order(3)
 public class FileServiceStep implements Step {

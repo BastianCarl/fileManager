@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@FileUploaderFlowStep
+@UploaderJobStep
 @Order(1)
 @Component
 public class CheckingStep implements Step {

@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.example.demo.model.FileProcessingStep.*;
 
-@FileUploaderFlowStep
+@UploaderJobStep
 @Order(4)
 @Component
 public class DiskStep implements Step {
