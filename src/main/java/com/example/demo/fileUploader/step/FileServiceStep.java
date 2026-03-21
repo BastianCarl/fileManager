@@ -30,9 +30,9 @@ public class FileServiceStep implements Step {
       Resource resource, FileProcessingStep currentFileProcessingStep) {
     if (shouldProcess(currentFileProcessingStep)) {
       currentFileProcessingStep = FILE_SERVICE_STARTED;
-      auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
+      auditService.upsert(resource.getFileMetadata(), FILE_SERVICE_STARTED);
       fileService.uploadFile(resource);
-      auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState());
       currentFileProcessingStep = nextState();
     }
     return currentFileProcessingStep;

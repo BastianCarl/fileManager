@@ -49,11 +49,11 @@ public class DiskStep implements Step {
       Resource resource, FileProcessingStep currentFileProcessingStep) {
     if (shouldProcess(currentFileProcessingStep)) {
       currentFileProcessingStep = DISK_STARTED;
-      auditService.updateOrCreate(resource.getFileMetadata(), DISK_STARTED);
+      auditService.upsert(resource.getFileMetadata(), DISK_STARTED);
       File file = resource.getFile();
       fileHelper.move(
           file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-      auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState());
       currentFileProcessingStep = DISK_DONE;
     }
     return currentFileProcessingStep;

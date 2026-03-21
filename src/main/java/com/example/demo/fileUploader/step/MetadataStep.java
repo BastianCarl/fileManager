@@ -31,9 +31,9 @@ public class MetadataStep implements Step {
       Resource resource, FileProcessingStep currentFileProcessingStep) {
     if (shouldProcess(currentFileProcessingStep)) {
       currentFileProcessingStep = METADATA_STARTED;
-      auditService.updateOrCreate(resource.getFileMetadata(), METADATA_STARTED);
+      auditService.upsert(resource.getFileMetadata(), METADATA_STARTED);
       fileMetaDataService.save(resource.getFileMetadata());
-      auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState());
       currentFileProcessingStep = nextState();
     }
     return currentFileProcessingStep;

@@ -25,7 +25,7 @@ public class DoneStep implements Step {
   public FileProcessingStep process(
       Resource resource, FileProcessingStep previousFileProcessingStep) {
     if (shouldProcess(previousFileProcessingStep)) {
-      auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState());
     }
     return nextState();
   }
