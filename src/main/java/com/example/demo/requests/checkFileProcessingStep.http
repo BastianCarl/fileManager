@@ -43,6 +43,6 @@ Accept: application/json
 
 ###
 # @name getStatus
-GET {{rootURL}}/files/6931a24b-0485-4830-8dad-d4c40c2a9a19
+GET {{rootURL}}/files/4ca4ffdd-7855-4c3c-a309-d5a130258e29
 Authentication: Bearer {{token}}
 Accept: application/json

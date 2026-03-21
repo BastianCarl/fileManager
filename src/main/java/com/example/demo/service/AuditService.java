@@ -26,26 +26,22 @@ public class AuditService {
         .orElse(FileProcessingStep.NOT_FOUND);
   }
 
-  public FileAuditState updateOrCreate(FileMetadata fileMetadata, FileProcessingStep newState) {
+  public FileAuditState updateOrCreate(
+      FileMetadata fileMetadata, FileProcessingStep newState, UUID id) {
     String code = fileMetadata.getCode();
+    FileAuditState fileAuditState =
+        auditRepository
+            .findByCode(code)
+            .orElseGet(
+                () -> {
+                  FileAuditState a = new FileAuditState();
+                  a.setId(id);
+                  a.setCode(code);
+                  return a;
+                });
 
-    // 1. Caută în DB
-    Optional<FileAuditState> existing = auditRepository.findByCode(code);
-
-    if (existing.isPresent()) {
-      // 👉 UPDATE (entity existent)
-      FileAuditState state = existing.get();
-      state.setStep(newState);
-      return auditRepository.save(state); // UPDATE sigur
-    }
-
-    // 👉 CREATE (entity nou)
-    FileAuditState state = new FileAuditState();
-    state.setId(UUID.randomUUID());
-    state.setCode(code);
-    state.setStep(newState);
-
-    return auditRepository.save(state); // INSERT
+    fileAuditState.setStep(newState);
+    return auditRepository.save(fileAuditState);
   }
 
   public Optional<FileAuditState> findById(String id) {
