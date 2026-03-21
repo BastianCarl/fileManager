@@ -19,22 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JWTHelper jwtHelper;
+  private final UserService userService;
+  private final AuthenticationManager authenticationManager;
+  private final JWTHelper jwtHelper;
 
-    @PostMapping("/registration")
-    public User register(@RequestBody UserDTO user) {
-       return userService.saveUser(new User(user));
-    }
+  @PostMapping("/registration")
+  public User register(@RequestBody UserDTO user) {
+    return userService.saveUser(new User(user));
+  }
 
-    @PostMapping("/login")
-    public String login(@RequestBody UserDTO user) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
-        if (authentication.isAuthenticated()) {
-            return jwtHelper.generateToken(user.getUserName());
-        } else {
-            throw new BadCredentialsException("Invalid credentials");
-        }
+  @PostMapping("/login")
+  public String login(@RequestBody UserDTO user) {
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
+    if (authentication.isAuthenticated()) {
+      return jwtHelper.generateToken(user.getUserName());
+    } else {
+      throw new BadCredentialsException("Invalid credentials");
     }
+  }
 }

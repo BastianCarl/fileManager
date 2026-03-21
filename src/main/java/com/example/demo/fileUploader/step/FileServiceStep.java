@@ -1,5 +1,7 @@
 package com.example.demo.fileUploader.step;
 
+import static com.example.demo.model.FileProcessingStep.*;
+
 import com.example.demo.files.FileService;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
@@ -9,36 +11,34 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import static com.example.demo.model.FileProcessingStep.*;
-
-@UploaderJobStep
+@FileUploaderJobStep
 @Component
 @Order(3)
 public class FileServiceStep implements Step {
-    private final FileService fileService;
-    private final AuditService auditService;
+  private final FileService fileService;
+  private final AuditService auditService;
 
-    @Autowired
-    public FileServiceStep(@Lazy AuditService auditService,
-                           @Lazy FileService fileService,
-                           DiskStep diskStep
-    ) {
-        this.auditService = auditService;
-        this.fileService = fileService;
-    }
+  @Autowired
+  public FileServiceStep(@Lazy AuditService auditService, @Lazy FileService fileService) {
+    this.auditService = auditService;
+    this.fileService = fileService;
+  }
 
-    @Override
-    public FileProcessingStep process(Resource resource, FileProcessingStep currentFileProcessingStep) {
-        if (shouldProcess(currentFileProcessingStep)) {
-            auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
-            fileService.uploadFile(resource);
-            auditService.updateOrCreate(resource.getFileMetadata(), nextState());
-        }
-        return nextState();
+  @Override
+  public FileProcessingStep process(
+      Resource resource, FileProcessingStep currentFileProcessingStep) {
+    if (shouldProcess(currentFileProcessingStep)) {
+      currentFileProcessingStep = FILE_SERVICE_STARTED;
+      auditService.updateOrCreate(resource.getFileMetadata(), FILE_SERVICE_STARTED);
+      fileService.uploadFile(resource);
+      auditService.updateOrCreate(resource.getFileMetadata(), nextState());
+      currentFileProcessingStep = nextState();
     }
+    return currentFileProcessingStep;
+  }
 
-    @Override
-    public FileProcessingStep nextState() {
-        return FILE_SERVICE_DONE;
-    }
+  @Override
+  public FileProcessingStep nextState() {
+    return FILE_SERVICE_DONE;
+  }
 }

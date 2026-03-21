@@ -1,24 +1,30 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.FileMetadata;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.util.List;
 
 public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long> {
-    List<FileMetadata> findByOwnerId(Long ownerId);
-    FileMetadata findByName(String name);
-    void deleteById(Long id);
-    boolean existsByHashValue(String hashValue);
-    @Query("""
+  List<FileMetadata> findByOwnerId(Long ownerId);
+
+  FileMetadata findByName(String name);
+
+  void deleteById(Long id);
+
+  boolean existsByHashValue(String hashValue);
+
+  @Query(
+      """
        SELECT COALESCE(MAX(f.version), 0)
        FROM file_metadata f
        WHERE f.name = :name
        """)
-    Long findMaxVersionByName(@Param("name") String name);
-    @Query("""
+  Long findMaxVersionByName(@Param("name") String name);
+
+  @Query(
+      """
         SELECT f
         FROM file_metadata f
         WHERE f.version = (
@@ -27,9 +33,11 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
             WHERE f2.name = f.name
         )
     """)
-    List<FileMetadata> getFilesWithLatestVersion();
+  List<FileMetadata> getFilesWithLatestVersion();
 
-    @Query(value = """
+  @Query(
+      value =
+          """
         INSERT INTO file_metadata
             (name,
              mime_type,
@@ -54,6 +62,7 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
             )
         )
         RETURNING *
-        """, nativeQuery = true)
-    FileMetadata saveWithVersioning(FileMetadata file);
+        """,
+      nativeQuery = true)
+  FileMetadata saveWithVersioning(FileMetadata file);
 }

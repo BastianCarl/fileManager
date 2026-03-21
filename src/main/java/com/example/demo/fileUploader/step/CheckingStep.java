@@ -1,4 +1,5 @@
 package com.example.demo.fileUploader.step;
+
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import org.slf4j.Logger;
@@ -7,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-@UploaderJobStep
+@FileUploaderJobStep
 @Order(1)
 @Component
 public class CheckingStep implements Step {
@@ -21,13 +22,15 @@ public class CheckingStep implements Step {
 
     @Override
     public FileProcessingStep process(Resource resource, FileProcessingStep currentFileProcessingStep) {
-       if (currentFileProcessingStep != FileProcessingStep.DONE) {
-           return currentFileProcessingStep;
-       }else {
-           LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
-           return cleaningStep.process(resource, currentFileProcessingStep);
-       }
+        if (currentFileProcessingStep != FileProcessingStep.DONE) {
+            return currentFileProcessingStep;
+        } else {
+            LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
+            cleaningStep.process(resource);
+            return FileProcessingStep.DONE;
+        }
     }
+
 
     @Override
     public FileProcessingStep nextState() {

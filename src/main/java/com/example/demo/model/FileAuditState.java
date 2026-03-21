@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FileAuditState {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Enumerated(EnumType.STRING)
-    private FileProcessingStep step;
-    private String code;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Enumerated(EnumType.STRING)
+  private FileProcessingStep step;
+
+  private String code;
 }
