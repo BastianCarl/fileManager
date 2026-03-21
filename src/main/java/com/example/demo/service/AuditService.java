@@ -27,7 +27,7 @@ public class AuditService {
   }
 
   public FileAuditState updateOrCreate(
-      FileMetadata fileMetadata, FileProcessingStep newState, UUID id) {
+      FileMetadata fileMetadata, FileProcessingStep newState) {
     String code = fileMetadata.getCode();
     FileAuditState fileAuditState =
         auditRepository
@@ -35,7 +35,7 @@ public class AuditService {
             .orElseGet(
                 () -> {
                   FileAuditState a = new FileAuditState();
-                  a.setId(id);
+                  a.setId(UUID.randomUUID());
                   a.setCode(code);
                   return a;
                 });
