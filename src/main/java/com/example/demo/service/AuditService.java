@@ -26,8 +26,7 @@ public class AuditService {
         .orElse(FileProcessingStep.NOT_FOUND);
   }
 
-  public FileAuditState updateOrCreate(
-      FileMetadata fileMetadata, FileProcessingStep newState) {
+  public FileAuditState updateOrCreate(FileMetadata fileMetadata, FileProcessingStep newState) {
     String code = fileMetadata.getCode();
     FileAuditState fileAuditState =
         auditRepository
