@@ -73,12 +73,12 @@ public class FileServiceOrchestrator {
   }
 
   @Async
-  public void upload(File file, String authToken) {
+  public void upload(File file, String authToken, UUID uuid) {
     Resource resource =
         new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(authToken)));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
     for (Step currentStep : steps) {
-      fileProcessingStep = currentStep.process(resource, fileProcessingStep);
+      fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
     }
   }
 

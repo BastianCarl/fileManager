@@ -2,9 +2,11 @@ package com.example.demo.fileUploader.step;
 
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
+import java.util.UUID;
 
 public interface Step {
-  FileProcessingStep process(Resource resource, FileProcessingStep previousFileProcessingStep);
+  FileProcessingStep process(
+      Resource resource, FileProcessingStep previousFileProcessingStep, UUID uuid);
 
   FileProcessingStep nextState();
 

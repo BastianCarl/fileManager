@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Recover;
@@ -69,8 +70,9 @@ public class FileUploaderService {
     Resource resource =
         new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
+    UUID uuid = UUID.randomUUID();
     for (Step currentStep : steps) {
-      fileProcessingStep = currentStep.process(resource, fileProcessingStep);
+      fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
     }
   }
 

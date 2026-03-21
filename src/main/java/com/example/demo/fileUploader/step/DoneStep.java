@@ -5,6 +5,7 @@ import static com.example.demo.model.FileProcessingStep.DONE;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -23,9 +24,9 @@ public class DoneStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep previousFileProcessingStep) {
+      Resource resource, FileProcessingStep previousFileProcessingStep, UUID uuid) {
     if (shouldProcess(previousFileProcessingStep)) {
-      auditService.upsert(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
     }
     return nextState();
   }

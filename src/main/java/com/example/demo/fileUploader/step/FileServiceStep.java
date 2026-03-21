@@ -6,6 +6,7 @@ import com.example.demo.files.FileService;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
@@ -27,12 +28,12 @@ public class FileServiceStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
       currentFileProcessingStep = FILE_SERVICE_STARTED;
-      auditService.upsert(resource.getFileMetadata(), FILE_SERVICE_STARTED);
+      auditService.upsert(resource.getFileMetadata(), FILE_SERVICE_STARTED, uuid);
       fileService.uploadFile(resource);
-      auditService.upsert(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
       currentFileProcessingStep = nextState();
     }
     return currentFileProcessingStep;

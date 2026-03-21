@@ -6,6 +6,7 @@ import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.FileMetaDataService;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
@@ -28,12 +29,12 @@ public class MetadataStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
       currentFileProcessingStep = METADATA_STARTED;
-      auditService.upsert(resource.getFileMetadata(), METADATA_STARTED);
+      auditService.upsert(resource.getFileMetadata(), METADATA_STARTED, uuid);
       fileMetaDataService.save(resource.getFileMetadata());
-      auditService.upsert(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
       currentFileProcessingStep = nextState();
     }
     return currentFileProcessingStep;

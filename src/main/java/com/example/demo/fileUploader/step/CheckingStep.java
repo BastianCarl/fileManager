@@ -2,6 +2,7 @@ package com.example.demo.fileUploader.step;
 
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class CheckingStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (currentFileProcessingStep == FileProcessingStep.DONE) {
       LOGGER.info(
           "Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());

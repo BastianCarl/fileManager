@@ -12,6 +12,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -46,14 +47,14 @@ public class DiskStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
       currentFileProcessingStep = DISK_STARTED;
-      auditService.upsert(resource.getFileMetadata(), DISK_STARTED);
+      auditService.upsert(resource.getFileMetadata(), DISK_STARTED, uuid);
       File file = resource.getFile();
       fileHelper.move(
           file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-      auditService.upsert(resource.getFileMetadata(), nextState());
+      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
       currentFileProcessingStep = DISK_DONE;
     }
     return currentFileProcessingStep;

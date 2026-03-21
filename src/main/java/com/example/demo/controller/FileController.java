@@ -33,11 +33,11 @@ public class FileController {
 
     File tempFile = fileHelper.createTempFile(file);
 
-    UUID id = UUID.randomUUID();
-    fileServiceOrchestrator.upload(tempFile, authToken);
+    UUID uuid = UUID.randomUUID();
+    fileServiceOrchestrator.upload(tempFile, authToken, uuid);
     return ResponseEntity.accepted()
-        .header(HttpHeaders.LOCATION, "/api/v1/files/" + id)
-        .body(id.toString());
+        .header(HttpHeaders.LOCATION, "/api/v1/files/" + uuid)
+        .body(uuid.toString());
   }
 
   @GetMapping("/{id}")
