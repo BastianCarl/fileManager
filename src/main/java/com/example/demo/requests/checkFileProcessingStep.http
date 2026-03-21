@@ -1,0 +1,48 @@
+@rootURL = http://localhost:8080/api/v1
+@userName = sebi
+@password = sebi
+
+###
+# @name login
+POST {{rootURL}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userName": "{{userName}}",
+  "password": "{{password}}"
+}
+
+> {%
+    try {
+        const ct = response.headers["content-type"] || "";
+        let token = null;
+
+        if (ct.includes("application/json")) {
+            const j = JSON.parse(response.body);
+            token = j.token || j.accessToken || (j.data && j.data.token);
+        } else {
+            token = (response.body || "").trim();
+        }
+
+        if (!token) {
+            client.log("Login response body: " + response.body);
+            throw new Error("Token not found in login response.");
+        }
+
+        client.global.set("token", token);
+    } catch (e) {
+        client.log("Failed to parse login response: " + e.message);
+        throw e;
+    }
+%}
+
+###
+# setezi manual sau din upload
+@fileId = 02584d82-8ccd-4f95-bb96-c67d9a856769
+
+###
+# @name getStatus
+GET {{rootURL}}/files/6931a24b-0485-4830-8dad-d4c40c2a9a19
+Authentication: Bearer {{token}}
+Accept: application/json

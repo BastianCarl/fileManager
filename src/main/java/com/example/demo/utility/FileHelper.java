@@ -120,4 +120,17 @@ public class FileHelper {
   public String sha256Hex(InputStream is) throws IOException {
     return HexFormat.of().formatHex(sha256(is));
   }
+
+  public File createTempFile(MultipartFile multipartFile) throws IOException {
+    String originalName = multipartFile.getOriginalFilename();
+    String suffix =
+        (originalName != null && originalName.contains("."))
+            ? originalName.substring(originalName.lastIndexOf('.'))
+            : ".tmp";
+
+    File tempFile = File.createTempFile("upload_", suffix);
+    multipartFile.transferTo(tempFile);
+
+    return tempFile;
+  }
 }

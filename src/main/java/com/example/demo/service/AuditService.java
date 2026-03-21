@@ -47,4 +47,8 @@ public class AuditService {
 
     return auditRepository.save(state); // INSERT
   }
+
+  public Optional<FileAuditState> findById(String id) {
+    return auditRepository.findById(UUID.fromString(id));
+  }
 }

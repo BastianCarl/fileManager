@@ -1,8 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
+import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Option;
 import com.example.demo.service.UserService;
+import com.example.demo.utility.FileHelper;
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,13 +24,30 @@ public class FileController {
 
   private final FileServiceOrchestrator fileServiceOrchestrator;
   private final UserService userService;
+  private final FileHelper fileHelper;
 
   @PostMapping
   public ResponseEntity<String> uploadFile(
-      @RequestParam MultipartFile file, @RequestHeader("Authentication") String authToken) {
+      @RequestParam MultipartFile file, @RequestHeader("Authentication") String authToken)
+      throws IOException {
+
+    File tempFile = fileHelper.createTempFile(file);
+
     UUID id = UUID.randomUUID();
-    fileServiceOrchestrator.upload(file, authToken);
-    return ResponseEntity.ok(id.toString());
+    fileServiceOrchestrator.upload(tempFile, authToken);
+    return ResponseEntity.accepted()
+        .header(HttpHeaders.LOCATION, "/api/v1/files/" + id)
+        .body(id.toString());
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<FileProcessingStep> checkFileProcessingStep(
+      @PathVariable String id, @RequestHeader("Authentication") String authToken) {
+
+    return fileServiceOrchestrator
+        .checkFileProcessingStep(id)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @GetMapping

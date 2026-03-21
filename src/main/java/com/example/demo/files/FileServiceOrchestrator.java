@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FileServiceOrchestrator {
@@ -74,18 +73,18 @@ public class FileServiceOrchestrator {
   }
 
   @Async
-  public void upload(MultipartFile file, String authToken) {
-    try {
-      Thread.sleep(999999999);
-    } catch (Exception e) {
-
-    }
+  public void upload(File file, String authToken) {
     Resource resource =
         new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(authToken)));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
     for (Step currentStep : steps) {
       fileProcessingStep = currentStep.process(resource, fileProcessingStep);
     }
+  }
+
+  public Optional<FileProcessingStep> checkFileProcessingStep(String id) {
+    Optional<FileAuditState> fileAuditState = auditService.findById(id);
+    return fileAuditState.map(FileAuditState::getStep);
   }
 
   private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
