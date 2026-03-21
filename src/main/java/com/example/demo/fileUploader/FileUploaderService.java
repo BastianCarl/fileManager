@@ -1,5 +1,7 @@
 package com.example.demo.fileUploader;
 
+import static com.example.demo.service.UserService.userDTO;
+
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
 import com.example.demo.fileUploader.step.FileUploaderJobStep;
@@ -11,74 +13,72 @@ import com.example.demo.service.AuditService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.FileHelper;
 import jakarta.annotation.PostConstruct;
+import java.io.File;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static com.example.demo.service.UserService.userDTO;
-
 @Service
 public class FileUploaderService {
-    private final UserService userService;
-    private final FileHelper fileHelper;
-    private final FileMetadataMapper fileMetadataMapper;
-    private final AuditService auditService;
-    private final List<Step> steps;
+  private final UserService userService;
+  private final FileHelper fileHelper;
+  private final FileMetadataMapper fileMetadataMapper;
+  private final AuditService auditService;
+  private final List<Step> steps;
 
-    @Value("${file.uploader.job.date.format}")
-    private String DATE_FORMAT;
+  @Value("${file.uploader.job.date.format}")
+  private String DATE_FORMAT;
 
-    @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
-    private Path backupPath;
+  @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.backup.path}')}")
+  private Path backupPath;
 
-    @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.failed.path}')}")
-    private Path failedPath;
+  @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.failed.path}')}")
+  private Path failedPath;
 
-    private DateTimeFormatter formatter;
+  private DateTimeFormatter formatter;
 
-    @Autowired
-    public FileUploaderService(
-            UserService userService,
-            FileHelper fileHelper,
-            FileMetadataMapper fileMetadataMapper,
-            AuditService auditService,
-            @FileUploaderJobStep List<Step> steps) {
-        this.userService = userService;
-        this.fileHelper = fileHelper;
-        this.fileMetadataMapper = fileMetadataMapper;
-        this.steps = steps;
-        this.auditService = auditService;
+  @Autowired
+  public FileUploaderService(
+      UserService userService,
+      FileHelper fileHelper,
+      FileMetadataMapper fileMetadataMapper,
+      AuditService auditService,
+      @FileUploaderJobStep List<Step> steps) {
+    this.userService = userService;
+    this.fileHelper = fileHelper;
+    this.fileMetadataMapper = fileMetadataMapper;
+    this.steps = steps;
+    this.auditService = auditService;
+  }
+
+  @PostConstruct
+  public void init() {
+    formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+    fileHelper.checkDirectory(backupPath);
+    fileHelper.checkDirectory(failedPath);
+  }
+
+  @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
+  public void process(File file) {
+    Resource resource =
+        new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
+    FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
+    for (Step currentStep : steps) {
+      fileProcessingStep = currentStep.process(resource, fileProcessingStep);
     }
+  }
 
-    @PostConstruct
-    public void init() {
-        formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-        fileHelper.checkDirectory(backupPath);
-        fileHelper.checkDirectory(failedPath);
-    }
-
-    @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
-    public void process(File file) {
-        Resource resource = new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO)));
-        FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
-        for (Step currentStep : steps) {
-            fileProcessingStep = currentStep.process(resource, fileProcessingStep);
-        }
-    }
-
-    @Recover
-    public void recover(Exception e, File file) {
-        fileHelper.moveWithRenaming(
-                file.toPath(),
-                Path.of(failedPath.toString()),
-                LocalDate.now().format(formatter) + "-" + file.getName());
-    }
+  @Recover
+  public void recover(Exception e, File file) {
+    fileHelper.moveWithRenaming(
+        file.toPath(),
+        Path.of(failedPath.toString()),
+        LocalDate.now().format(formatter) + "-" + file.getName());
+  }
 }

@@ -12,26 +12,27 @@ import org.springframework.stereotype.Component;
 @Order(1)
 @Component
 public class CheckingStep implements Step {
-    private final CleaningStep cleaningStep;
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckingStep.class);
+  private final CleaningStep cleaningStep;
+  private static final Logger LOGGER = LoggerFactory.getLogger(CheckingStep.class);
 
-    @Autowired
-    public CheckingStep(CleaningStep cleaningStep) {
-        this.cleaningStep = cleaningStep;
+  @Autowired
+  public CheckingStep(CleaningStep cleaningStep) {
+    this.cleaningStep = cleaningStep;
+  }
+
+  @Override
+  public FileProcessingStep process(
+      Resource resource, FileProcessingStep currentFileProcessingStep) {
+    if (currentFileProcessingStep == FileProcessingStep.DONE) {
+      LOGGER.info(
+          "Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
+      cleaningStep.process(resource);
     }
+    return currentFileProcessingStep;
+  }
 
-    @Override
-    public FileProcessingStep process(Resource resource, FileProcessingStep currentFileProcessingStep) {
-        if (currentFileProcessingStep == FileProcessingStep.DONE) {
-            LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
-            cleaningStep.process(resource);
-        }
-        return currentFileProcessingStep;
-    }
-
-
-    @Override
-    public FileProcessingStep nextState() {
-        return null;
-    }
+  @Override
+  public FileProcessingStep nextState() {
+    return null;
+  }
 }
