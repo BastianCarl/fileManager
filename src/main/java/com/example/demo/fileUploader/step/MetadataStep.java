@@ -12,6 +12,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @FileUploaderJobStep
+@UserUploadStep
 @Order(2)
 @Component
 public class MetadataStep implements Step {

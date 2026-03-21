@@ -2,7 +2,6 @@ package com.example.demo.fileUploader.step;
 
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
-import com.example.demo.service.AuditService;
 import com.example.demo.utility.FileHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

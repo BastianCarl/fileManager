@@ -22,13 +22,11 @@ public class CheckingStep implements Step {
 
     @Override
     public FileProcessingStep process(Resource resource, FileProcessingStep currentFileProcessingStep) {
-        if (currentFileProcessingStep != FileProcessingStep.DONE) {
-            return currentFileProcessingStep;
-        } else {
+        if (currentFileProcessingStep == FileProcessingStep.DONE) {
             LOGGER.info("Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());
             cleaningStep.process(resource);
-            return FileProcessingStep.DONE;
         }
+        return currentFileProcessingStep;
     }
 
 
