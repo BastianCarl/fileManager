@@ -4,6 +4,8 @@ import com.example.demo.model.FileAuditState;
 import com.example.demo.model.FileMetadata;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.repository.AuditRepository;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +28,23 @@ public class AuditService {
 
   public FileAuditState updateOrCreate(FileMetadata fileMetadata, FileProcessingStep newState) {
     String code = fileMetadata.getCode();
-    FileAuditState fileAuditState =
-        auditRepository
-            .findByCode(code)
-            .orElseGet(
-                () -> {
-                  FileAuditState a = new FileAuditState();
-                  a.setCode(code);
-                  return a;
-                });
 
-    fileAuditState.setStep(newState);
-    return auditRepository.save(fileAuditState);
+    // 1. Caută în DB
+    Optional<FileAuditState> existing = auditRepository.findByCode(code);
+
+    if (existing.isPresent()) {
+      // 👉 UPDATE (entity existent)
+      FileAuditState state = existing.get();
+      state.setStep(newState);
+      return auditRepository.save(state); // UPDATE sigur
+    }
+
+    // 👉 CREATE (entity nou)
+    FileAuditState state = new FileAuditState();
+    state.setId(UUID.randomUUID());
+    state.setCode(code);
+    state.setStep(newState);
+
+    return auditRepository.save(state); // INSERT
   }
 }

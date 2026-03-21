@@ -19,6 +19,7 @@ import java.util.concurrent.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,17 +73,18 @@ public class FileServiceOrchestrator {
     formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
   }
 
-  public Optional<FileMetadata> upload(MultipartFile file, String authToken) {
+  @Async
+  public void upload(MultipartFile file, String authToken) {
+    try {
+      Thread.sleep(999999999);
+    } catch (Exception e) {
+
+    }
     Resource resource =
         new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(authToken)));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
     for (Step currentStep : steps) {
       fileProcessingStep = currentStep.process(resource, fileProcessingStep);
-    }
-    if (fileProcessingStep == FileProcessingStep.DONE) {
-      return Optional.of(resource.getFileMetadata());
-    } else {
-      return Optional.empty();
     }
   }
 

@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
-import com.example.demo.model.FileMetadata;
 import com.example.demo.model.Option;
 import com.example.demo.service.UserService;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -22,12 +22,11 @@ public class FileController {
   private final UserService userService;
 
   @PostMapping
-  public ResponseEntity<FileMetadata> uploadFile(
+  public ResponseEntity<String> uploadFile(
       @RequestParam MultipartFile file, @RequestHeader("Authentication") String authToken) {
-    return fileServiceOrchestrator
-        .upload(file, authToken)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
+    UUID id = UUID.randomUUID();
+    fileServiceOrchestrator.upload(file, authToken);
+    return ResponseEntity.ok(id.toString());
   }
 
   @GetMapping
