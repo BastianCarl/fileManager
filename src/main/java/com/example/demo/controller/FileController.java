@@ -73,9 +73,10 @@ public class FileController {
         .orElseGet(() -> ResponseEntity.badRequest().build());
   }
 
-  @PostMapping("/restore")
+  @PostMapping("/backups/{date}/restorations")
   public void restoreBackup(
-      @RequestParam("restoreDate") String date, @RequestHeader("Authentication") String authToken) {
+          @PathVariable("date") String date,
+          @RequestHeader("Authentication") String authToken) {
     fileServiceOrchestrator.restoreBackup(date, userService.getOwnerId(authToken));
   }
 }
