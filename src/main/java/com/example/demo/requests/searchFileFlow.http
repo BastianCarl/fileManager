@@ -36,5 +36,5 @@ Accept: application/json
 %}
 
 ###
-GET {{rootURL}}/files?file=steam.jpg
+GET {{rootURL}}/files?name=steam.jpg
 Authentication: Bearer {{token}}

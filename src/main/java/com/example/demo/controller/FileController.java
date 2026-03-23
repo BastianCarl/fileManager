@@ -51,17 +51,18 @@ public class FileController {
   }
 
   @GetMapping
-  public String search(@RequestParam(value = "file") String name) {
+  public String search(@RequestParam(value = "name") String name) {
     return fileServiceOrchestrator.searchFile(name);
   }
 
-  @GetMapping("/all/{type}")
+  @GetMapping(params = {"type", "version"})
   public ResponseEntity<byte[]> getAllFiles(
-      @RequestHeader("Authentication") String authToken,
-      @PathVariable String type,
-      @RequestParam Option option) {
+          @RequestHeader("Authentication") String authHeader,
+          @RequestParam String type,
+          @RequestParam Option version
+  ){
     return fileServiceOrchestrator
-        .manageDownloadAllFilesAsArchive(type, option)
+        .manageDownloadAllFilesAsArchive(type, version)
         .map(
             zipBytes ->
                 ResponseEntity.ok()
