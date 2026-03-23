@@ -5,7 +5,7 @@
 @fileId= 5
 ###
 # @name login
-POST {{rootURL}}/login
+POST {{rootURL}}/sessions
 Content-Type: application/json
 Accept: application/json
 

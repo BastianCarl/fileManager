@@ -2,7 +2,7 @@
 @userName = sebi
 @password = sebi
 @role= ROLE_ADMIN
-POST {{rootURL}}/auth/registration
+POST {{rootURL}}/users
 Content-Type: application/json
 Accept: application/json
 

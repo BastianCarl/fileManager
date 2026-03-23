@@ -33,8 +33,8 @@ public class SecurityConfig {
         authorizeRequests ->
             authorizeRequests
                 .requestMatchers(
-                    "/auth/registration",
-                    "/auth/login",
+                    "/users",
+                    "/sessions",
                     "/v3/api-docs",
                     "/v3/api-docs/**",
                     "/swagger-ui/**",

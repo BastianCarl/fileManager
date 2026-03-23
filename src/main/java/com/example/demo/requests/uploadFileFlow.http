@@ -4,7 +4,7 @@
 @boundary = WebAppBoundary
 ###
 # @name login
-POST {{rootURL}}/auth/login
+POST {{rootURL}}/sessions
 Content-Type: application/json
 Accept: application/json
 

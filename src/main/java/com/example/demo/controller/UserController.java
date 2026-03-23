@@ -11,10 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/auth")
 @RestController
 @AllArgsConstructor
 public class UserController {
@@ -23,12 +21,12 @@ public class UserController {
   private final AuthenticationManager authenticationManager;
   private final JWTHelper jwtHelper;
 
-  @PostMapping("/registration")
+  @PostMapping("/users")
   public User register(@RequestBody UserDTO user) {
     return userService.saveUser(new User(user));
   }
 
-  @PostMapping("/login")
+  @PostMapping("/sessions")
   public String login(@RequestBody UserDTO user) {
     Authentication authentication =
         authenticationManager.authenticate(

@@ -1,8 +1,8 @@
 @rootURL = http://localhost:8080
-@userName = sambata
-@password = sambata
+@userName = sebi
+@password = sebi
 # @name login
-POST {{rootURL}}/login
+POST {{rootURL}}/sessions
 Content-Type: application/json
 Accept: application/json
 
