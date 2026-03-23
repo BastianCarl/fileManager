@@ -1,7 +1,6 @@
 package com.example.demo.files;
 
-import com.example.demo.fileUploader.step.Step;
-import com.example.demo.fileUploader.step.UserUploadStep;
+import com.example.demo.fileUploadingSteps.Step;
 import com.example.demo.model.*;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.AuditService;
@@ -53,7 +52,7 @@ public class FileServiceOrchestrator {
       FileMetaDataService fileMetaDataService,
       Archiver archiver,
       FileMetadataMapper fileMetadataMapper,
-      @UserUploadStep List<Step> steps,
+      List<Step> steps,
       AuditService auditService,
       FileHelper fileHelper) {
     this.fileService = awsImplementationFileService;

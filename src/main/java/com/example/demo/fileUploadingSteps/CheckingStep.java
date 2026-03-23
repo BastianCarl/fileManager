@@ -1,13 +1,14 @@
-package com.example.demo.fileUploader.step;
+package com.example.demo.fileUploadingSteps;
 
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
-import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @FileUploaderJobStep
 @Order(1)

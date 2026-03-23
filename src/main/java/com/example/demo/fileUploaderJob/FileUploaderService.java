@@ -1,11 +1,10 @@
-package com.example.demo.fileUploader;
+package com.example.demo.fileUploaderJob;
 
 import static com.example.demo.service.UserService.userDTO;
 
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
-import com.example.demo.fileUploader.step.FileUploaderJobStep;
-import com.example.demo.fileUploader.step.Step;
+import com.example.demo.fileUploadingSteps.Step;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
@@ -50,7 +49,7 @@ public class FileUploaderService {
       FileHelper fileHelper,
       FileMetadataMapper fileMetadataMapper,
       AuditService auditService,
-      @FileUploaderJobStep List<Step> steps) {
+      List<Step> steps) {
     this.userService = userService;
     this.fileHelper = fileHelper;
     this.fileMetadataMapper = fileMetadataMapper;

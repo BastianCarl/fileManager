@@ -1,7 +1,8 @@
-package com.example.demo.fileUploader.step;
+package com.example.demo.fileUploadingSteps;
 
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
+
 import java.util.UUID;
 
 public interface Step {

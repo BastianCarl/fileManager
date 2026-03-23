@@ -1,23 +1,24 @@
-package com.example.demo.fileUploader.step;
-
-import static com.example.demo.model.FileProcessingStep.DISK_DONE;
-import static com.example.demo.model.FileProcessingStep.DISK_STARTED;
+package com.example.demo.fileUploadingSteps;
 
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 import com.example.demo.utility.FileHelper;
 import jakarta.annotation.PostConstruct;
-import java.io.File;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
+import static com.example.demo.model.FileProcessingStep.DISK_DONE;
+import static com.example.demo.model.FileProcessingStep.DISK_STARTED;
 
 @FileUploaderJobStep
 @Order(4)
@@ -49,7 +50,6 @@ public class DiskStep implements Step {
   public FileProcessingStep process(
       Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
-      currentFileProcessingStep = DISK_STARTED;
       auditService.upsert(resource.getFileMetadata(), DISK_STARTED, uuid);
       File file = resource.getFile();
       fileHelper.move(

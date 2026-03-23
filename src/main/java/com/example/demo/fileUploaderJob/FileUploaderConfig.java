@@ -1,4 +1,4 @@
-package com.example.demo.fileUploader;
+package com.example.demo.fileUploaderJob;
 
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Value;

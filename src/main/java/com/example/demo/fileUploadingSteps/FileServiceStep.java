@@ -1,16 +1,18 @@
-package com.example.demo.fileUploader.step;
-
-import static com.example.demo.model.FileProcessingStep.*;
+package com.example.demo.fileUploadingSteps;
 
 import com.example.demo.files.FileService;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+import static com.example.demo.model.FileProcessingStep.FILE_SERVICE_DONE;
+import static com.example.demo.model.FileProcessingStep.FILE_SERVICE_STARTED;
 
 @FileUploaderJobStep
 @UserUploadStep
@@ -30,7 +32,6 @@ public class FileServiceStep implements Step {
   public FileProcessingStep process(
       Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
-      currentFileProcessingStep = FILE_SERVICE_STARTED;
       auditService.upsert(resource.getFileMetadata(), FILE_SERVICE_STARTED, uuid);
       fileService.uploadFile(resource);
       auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
