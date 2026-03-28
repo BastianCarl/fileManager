@@ -5,7 +5,7 @@ import com.example.demo.model.StatsType;
 
 public interface StatsHandler {
 
-    StatsType type();
+  StatsType type();
 
-    Object execute(StatsContext context);
+  Object execute(StatsContext context);
 }

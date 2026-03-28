@@ -1,18 +1,17 @@
 package com.example.demo.model.fileUploadingStep;
 
+import static com.example.demo.model.FileProcessingStep.METADATA_DONE;
+import static com.example.demo.model.FileProcessingStep.METADATA_STARTED;
+
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.FileMetaDataService;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
-
-import static com.example.demo.model.FileProcessingStep.METADATA_DONE;
-import static com.example.demo.model.FileProcessingStep.METADATA_STARTED;
 
 @FileUploaderJobStep
 @UserUploadStep

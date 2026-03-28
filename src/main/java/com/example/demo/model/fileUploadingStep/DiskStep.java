@@ -1,24 +1,23 @@
 package com.example.demo.model.fileUploadingStep;
 
+import static com.example.demo.model.FileProcessingStep.DISK_DONE;
+import static com.example.demo.model.FileProcessingStep.DISK_STARTED;
+
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
 import com.example.demo.utility.FileHelper;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-
-import static com.example.demo.model.FileProcessingStep.DISK_DONE;
-import static com.example.demo.model.FileProcessingStep.DISK_STARTED;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 @FileUploaderJobStep
 @Order(4)
@@ -50,13 +49,12 @@ public class DiskStep implements Step {
   public FileProcessingStep process(
       Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
-      throw new NullPointerException();
-//      auditService.upsert(resource.getFileMetadata(), DISK_STARTED, uuid);
-//      File file = resource.getFile();
-//      fileHelper.move(
-//          file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-//      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
-//      currentFileProcessingStep = DISK_DONE;
+      auditService.upsert(resource.getFileMetadata(), DISK_STARTED, uuid);
+      File file = resource.getFile();
+      fileHelper.move(
+          file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
+      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
+      currentFileProcessingStep = DISK_DONE;
     }
     return currentFileProcessingStep;
   }

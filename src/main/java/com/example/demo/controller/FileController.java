@@ -57,10 +57,9 @@ public class FileController {
 
   @GetMapping(params = {"type", "version"})
   public ResponseEntity<byte[]> getAllFiles(
-          @RequestHeader("Authentication") String authHeader,
-          @RequestParam String type,
-          @RequestParam Version version
-  ){
+      @RequestHeader("Authentication") String authHeader,
+      @RequestParam String type,
+      @RequestParam Version version) {
     return fileServiceOrchestrator
         .manageDownloadAllFilesAsArchive(type, version)
         .map(
@@ -76,8 +75,7 @@ public class FileController {
 
   @PostMapping("/backups/{date}/restorations")
   public void restoreBackup(
-          @PathVariable("date") String date,
-          @RequestHeader("Authentication") String authToken) {
+      @PathVariable("date") String date, @RequestHeader("Authentication") String authToken) {
     fileServiceOrchestrator.restoreBackup(date, userService.getOwnerId(authToken));
   }
 }

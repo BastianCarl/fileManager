@@ -26,7 +26,8 @@ public class LoggingAspect {
   }
 
   @AfterThrowing(
-      pointcut = "execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.process(..))",
+      pointcut =
+          "execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.process(..))",
       throwing = "ex")
   public void logProcessFailure(JoinPoint joinPoint, Throwable ex) {
     File file = (File) joinPoint.getArgs()[0];
@@ -34,7 +35,8 @@ public class LoggingAspect {
   }
 
   @AfterReturning(
-      pointcut = "execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.process(..))")
+      pointcut =
+          "execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.process(..))")
   public void logProcessSuccessful(JoinPoint joinPoint) {
     File file = (File) joinPoint.getArgs()[0];
     LOGGER.info("FileUploaderService.process successful for file {}", file.getAbsolutePath());

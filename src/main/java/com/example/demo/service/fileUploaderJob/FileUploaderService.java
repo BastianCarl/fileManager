@@ -4,11 +4,11 @@ import static com.example.demo.service.UserService.userDTO;
 
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
-import com.example.demo.model.FileUploaderClient;
-import com.example.demo.model.fileUploadingStep.Step;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.FileProcessingStep;
+import com.example.demo.model.FileUploaderClient;
 import com.example.demo.model.Resource;
+import com.example.demo.model.fileUploadingStep.Step;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.FileHelper;
@@ -68,7 +68,9 @@ public class FileUploaderService {
   @Retryable(retryFor = {DatabaseFailure.class, FileServiceFailure.class})
   public void process(File file) {
     Resource resource =
-        new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(userDTO), FileUploaderClient.JOB));
+        new Resource(
+            file,
+            fileMetadataMapper.map(file, userService.getOwnerId(userDTO), FileUploaderClient.JOB));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
     UUID uuid = UUID.randomUUID();
     for (Step currentStep : steps) {

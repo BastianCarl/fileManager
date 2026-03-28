@@ -31,14 +31,23 @@ public class FileMetadata {
   private String hashValue;
   private String code;
   private Long version;
+
   @Column(name = "upload_time")
   private Long uploadTime;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "file_uploader_client")
   private FileUploaderClient fileUploaderClient;
 
   public FileMetadata(
-      String name, String mimeType, Long ownerId, Long size, String key, String hashValue, Long uploadTime, FileUploaderClient fileUploaderClient) {
+      String name,
+      String mimeType,
+      Long ownerId,
+      Long size,
+      String key,
+      String hashValue,
+      Long uploadTime,
+      FileUploaderClient fileUploaderClient) {
     this.name = name;
     this.mimeType = mimeType;
     this.ownerId = ownerId;

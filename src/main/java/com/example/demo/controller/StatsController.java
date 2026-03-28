@@ -1,33 +1,31 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.FileUploaderClient;
-import com.example.demo.service.StatsService;
 import com.example.demo.model.StatsContext;
 import com.example.demo.model.StatsType;
+import com.example.demo.service.StatsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/stats")
 public class StatsController {
 
-    private final StatsService statsService;
+  private final StatsService statsService;
 
-    public StatsController(StatsService statsService) {
-        this.statsService = statsService;
-    }
+  public StatsController(StatsService statsService) {
+    this.statsService = statsService;
+  }
 
-    @GetMapping("/uploads")
-    public Object getUploadStats(
-            @RequestParam(defaultValue = "7") int days,
-            @RequestParam(defaultValue = "10") int top,
-            @RequestParam(defaultValue = "true") boolean groupByExtension,
-            @RequestParam StatsType type,
-            @RequestParam(required = false) FileUploaderClient fileUploaderClient
+  @GetMapping("/uploads")
+  public Object getUploadStats(
+      @RequestParam(defaultValue = "7") int days,
+      @RequestParam(defaultValue = "10") int top,
+      @RequestParam(defaultValue = "true") boolean groupByExtension,
+      @RequestParam StatsType type,
+      @RequestParam(required = false) FileUploaderClient fileUploaderClient) {
 
-            ) {
+    StatsContext ctx = new StatsContext(days, top, groupByExtension, fileUploaderClient);
 
-        StatsContext ctx = new StatsContext(days, top, groupByExtension, fileUploaderClient);
-
-        return statsService.execute(type, ctx);
-    }
+    return statsService.execute(type, ctx);
+  }
 }
