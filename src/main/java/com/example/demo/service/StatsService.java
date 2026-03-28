@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.repository.model.StatsContext;
+import com.example.demo.model.StatsContext;
 import com.example.demo.service.handler.StatsHandler;
-import com.example.demo.repository.model.StatsType;
+import com.example.demo.model.StatsType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

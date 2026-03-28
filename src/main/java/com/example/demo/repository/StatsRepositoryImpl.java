@@ -1,9 +1,9 @@
 package com.example.demo.repository;
 
-import com.example.demo.repository.model.dto.DailyUploadDTO;
-import com.example.demo.repository.model.dto.ExtensionStatsDTO;
-import com.example.demo.repository.model.dto.FailedUploadDTO;
-import com.example.demo.repository.model.dto.TopUploaderDTO;
+import com.example.demo.model.dto.DailyUploadDTO;
+import com.example.demo.model.dto.ExtensionStatsDTO;
+import com.example.demo.model.dto.FailedUploadDTO;
+import com.example.demo.model.dto.TopUploaderDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;

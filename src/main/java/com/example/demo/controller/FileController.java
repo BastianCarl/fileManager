@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
-import com.example.demo.repository.model.FileProcessingStep;
-import com.example.demo.repository.model.Version;
+import com.example.demo.model.FileProcessingStep;
+import com.example.demo.model.Version;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.FileHelper;
 import java.io.File;

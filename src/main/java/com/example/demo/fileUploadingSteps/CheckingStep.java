@@ -1,7 +1,7 @@
 package com.example.demo.fileUploadingSteps;
 
-import com.example.demo.repository.model.FileProcessingStep;
-import com.example.demo.repository.model.Resource;
+import com.example.demo.model.FileProcessingStep;
+import com.example.demo.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

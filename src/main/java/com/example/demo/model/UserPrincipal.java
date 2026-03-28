@@ -1,4 +1,4 @@
-package com.example.demo.repository.model;
+package com.example.demo.model;
 
 import java.util.Collection;
 import java.util.List;

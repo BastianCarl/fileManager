@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.repository.model.User;
-import com.example.demo.repository.model.dto.UserDTO;
+import com.example.demo.model.User;
+import com.example.demo.model.dto.UserDTO;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.JWTHelper;
 import lombok.AllArgsConstructor;

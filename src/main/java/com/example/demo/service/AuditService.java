@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.repository.model.FileAuditState;
-import com.example.demo.repository.model.FileMetadata;
-import com.example.demo.repository.model.FileProcessingStep;
+import com.example.demo.model.FileAuditState;
+import com.example.demo.model.FileMetadata;
+import com.example.demo.model.FileProcessingStep;
 import com.example.demo.repository.AuditRepository;
 import java.util.Optional;
 import java.util.UUID;

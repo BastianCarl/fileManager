@@ -1,4 +1,4 @@
-package com.example.demo.repository.model.dto;
+package com.example.demo.model.dto;
 
 public record FailedUploadDTO(
         String code,
