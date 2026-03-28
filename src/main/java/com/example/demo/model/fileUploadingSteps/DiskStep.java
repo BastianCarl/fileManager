@@ -1,4 +1,4 @@
-package com.example.demo.fileUploadingSteps;
+package com.example.demo.model.fileUploadingSteps;
 
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;

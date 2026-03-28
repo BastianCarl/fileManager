@@ -1,6 +1,6 @@
 package com.example.demo.files;
 
-import com.example.demo.fileUploadingSteps.Step;
+import com.example.demo.model.fileUploadingSteps.Step;
 import com.example.demo.model.*;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.AuditService;

@@ -1,9 +1,9 @@
-package com.example.demo.fileUploadingSteps;
+package com.example.demo.model.fileUploadingSteps;
 
+import com.example.demo.files.FileService;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;
 import com.example.demo.service.AuditService;
-import com.example.demo.service.FileMetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
@@ -11,30 +11,29 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-import static com.example.demo.model.FileProcessingStep.METADATA_DONE;
-import static com.example.demo.model.FileProcessingStep.METADATA_STARTED;
+import static com.example.demo.model.FileProcessingStep.FILE_SERVICE_DONE;
+import static com.example.demo.model.FileProcessingStep.FILE_SERVICE_STARTED;
 
 @FileUploaderJobStep
 @UserUploadStep
-@Order(2)
 @Component
-public class MetadataStep implements Step {
-  private final FileMetaDataService fileMetaDataService;
+@Order(3)
+public class FileServiceStep implements Step {
+  private final FileService fileService;
   private final AuditService auditService;
 
   @Autowired
-  public MetadataStep(
-      @Lazy AuditService auditService, @Lazy FileMetaDataService fileMetaDataService) {
+  public FileServiceStep(@Lazy AuditService auditService, @Lazy FileService fileService) {
     this.auditService = auditService;
-    this.fileMetaDataService = fileMetaDataService;
+    this.fileService = fileService;
   }
 
   @Override
   public FileProcessingStep process(
       Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
-      auditService.upsert(resource.getFileMetadata(), METADATA_STARTED, uuid);
-      fileMetaDataService.save(resource.getFileMetadata());
+      auditService.upsert(resource.getFileMetadata(), FILE_SERVICE_STARTED, uuid);
+      fileService.uploadFile(resource);
       auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
       currentFileProcessingStep = nextState();
     }
@@ -43,6 +42,6 @@ public class MetadataStep implements Step {
 
   @Override
   public FileProcessingStep nextState() {
-    return METADATA_DONE;
+    return FILE_SERVICE_DONE;
   }
 }

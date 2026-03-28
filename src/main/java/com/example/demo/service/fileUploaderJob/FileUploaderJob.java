@@ -1,4 +1,4 @@
-package com.example.demo.fileUploaderJob;
+package com.example.demo.service.fileUploaderJob;
 
 import com.example.demo.utility.FileHelper;
 import jakarta.annotation.PostConstruct;

@@ -1,10 +1,10 @@
-package com.example.demo.fileUploaderJob;
+package com.example.demo.service.fileUploaderJob;
 
 import static com.example.demo.service.UserService.userDTO;
 
 import com.example.demo.exception.DatabaseFailure;
 import com.example.demo.exception.FileServiceFailure;
-import com.example.demo.fileUploadingSteps.Step;
+import com.example.demo.model.fileUploadingSteps.Step;
 import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Resource;

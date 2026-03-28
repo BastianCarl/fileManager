@@ -1,5 +1,6 @@
-package com.example.demo.fileUploaderJob;
+package com.example.demo.config;
 
+import com.example.demo.service.fileUploaderJob.FileUploaderJob;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.example.demo.fileUploadingSteps;
+package com.example.demo.model.fileUploadingSteps;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 
