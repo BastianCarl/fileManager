@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.model.User;
-import com.example.demo.model.UserPrincipal;
+import com.example.demo.repository.model.User;
+import com.example.demo.repository.model.UserPrincipal;
 import com.example.demo.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

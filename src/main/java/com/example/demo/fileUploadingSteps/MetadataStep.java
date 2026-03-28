@@ -1,7 +1,7 @@
 package com.example.demo.fileUploadingSteps;
 
-import com.example.demo.model.FileProcessingStep;
-import com.example.demo.model.Resource;
+import com.example.demo.repository.model.FileProcessingStep;
+import com.example.demo.repository.model.Resource;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.FileMetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-import static com.example.demo.model.FileProcessingStep.METADATA_DONE;
-import static com.example.demo.model.FileProcessingStep.METADATA_STARTED;
+import static com.example.demo.repository.model.FileProcessingStep.METADATA_DONE;
+import static com.example.demo.repository.model.FileProcessingStep.METADATA_STARTED;
 
 @FileUploaderJobStep
 @UserUploadStep

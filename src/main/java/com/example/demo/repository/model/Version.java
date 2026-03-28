@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.repository.model;
 
 import com.example.demo.service.FileMetaDataService;
 import java.util.List;

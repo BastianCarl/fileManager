@@ -2,8 +2,8 @@ package com.example.demo.files;
 
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
-import com.example.demo.model.FileMetadata;
-import com.example.demo.model.Resource;
+import com.example.demo.repository.model.FileMetadata;
+import com.example.demo.repository.model.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

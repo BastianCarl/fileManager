@@ -1,7 +1,7 @@
 package com.example.demo.fileUploadingSteps;
 
-import com.example.demo.model.FileProcessingStep;
-import com.example.demo.model.Resource;
+import com.example.demo.repository.model.FileProcessingStep;
+import com.example.demo.repository.model.Resource;
 import com.example.demo.service.AuditService;
 import com.example.demo.utility.FileHelper;
 import jakarta.annotation.PostConstruct;
@@ -17,8 +17,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-import static com.example.demo.model.FileProcessingStep.DISK_DONE;
-import static com.example.demo.model.FileProcessingStep.DISK_STARTED;
+import static com.example.demo.repository.model.FileProcessingStep.DISK_DONE;
+import static com.example.demo.repository.model.FileProcessingStep.DISK_STARTED;
 
 @FileUploaderJobStep
 @Order(4)

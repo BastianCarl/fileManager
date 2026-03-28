@@ -1,4 +1,4 @@
-package com.example.demo.strategy;
+package com.example.demo.repository.model.dto;
 
 public record DailyUploadDTO(
         java.time.LocalDate day,

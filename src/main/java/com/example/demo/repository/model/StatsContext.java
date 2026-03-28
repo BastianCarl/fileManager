@@ -1,4 +1,4 @@
-package com.example.demo.strategy;
+package com.example.demo.repository.model;
 
 public record StatsContext(
         int days,

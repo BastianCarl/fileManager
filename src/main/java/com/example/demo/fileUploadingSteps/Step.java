@@ -1,7 +1,7 @@
 package com.example.demo.fileUploadingSteps;
 
-import com.example.demo.model.FileProcessingStep;
-import com.example.demo.model.Resource;
+import com.example.demo.repository.model.FileProcessingStep;
+import com.example.demo.repository.model.Resource;
 
 import java.util.UUID;
 

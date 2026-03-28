@@ -1,5 +1,10 @@
-package com.example.demo.strategy;
+package com.example.demo.repository;
 
+
+import com.example.demo.repository.model.dto.DailyUploadDTO;
+import com.example.demo.repository.model.dto.ExtensionStatsDTO;
+import com.example.demo.repository.model.dto.FailedUploadDTO;
+import com.example.demo.repository.model.dto.TopUploaderDTO;
 
 import java.util.List;
 

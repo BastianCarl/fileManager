@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.repository.model;
 
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 

@@ -1,5 +1,8 @@
-package com.example.demo.strategy;
+package com.example.demo.controller;
 
+import com.example.demo.service.StatsService;
+import com.example.demo.repository.model.StatsContext;
+import com.example.demo.repository.model.StatsType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

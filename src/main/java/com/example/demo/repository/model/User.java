@@ -1,5 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.repository.model;
 
+import com.example.demo.repository.model.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

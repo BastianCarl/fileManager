@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.exception.DatabaseFailure;
-import com.example.demo.model.FileMetadata;
+import com.example.demo.repository.model.FileMetadata;
 import com.example.demo.repository.FileMetadataRepository;
 import jakarta.transaction.Transactional;
 import java.util.*;
