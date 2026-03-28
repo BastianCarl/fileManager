@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.FileUploaderClient;
 import com.example.demo.service.StatsService;
 import com.example.demo.model.StatsContext;
 import com.example.demo.model.StatsType;
@@ -20,10 +21,12 @@ public class StatsController {
             @RequestParam(defaultValue = "7") int days,
             @RequestParam(defaultValue = "10") int top,
             @RequestParam(defaultValue = "true") boolean groupByExtension,
-            @RequestParam StatsType type   // IMPORTANT: alegi ce statistică vrei
-    ) {
+            @RequestParam StatsType type,
+            @RequestParam(required = false) FileUploaderClient fileUploaderClient
 
-        StatsContext ctx = new StatsContext(days, top, groupByExtension);
+            ) {
+
+        StatsContext ctx = new StatsContext(days, top, groupByExtension, fileUploaderClient);
 
         return statsService.execute(type, ctx);
     }

@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.FileUploaderClient;
 import com.example.demo.model.dto.DailyUploadDTO;
 import com.example.demo.model.dto.ExtensionStatsDTO;
 import com.example.demo.model.dto.FailedUploadDTO;
@@ -107,24 +108,29 @@ public class StatsRepositoryImpl implements StatsRepository {
 
     // ❌ FAILED UPLOADS (JOIN pe code)
     @Override
-    public List<FailedUploadDTO> failedUploads(Long from) {
+    public List<FailedUploadDTO> failedUploads(Long from, FileUploaderClient client) {
 
         String sql = """
-            SELECT 
-                a.code,
-                f.owner_id,
-                f.upload_time,
-                a.step
-            FROM file_audit_state a
-            JOIN file_metadata f ON f.code = a.code
-            WHERE f.upload_time >= :from
-              AND a.step = 'FAILED'
-            ORDER BY f.upload_time DESC
-        """;
+        SELECT 
+            a.code,
+            f.owner_id,
+            f.upload_time,
+            a.step
+        FROM file_audit_state a
+        JOIN file_metadata f ON f.code = a.code
+        WHERE f.upload_time >= :from
+          AND a.step = 'FAILED'
+          AND (:client IS NULL OR f.file_uploader_client = :client)
+        ORDER BY f.upload_time DESC
+    """;
 
-        List<Object[]> result = em.createNativeQuery(sql)
-                .setParameter("from", from)
-                .getResultList();
+        var query = em.createNativeQuery(sql)
+                .setParameter("from", from);
+
+        // 🔥 IMPORTANT: enum → String
+        query.setParameter("client", client != null ? client.name() : null);
+
+        List<Object[]> result = query.getResultList();
 
         return result.stream()
                 .map(r -> new FailedUploadDTO(

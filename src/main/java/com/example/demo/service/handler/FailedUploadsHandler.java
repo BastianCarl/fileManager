@@ -25,6 +25,6 @@ public class FailedUploadsHandler implements StatsHandler {
         long now = System.currentTimeMillis();
         long from = now - ctx.days() * 86400000L;
 
-        return repository.failedUploads(from);
+        return repository.failedUploads(from, ctx.fileUploaderClient());
     }
 }
