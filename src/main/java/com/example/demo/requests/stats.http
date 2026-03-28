@@ -1,6 +1,6 @@
 @rootURL = http://localhost:8080/api/v1
-@userName = sebi
-@password = sebi
+@userName = cristi
+@password = cristi
 @boundary = WebAppBoundary
 ###
 # @name login
@@ -35,6 +35,6 @@ Accept: application/json
 %}
 
 ###
-GET {{rootURL}}/stats/uploads?days=7&top=10&type=BY_EXTENSION
+GET {{rootURL}}/stats/uploads?days=7&type=FAILED_UPLOADS&fileUploaderClient=JOB
 Authentication: Bearer {{token}}
 Content-Type: application/json

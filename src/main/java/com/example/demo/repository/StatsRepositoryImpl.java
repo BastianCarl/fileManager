@@ -110,7 +110,7 @@ public class StatsRepositoryImpl implements StatsRepository {
     @Override
     public List<FailedUploadDTO> failedUploads(Long from, FileUploaderClient client) {
 
-        String sql = """
+        StringBuilder sql = new StringBuilder("""
         SELECT 
             a.code,
             f.owner_id,
@@ -119,16 +119,21 @@ public class StatsRepositoryImpl implements StatsRepository {
         FROM file_audit_state a
         JOIN file_metadata f ON f.code = a.code
         WHERE f.upload_time >= :from
-          AND a.step = 'FAILED'
-          AND (:client IS NULL OR f.file_uploader_client = :client)
-        ORDER BY f.upload_time DESC
-    """;
+          AND a.step != 'DONE'
+    """);
 
-        var query = em.createNativeQuery(sql)
+        if (client != null) {
+            sql.append(" AND f.file_uploader_client = :client");
+        }
+
+        sql.append(" ORDER BY f.upload_time DESC");
+
+        var query = em.createNativeQuery(sql.toString())
                 .setParameter("from", from);
 
-        // 🔥 IMPORTANT: enum → String
-        query.setParameter("client", client != null ? client.name() : null);
+        if (client != null) {
+            query.setParameter("client", client.name());
+        }
 
         List<Object[]> result = query.getResultList();
 

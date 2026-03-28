@@ -50,12 +50,13 @@ public class DiskStep implements Step {
   public FileProcessingStep process(
       Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
     if (shouldProcess(currentFileProcessingStep)) {
-      auditService.upsert(resource.getFileMetadata(), DISK_STARTED, uuid);
-      File file = resource.getFile();
-      fileHelper.move(
-          file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
-      currentFileProcessingStep = DISK_DONE;
+      throw new NullPointerException();
+//      auditService.upsert(resource.getFileMetadata(), DISK_STARTED, uuid);
+//      File file = resource.getFile();
+//      fileHelper.move(
+//          file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
+//      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
+//      currentFileProcessingStep = DISK_DONE;
     }
     return currentFileProcessingStep;
   }
