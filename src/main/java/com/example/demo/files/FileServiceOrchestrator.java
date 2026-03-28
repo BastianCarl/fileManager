@@ -1,6 +1,6 @@
 package com.example.demo.files;
 
-import com.example.demo.model.fileUploadingSteps.Step;
+import com.example.demo.model.fileUploadingStep.Step;
 import com.example.demo.model.*;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.AuditService;
@@ -74,7 +74,7 @@ public class FileServiceOrchestrator {
   @Async
   public void upload(File file, String authToken, UUID uuid) {
     Resource resource =
-        new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(authToken)));
+        new Resource(file, fileMetadataMapper.map(file, userService.getOwnerId(authToken), FileUploaderClient.API));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
     for (Step currentStep : steps) {
       fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
@@ -173,7 +173,7 @@ public class FileServiceOrchestrator {
     Path backup = Path.of(BACKUP_PATH, date);
     File[] files = fileHelper.listFiles(backup);
     for (File file : files) {
-      FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId);
+      FileMetadata fileMetadata = fileMetadataMapper.map(file, ownerId, FileUploaderClient.API);
       fileMetaDataService.save(fileMetadata);
       fileService.uploadFile(new Resource(file, fileMetadata));
     }

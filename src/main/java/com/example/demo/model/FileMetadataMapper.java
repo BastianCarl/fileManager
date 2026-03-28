@@ -19,7 +19,7 @@ public class FileMetadataMapper {
     this.fileService = fileService;
   }
 
-  public FileMetadata map(File file, Long ownerId) {
+  public FileMetadata map(File file, Long ownerId, FileUploaderClient fileUploaderClient) {
     try {
       return new FileMetadata(
           file.getName(),
@@ -28,14 +28,15 @@ public class FileMetadataMapper {
           file.length(),
           fileService.generateKey(file),
           sha256Hex(Files.newInputStream(file.toPath())),
-          System.currentTimeMillis()
+          System.currentTimeMillis(),
+          fileUploaderClient
       );
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public FileMetadata map(MultipartFile file, Long ownerId) {
+  public FileMetadata map(MultipartFile file, Long ownerId, FileUploaderClient fileUploaderClient) {
     try {
       return new FileMetadata(
           file.getOriginalFilename(),
@@ -44,7 +45,8 @@ public class FileMetadataMapper {
           file.getSize(),
           fileService.generateKey(file),
           sha256Hex(file.getInputStream()),
-          System.currentTimeMillis()
+          System.currentTimeMillis(),
+          fileUploaderClient
       );
     } catch (IOException e) {
       throw new RuntimeException(e);

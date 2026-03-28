@@ -38,33 +38,35 @@ public interface FileMetadataRepository extends JpaRepository<FileMetadata, Long
   @Query(
           value =
                   """
-              INSERT INTO file_metadata
-                  (name,
-                   mime_type,
-                   owner_id,
-                   size,
-                   key,
-                   hash_value,
-                   code,
-                   version,
-                   upload_time)
-              VALUES (
-                  :#{#file.name},
-                  :#{#file.mimeType},
-                  :#{#file.ownerId},
-                  :#{#file.size},
-                  :#{#file.key},
-                  :#{#file.hashValue},
-                  :#{#file.code},
-                  (
-                      SELECT COALESCE(MAX(f2.version), 0) + 1
-                      FROM file_metadata f2
-                      WHERE f2.name = :#{#file.name}
-                  ),
-                  :#{#file.uploadTime}
-              )
-              RETURNING *
-              """,
+                  INSERT INTO file_metadata
+                      (name,
+                       mime_type,
+                       owner_id,
+                       size,
+                       key,
+                       hash_value,
+                       code,
+                       version,
+                       upload_time,
+                       file_uploader_client)
+                  VALUES (
+                      :#{#file.name},
+                      :#{#file.mimeType},
+                      :#{#file.ownerId},
+                      :#{#file.size},
+                      :#{#file.key},
+                      :#{#file.hashValue},
+                      :#{#file.code},
+                      (
+                          SELECT COALESCE(MAX(f2.version), 0) + 1
+                          FROM file_metadata f2
+                          WHERE f2.name = :#{#file.name}
+                      ),
+                      :#{#file.uploadTime},
+                      :#{#file.fileUploaderClient.name()}
+                  )
+                  RETURNING *
+                  """,
           nativeQuery = true
   )
   FileMetadata saveWithVersioning(FileMetadata file);

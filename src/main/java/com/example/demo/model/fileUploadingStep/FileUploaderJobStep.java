@@ -1,4 +1,4 @@
-package com.example.demo.model.fileUploadingSteps;
+package com.example.demo.model.fileUploadingStep;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -10,4 +10,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier
-public @interface UserUploadStep {}
+public @interface FileUploaderJobStep {}
