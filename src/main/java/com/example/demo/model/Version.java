@@ -3,7 +3,7 @@ package com.example.demo.model;
 import com.example.demo.service.FileMetaDataService;
 import java.util.List;
 
-public enum Option {
+public enum Version {
   all() {
     @Override
     public List<FileMetadata> getFiles(FileMetaDataService service) {

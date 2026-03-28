@@ -27,7 +27,9 @@ public class FileMetadataMapper {
           ownerId,
           file.length(),
           fileService.generateKey(file),
-          sha256Hex(Files.newInputStream(file.toPath())));
+          sha256Hex(Files.newInputStream(file.toPath())),
+          System.currentTimeMillis()
+      );
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -41,7 +43,9 @@ public class FileMetadataMapper {
           ownerId,
           file.getSize(),
           fileService.generateKey(file),
-          sha256Hex(file.getInputStream()));
+          sha256Hex(file.getInputStream()),
+          System.currentTimeMillis()
+      );
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

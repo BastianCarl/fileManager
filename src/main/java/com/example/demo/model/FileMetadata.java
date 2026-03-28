@@ -31,15 +31,18 @@ public class FileMetadata {
   private String hashValue;
   private String code;
   private Long version;
+  @Column(name = "upload_time")
+  private Long uploadTime;
 
   public FileMetadata(
-      String name, String mimeType, Long ownerId, Long size, String key, String hashValue) {
+      String name, String mimeType, Long ownerId, Long size, String key, String hashValue, Long uploadTime) {
     this.name = name;
     this.mimeType = mimeType;
     this.ownerId = ownerId;
     this.size = size;
     this.key = key;
     this.hashValue = hashValue;
+    this.uploadTime = uploadTime;
     this.code = generateCode(ownerId, size, key, hashValue);
   }
 

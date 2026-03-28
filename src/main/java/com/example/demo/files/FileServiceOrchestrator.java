@@ -148,9 +148,9 @@ public class FileServiceOrchestrator {
     }
   }
 
-  public Optional<byte[]> manageDownloadAllFilesAsArchive(String type, Option option) {
+  public Optional<byte[]> manageDownloadAllFilesAsArchive(String type, Version version) {
     if (archiver.isArchiveTypeAccepted(type)) {
-      List<FileMetadata> files = option.getFiles(fileMetaDataService);
+      List<FileMetadata> files = version.getFiles(fileMetaDataService);
       try {
         return Optional.of(archiver.createZip(manageDownloadAllFiles(files)));
       } catch (IOException e) {

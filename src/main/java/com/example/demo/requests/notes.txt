@@ -266,5 +266,5 @@ sa obtin versiunii de diverse size-uri pentru poze e.g. un thumbnail, poza pentr
 upload-ul facut de useri prin api sa apara in audit table
 un endpoint care sa faca un dashboard cu statistica: top uploaderi, clasament dupa extensie, datele cu volumulul de upload per zi pentru ultimele x zile(x se configureaza cand chem api-ul), failed uploads(via upi, via file job)
 Mellum https://blog.jetbrains.com/blog/2024/10/22/introducing-mellum-jetbrains-new-llm-built-for-developers/ configurat local
-GET {{rootURL}}/files/all/zip?option=latest
+GET {{rootURL}}/files/all/zip?version=latest
 swagger, iau swagger.json da-ti cu parerea
