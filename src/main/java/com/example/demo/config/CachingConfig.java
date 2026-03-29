@@ -50,10 +50,21 @@ public class CachingConfig {
                 RedisSerializationContext.SerializationPair.fromSerializer(
                     new GenericJackson2JsonRedisSerializer()));
 
+
+    // 🔥 CACHE pentru imagini procesate
+    RedisCacheConfiguration imageCacheConfig =
+            RedisCacheConfiguration.defaultCacheConfig()
+                    .entryTtl(Duration.ofMinutes(30)) // mai mare pentru imagini
+                    .disableCachingNullValues()
+                    .serializeValuesWith(
+                            RedisSerializationContext.SerializationPair.fromSerializer(
+                                    RedisSerializer.byteArray()));
+
     return RedisCacheManager.builder(connectionFactory)
         .cacheDefaults(defaultConfig)
         .withCacheConfiguration("downloadCache", downloadCacheConfig)
         .withCacheConfiguration("zipCache", zipCacheConfig)
+            .withCacheConfiguration("imageCache", imageCacheConfig)
         .build();
   }
 }

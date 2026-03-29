@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +25,10 @@ public class ImageService {
     this.fileService = fileService;
     this.fileMetaDataService = fileMetaDataService;
   }
-
+    @Cacheable(
+            value = "imageCache",
+            key = "#imageId + '_' + #type.name()"
+    )
   public byte[] getProcessedImage(Long imageId, ImageType type) throws IOException {
 
     FileMetadata fileMetadata = fileMetaDataService.getFileMetadata(imageId);
