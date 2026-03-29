@@ -40,6 +40,10 @@ public class FileMetaDataService {
         .getFirst();
   }
 
+  public FileMetadata getFileMetadata(Long fileId) {
+    return repository.findById(fileId).orElse(null);
+  }
+
   public List<FileMetadata> getImageMetadataList(Long userId) {
     return repository.findByOwnerId(userId);
   }
