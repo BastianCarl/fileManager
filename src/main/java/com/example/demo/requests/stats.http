@@ -35,6 +35,6 @@ Accept: application/json
 %}
 
 ###
-GET {{rootURL}}/stats/uploads?days=7&type=TOP_UPLOADERS
+GET {{rootURL}}/stats/uploads?days=7&type=BY_EXTENSION
 Authentication: Bearer {{token}}
 Content-Type: application/json
