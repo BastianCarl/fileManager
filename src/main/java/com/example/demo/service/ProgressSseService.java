@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class ProgressSseService {
 
   private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+  private final String EVENT = "progress";
 
   public SseEmitter subscribe(String uuid) {
     SseEmitter emitter = new SseEmitter(0L); // fără timeout
@@ -27,7 +28,7 @@ public class ProgressSseService {
     SseEmitter emitter = emitters.get(uuid);
     if (emitter != null) {
       try {
-        emitter.send(SseEmitter.event().name("progress").data(update));
+        emitter.send(SseEmitter.event().name(EVENT).data(update));
       } catch (Exception e) {
         emitters.remove(uuid);
       }

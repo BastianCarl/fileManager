@@ -1,6 +1,6 @@
-@rootURL = http://localhost:8080
-@userName = sebi
-@password = sebi
+@rootURL = http://localhost:8080/api/v1
+@userName = cristi
+@password = cristi
 # @name login
 POST {{rootURL}}/sessions
 Content-Type: application/json

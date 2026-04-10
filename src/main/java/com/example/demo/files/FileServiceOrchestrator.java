@@ -85,30 +85,22 @@ public class FileServiceOrchestrator {
             fileMetadataMapper.map(
                 file, userService.getOwnerId(authToken), FileUploaderClient.API));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
-
-    int totalSteps = steps.size();
-    int currentIndex = 0;
-    try {
-      Thread.sleep(20000);
-
-    }catch (Exception e) {
-        throw new RuntimeException(e);
-    }
-
-    for (Step currentStep : steps) {
+    for (int i = 0; i < steps.size(); i++) {
+      try {
+        Thread.sleep(20000);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+      Step currentStep = steps.get(i);
       progressSseService.sendUpdate(
           id,
           new ProgressUpdate(
-              id,
-              "IN_PROGRESS",
-              (currentIndex * 100) / totalSteps,
-              "Running step: " + currentStep.getClass().getSimpleName()));
+              id, ProgressUpdate.ProgressUpdateStatus.IN_PROGRESS, i, steps.size(), currentStep));
 
       fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
-
-      currentIndex++;
     }
-    progressSseService.sendUpdate(id, new ProgressUpdate(id, "DONE", 100, "Completed"));
+    progressSseService.sendUpdate(
+        id, new ProgressUpdate(id, ProgressUpdate.ProgressUpdateStatus.DONE, 100, "Completed"));
   }
 
   public Optional<FileProcessingStep> checkFileProcessingStep(String id) {

@@ -40,8 +40,8 @@ Authentication: Bearer {{token}}
 Content-Type: multipart/form-data; boundary={{boundary}}
 
 --{{boundary}}
-Content-Disposition: form-data; name="file"; filename="steam.jpg"
+Content-Disposition: form-data; name="file"; filename="FutureHierarchy.jpg"
 Content-Type: text/plain
 
-< ./steam.jpg
+< ./FutureHierarchy.jpg
 --{{boundary}}--

@@ -37,5 +37,5 @@ Accept: application/json
 
 ### Subscribe to progress SSE
 GET http://localhost:8080/api/v1/progress/asdgvhgqeqwe
-Authorization: Bearer {{token}}
+Authentication: Bearer {{token}}
 Accept: text/event-stream

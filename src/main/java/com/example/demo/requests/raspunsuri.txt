@@ -1068,3 +1068,5 @@ Claude
     - use projects for a better context(instruction, context, files)
     - once for each purpose
     - skils
+
+curl -X GET "http://localhost:8080/api/v1/progress/3919da2e-6975-4708-bd4d-d2b5cb80ceff" -H "Authentication: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzU4MjUyNDUsImV4cCI6MTc3NTkxMTY0NX0.8_kLHNn0oWyV47Edjalpr992tnsAaC5K_5F5ntt96Yw" -H "Accept: text/event-stream"
