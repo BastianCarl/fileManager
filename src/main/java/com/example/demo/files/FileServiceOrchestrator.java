@@ -95,12 +95,14 @@ public class FileServiceOrchestrator {
       progressSseService.sendUpdate(
           id,
           new ProgressUpdate(
-              id, ProgressUpdate.ProgressUpdateStatus.IN_PROGRESS, i, steps.size(), currentStep));
+              ProgressUpdate.ProgressUpdateStatus.IN_PROGRESS, i, steps.size(), currentStep));
 
       fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
     }
     progressSseService.sendUpdate(
-        id, new ProgressUpdate(id, ProgressUpdate.ProgressUpdateStatus.DONE, 100, "Completed"));
+        id, new ProgressUpdate(ProgressUpdate.ProgressUpdateStatus.DONE, 100, "Completed"));
+
+    progressSseService.complete(id);
   }
 
   public Optional<FileProcessingStep> checkFileProcessingStep(String id) {

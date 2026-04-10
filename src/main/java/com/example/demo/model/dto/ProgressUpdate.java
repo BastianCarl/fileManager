@@ -7,7 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ProgressUpdate {
-  private String uuid;
   private ProgressUpdateStatus status;
   private int progress;
   private String message;
@@ -18,12 +17,7 @@ public class ProgressUpdate {
   }
 
   public ProgressUpdate(
-      String uuid,
-      ProgressUpdateStatus progressUpdateStatus,
-      int currentStep,
-      int totalSteps,
-      Step step) {
-    this.uuid = uuid;
+      ProgressUpdateStatus progressUpdateStatus, int currentStep, int totalSteps, Step step) {
     this.status = progressUpdateStatus;
     this.progress = (currentStep * 100) / totalSteps;
     this.message = "Running step: " + step.getClass().getSimpleName();
