@@ -276,6 +276,7 @@ patch vs put  vs pot pentru update partial vs update complet
 claude
 sa nu mai returnez uuid de la inceput ci pe parcurs
 cum functioneza @Async in Spring
+documentatie pentru aplicatie
 
 
 
