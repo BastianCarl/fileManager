@@ -1,0 +1,19 @@
+{
+  "id" : "b55d687a-41df-4dcb-bbe0-03ac26c06141",
+  "title" : "2+ 2?",
+  "createdAt" : 1775747142251,
+  "updatedAt" : 1775756660982,
+  "messages" : [ {
+    "role" : "USER",
+    "content" : " 2+ 2?",
+    "timestamp" : 1775747157338
+  }, {
+    "role" : "ASSISTANT",
+    "content" : "**Reasoning:** \nThe question is asking for a simple arithmetic calculation, but there's no relevant documentation or code provided to support the answer. However, based on the provided documentation and context, we can safely assume that the question is not related to the given code or documentation.\n\n**Solution:**\n2 + 2 = 4\n\nNote: The solution is a straightforward arithmetic calculation, and it does not require any reference to the provided documentation.",
+    "timestamp" : 1775747179931
+  }, {
+    "role" : "USER",
+    "content" : "ceads```java\n            authorizeRequests\n                .requestMatchers(\n                    \"/users\",\n                    \"/sessions\",\n                    \"/v3/api-docs\",\n                    \"/v3/api-docs/**\",\n                    \"/swagger-ui/**\",\n                    \"/swagger-ui.html\",\n                    \"/hello\")\n                .permitAll()\n                .anyRequest()\n                .authenticated());\n    //        http.authorizeHttpRequests(authorizeRequests ->\n    // authorizeRequests.anyRequest().permitAll());\n    http.httpBasic(Customizer.withDefaults());\n    http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);\n    return http.build();\n  }\n```",
+    "timestamp" : 1775756660982
+  } ]
+}

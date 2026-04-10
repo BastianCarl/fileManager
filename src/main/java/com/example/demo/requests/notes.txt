@@ -268,3 +268,17 @@ un endpoint care sa faca un dashboard cu statistica: top uploaderi, clasament du
 Mellum https://blog.jetbrains.com/blog/2024/10/22/introducing-mellum-jetbrains-new-llm-built-for-developers/ configurat local
 GET {{rootURL}}/files/all/zip?version=latest
 swagger, iau swagger.json da-ti cu parerea
+-----
+-------
+sse webosckets
+implementare pentru a notifica userii in timp real cand un upload s-a terminat sau a esuat
+patch vs put  vs pot pentru update partial vs update complet
+claude
+sa nu mai returnez uuid de la inceput ci pe parcurs
+cum functioneza @Async in Spring
+
+
+
+
+
+curl.exe -N "http://localhost:8080/api/v1/progress/d2232d5a-4caf-4cd9-895a-140d9892747e" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzU4MjMzMzAsImV4cCI6MTc3NTkwOTczMH0.aHyOZH2DwDDezQi49DBJnTQ-TcLaAY4WJLIIzo363oA"

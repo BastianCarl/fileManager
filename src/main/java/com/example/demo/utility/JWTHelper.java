@@ -28,7 +28,7 @@ public class JWTHelper {
         .setClaims(claims)
         .setSubject(username)
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 10000 * 6 * 3))
+        .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000)) // 24h
         .signWith(getKey(), SignatureAlgorithm.HS256)
         .compact();
   }

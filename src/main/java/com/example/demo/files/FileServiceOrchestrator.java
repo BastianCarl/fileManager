@@ -1,10 +1,12 @@
 package com.example.demo.files;
 
 import com.example.demo.model.*;
+import com.example.demo.model.dto.ProgressUpdate;
 import com.example.demo.model.fileUploadingStep.Step;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.FileMetaDataService;
+import com.example.demo.service.ProgressSseService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.Archiver;
 import com.example.demo.utility.FileHelper;
@@ -40,6 +42,7 @@ public class FileServiceOrchestrator {
   private final FileHelper fileHelper;
   private final FileMetadataMapper fileMetadataMapper;
   private final AuditService auditService;
+  private final ProgressSseService progressSseService;
   private DateTimeFormatter formatter;
   private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
   private final List<Step> steps;
@@ -54,6 +57,7 @@ public class FileServiceOrchestrator {
       FileMetadataMapper fileMetadataMapper,
       List<Step> steps,
       AuditService auditService,
+      ProgressSseService progressSseService,
       FileHelper fileHelper) {
     this.fileService = awsImplementationFileService;
     this.fileMetadataRepository = fileMetadataRepository;
@@ -64,6 +68,7 @@ public class FileServiceOrchestrator {
     this.fileMetadataMapper = fileMetadataMapper;
     this.auditService = auditService;
     this.steps = steps;
+    this.progressSseService = progressSseService;
   }
 
   @PostConstruct
@@ -73,15 +78,37 @@ public class FileServiceOrchestrator {
 
   @Async
   public void upload(File file, String authToken, UUID uuid) {
+    String id = uuid.toString();
     Resource resource =
         new Resource(
             file,
             fileMetadataMapper.map(
                 file, userService.getOwnerId(authToken), FileUploaderClient.API));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
-    for (Step currentStep : steps) {
-      fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
+
+    int totalSteps = steps.size();
+    int currentIndex = 0;
+    try {
+      Thread.sleep(20000);
+
+    }catch (Exception e) {
+        throw new RuntimeException(e);
     }
+
+    for (Step currentStep : steps) {
+      progressSseService.sendUpdate(
+          id,
+          new ProgressUpdate(
+              id,
+              "IN_PROGRESS",
+              (currentIndex * 100) / totalSteps,
+              "Running step: " + currentStep.getClass().getSimpleName()));
+
+      fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
+
+      currentIndex++;
+    }
+    progressSseService.sendUpdate(id, new ProgressUpdate(id, "DONE", 100, "Completed"));
   }
 
   public Optional<FileProcessingStep> checkFileProcessingStep(String id) {

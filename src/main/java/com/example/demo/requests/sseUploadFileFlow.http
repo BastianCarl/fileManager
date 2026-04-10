@@ -1,0 +1,83 @@
+@rootURL = http://localhost:8080/api/v1
+@userName = cristi
+@password = cristi
+@boundary = WebAppBoundary
+
+###
+# @name login
+POST {{rootURL}}/sessions
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userName": "{{userName}}",
+  "password": "{{password}}"
+}
+
+> {%
+    try {
+        const ct = response.headers["content-type"] || "";
+        let token = null;
+        if (ct.includes("application/json")) {
+            const j = JSON.parse(response.body);
+            token = j.token || j.accessToken || (j.data && j.data.token);
+        } else {
+            token = (response.body || "").trim();
+        }
+        if (!token) {
+            client.log("Login response body: " + response.body);
+            throw new Error("Token not found in login response.");
+        }
+        client.global.set("token", token);
+        client.log("✓ Token captured: " + token.substring(0, 20) + "...");
+    } catch (e) {
+        client.log("✗ Failed to parse login response: " + e.message);
+        throw e;
+    }
+%}
+
+###
+# @name uploadFileSSE
+POST {{rootURL}}/files
+Authentication: Bearer {{token}}
+Content-Type: multipart/form-data; boundary={{boundary}}
+
+--{{boundary}}
+Content-Disposition: form-data; name="file"; filename="test-upload.txt"
+Content-Type: text/plain
+
+This is a test file for SSE upload tracking.
+The server will process this file through multiple steps.
+--{{boundary}}--
+
+> {%
+    try {
+        const fileId = response.body.trim();
+        if (!fileId) {
+            throw new Error("No file ID in response");
+        }
+        client.global.set("fileId", fileId);
+        client.log("✓ Upload initiated with File ID: " + fileId);
+        client.log("  Location: " + response.headers.location);
+    } catch (e) {
+        client.log("✗ Failed to capture file ID: " + e.message);
+        throw e;
+    }
+%}
+
+###
+# @name watchProgressSSE
+GET {{rootURL}}/files/{{fileId}}/progress
+Authentication: Bearer {{token}}
+Accept: text/event-stream
+Connection: keep-alive
+Cache-Control: no-cache
+
+###
+# Flow Instructions:
+# 1. Run: login - va captura token-ul automat
+# 2. Run: uploadFileSSE - va face upload și va captura fileId
+# 3. Run: watchProgressSSE - va afișa SSE stream cu update-uri în timp real
+#    - Vei vedea mesajele: METADATA_STARTED, METADATA_DONE, FILE_SERVICE_STARTED, FILE_SERVICE_DONE, DISK_STARTED, DISK_DONE, DONE
+#    - Apoi "complete" event când se termină
+

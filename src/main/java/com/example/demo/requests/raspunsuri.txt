@@ -1062,3 +1062,9 @@ sa fac un generator custom care si daca deployez aplicatie de 10 sa nu genereze 
         - timeStamp
         - machine id
         - sequence number
+
+------------
+Claude
+    - use projects for a better context(instruction, context, files)
+    - once for each purpose
+    - skils
