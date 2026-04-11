@@ -1067,4 +1067,15 @@ sa fac un generator custom care si daca deployez aplicatie de 10 sa nu genereze 
 Claude
     - use projects for a better context(instruction, context, files) once for each purpose
 
-curl -X GET "http://localhost:8080/api/v1/progress/b0ea3f1e-12e0-4b6b-8533-759f034b889d" -H "Authentication: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzU4MjUyNDUsImV4cCI6MTc3NTkxMTY0NX0.8_kLHNn0oWyV47Edjalpr992tnsAaC5K_5F5ntt96Yw" -H "Accept: text/event-stream"
+SSE(Server send events)
+    - unidirectional communication
+    - server can push data to the client when an event occurs
+    - client can only receive data from the server, but cannot send data back to the server over the same connection.
+    - uses HTTP protocol
+    - text/event-stream content type
+    - only text-based data can be sent
+    - uses a special get request
+        - endpoint stream
+        - Content-Type: text/event-stream
+    Cons-
+     - bound to a specific server

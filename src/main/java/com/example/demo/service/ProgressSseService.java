@@ -5,18 +5,21 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 public class ProgressSseService {
 
+  @Value("${progress.sse.service.timeout:5}")
+  private int timeout;
   private static final Logger LOGGER = LoggerFactory.getLogger(ProgressSseService.class);
   private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
-  private final String EVENT = "progress";
+  private final String EVENT = "File processing progress";
 
   public SseEmitter subscribe(String uuid) {
-    SseEmitter emitter = new SseEmitter(5 * 60 * 1000L); // 5 minute
+    SseEmitter emitter = new SseEmitter(timeout * 60 * 1000L); // 5 minutes
 
     emitters.put(uuid, emitter);
 

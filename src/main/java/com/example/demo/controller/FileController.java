@@ -40,16 +40,6 @@ public class FileController {
         .body(uuid.toString());
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<FileProcessingStep> checkFileProcessingStep(
-      @PathVariable String id, @RequestHeader("Authentication") String authToken) {
-
-    return fileServiceOrchestrator
-        .checkFileProcessingStep(id)
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.notFound().build());
-  }
-
   @GetMapping
   public String search(@RequestParam(value = "name") String name) {
     return fileServiceOrchestrator.searchFile(name);

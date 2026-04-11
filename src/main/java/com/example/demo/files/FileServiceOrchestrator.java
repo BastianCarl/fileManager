@@ -105,11 +105,6 @@ public class FileServiceOrchestrator {
     progressSseService.complete(id);
   }
 
-  public Optional<FileProcessingStep> checkFileProcessingStep(String id) {
-    Optional<FileAuditState> fileAuditState = auditService.findById(id);
-    return fileAuditState.map(FileAuditState::getStep);
-  }
-
   private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
     if (files == null || files.isEmpty()) {
       return Collections.emptyMap();
