@@ -75,7 +75,8 @@ Response: {\
 "role": "USER"\
 }
 
-Status Codes: - 200 OK -- user successfully created
+Status Codes: 
+- 200 OK -- user successfully created
 - 400 Bad Request -- invalid input data
 
 ------------------------------------------------------------------------
