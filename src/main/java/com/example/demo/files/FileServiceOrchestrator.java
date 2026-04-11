@@ -27,10 +27,8 @@ import org.springframework.stereotype.Component;
 public class FileServiceOrchestrator {
   @Value("${file.uploader.job.date.format}")
   private String DATE_FORMAT;
-
   @Value("${limit.for.downloading}")
   private int LIMIT_FOR_DOWNLOADING;
-
   @Value("${file.uploader.job.backup.path}")
   private String BACKUP_PATH;
 
