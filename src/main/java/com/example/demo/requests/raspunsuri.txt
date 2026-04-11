@@ -1077,5 +1077,10 @@ SSE(Server send events)
     - uses a special get request
         - endpoint stream
         - Content-Type: text/event-stream
-    Cons-
+    Cons
      - bound to a specific server
+
+
+
+
+curl -X GET "http://localhost:8080/api/v1/progress/a9b2b8aa-73a0-4a42-b106-ebfeaa9429ba"  -H "Authentication: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzU5MTk5NzEsImV4cCI6MTc3NjAwNjM3MX0.K9CksxXynGZcsfkl633y2hxdz7E2ASrVE6n7IKBP6Ko" -H "Accept: text/event-stream"

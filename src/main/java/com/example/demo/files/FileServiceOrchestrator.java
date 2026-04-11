@@ -83,6 +83,7 @@ public class FileServiceOrchestrator {
             fileMetadataMapper.map(
                 file, userService.getOwnerId(authToken), FileUploaderClient.API));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
+    progressSseService.sendUpdate(id, ProgressUpdate.createStartedUpdate());
     for (int i = 0; i < steps.size(); i++) {
       try {
         Thread.sleep(20000);
@@ -97,10 +98,8 @@ public class FileServiceOrchestrator {
 
       fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
     }
-    progressSseService.sendUpdate(
-        id, new ProgressUpdate(ProgressUpdate.ProgressUpdateStatus.DONE, 100, "Completed"));
 
-    progressSseService.complete(id);
+    progressSseService.completeWithSuccess(id);
   }
 
   private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {

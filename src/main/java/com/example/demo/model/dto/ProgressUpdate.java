@@ -12,6 +12,7 @@ public class ProgressUpdate {
   private String message;
 
   public enum ProgressUpdateStatus {
+    STARTED,
     IN_PROGRESS,
     DONE
   }
@@ -21,5 +22,13 @@ public class ProgressUpdate {
     this.status = progressUpdateStatus;
     this.progress = (currentStep * 100) / totalSteps;
     this.message = "Running step: " + step.getClass().getSimpleName();
+  }
+
+  public static ProgressUpdate createCompletedUpdate() {
+    return new ProgressUpdate(ProgressUpdateStatus.DONE, 100, "Completed");
+  }
+
+  public static ProgressUpdate createStartedUpdate() {
+    return new ProgressUpdate(ProgressUpdateStatus.STARTED, 0, "File processing started");
   }
 }

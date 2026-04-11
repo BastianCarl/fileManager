@@ -43,11 +43,16 @@ public class ProgressSseService {
     }
   }
 
-  public void complete(String uuid) {
+  private void complete(String uuid) {
     SseEmitter emitter = emitters.get(uuid);
     if (emitter != null) {
       emitter.complete();
       emitters.remove(uuid, emitter);
     }
+  }
+
+  public void completeWithSuccess(String id) {
+    sendUpdate(id, ProgressUpdate.createCompletedUpdate());
+    complete(id);
   }
 }

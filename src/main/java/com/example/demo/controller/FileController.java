@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
-import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.Version;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.FileHelper;
+import com.example.demo.utility.UriBuilderService;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -25,6 +25,7 @@ public class FileController {
   private final FileServiceOrchestrator fileServiceOrchestrator;
   private final UserService userService;
   private final FileHelper fileHelper;
+  private final UriBuilderService uriBuilderService;
 
   @PostMapping
   public ResponseEntity<String> uploadFile(
@@ -32,12 +33,10 @@ public class FileController {
       throws IOException {
 
     File tempFile = fileHelper.createTempFile(file);
-
     UUID uuid = UUID.randomUUID();
+    String location = uriBuilderService.buildFileLocation(uuid);
     fileServiceOrchestrator.upload(tempFile, authToken, uuid);
-    return ResponseEntity.accepted()
-        .header(HttpHeaders.LOCATION, "/api/v1/files/" + uuid)
-        .body(uuid.toString());
+    return ResponseEntity.accepted().header(HttpHeaders.LOCATION, location).body(uuid.toString());
   }
 
   @GetMapping
