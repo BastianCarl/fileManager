@@ -1074,13 +1074,116 @@ SSE(Server send events)
     - uses HTTP protocol
     - text/event-stream content type
     - only text-based data can be sent
-    - uses a special get request
-        - endpoint stream
-        - Content-Type: text/event-stream
-    Cons
      - bound to a specific server
+     - Flow:
+        1. Request (client → server)
+            GET /stream HTTP/1.1          ✔️ OBLIGATORIU (trebuie să fie GET)
+            Host: example.com            ✔️ OBLIGATORIU (HTTP standard)
+            Accept: text/event-stream    ⚠️ OPȚIONAL (recomandat, dar nu necesar)
+
+        2. Response (server → client)
+            HTTP/1.1 200 OK              ✔️ OBLIGATORIU (response valid HTTP)
+            Content-Type: text/event-stream   ✔️ OBLIGATORIU (definește SSE)
+            Cache-Control: no-cache      ⚠️ OPȚIONAL (best practice)
+            Connection: keep-alive       ⚠️ OPȚIONAL (best practice)
+
+            data: mesaj 1
+            data: mesaj 2
+            ............
+
+WebSocket
+  - doesn't use HTTP protocol but ws(s)
+ - bidirectional communication
+ - Flow
+    1. Request (client → server)
+        GET /chat?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9(exemplu) HTTP/1.1                 ✔️ OBLIGATORIU (handshake-ul începe cu GET)
+        Host: example.com                 ✔️ OBLIGATORIU (HTTP standard)
+        Upgrade: websocket                ✔️ OBLIGATORIU
+        Connection: Upgrade               ✔️ OBLIGATORIU
+        Sec-WebSocket-Key: randomBase64Key ✔️ OBLIGATORIU
+        Sec-WebSocket-Version: 13         ✔️ OBLIGATORIU
+        Origin: http://example.com        ⚠️ OPȚIONAL
+        Sec-WebSocket-Protocol: chat      ⚠️ OPȚIONAL (subprotocol)
+        Sec-WebSocket-Extensions: ...     ⚠️ OPȚIONAL
+    2. Response (server → client)
+        HTTP/1.1 101 Switching Protocols  ✔️ OBLIGATORIU (confirmă upgrade-ul)
+        Upgrade: websocket                ✔️ OBLIGATORIU
+        Connection: Upgrade               ✔️ OBLIGATORIU
+        Sec-WebSocket-Accept: <calculat_din_key> ✔️ OBLIGATORIU
+SSE → definit de RESPONSE
+WebSocket → definit de REQUEST (handshake)
+
+Librari pentru WebSocket
+      Spring WebSocket
+      Spring STOMP
+      Netty (low-level)
+
+Format:
+     orice
 
 
+Autentificare & autorizare
+    Autentificare
+        La handshake(GET request )
+            -query param
+            - Header
+            - cookie
+        mesaje (după conectare)
+            - client-ul trimite token-ul in mesaj
+            - nu e cea mai buna solutie deoarce se poate conecta oricine
+    Autorizare
+         - se indentifica user-ul din conexiune
+         - se verifica daca user-ul are permisiunea de a accesa resursa
+           connections = {
+             socket_1: { user_id: 42, roles: ["USER"] },
+             socket_2: { user_id: 1, roles: ["ADMIN"] }
+           }
+Un singur server
+    User A ->(ws) server 1
+    User B ->(ws) server 1
+    User A ->(ws) server 1 -> user B
 
+Mai multe severe
+        User A ->(ws) server 1
+        User B ->(ws) server 1
+        User A ->(ws) server 1 ??? user B
+Solutie: Message broker
+    1. client → Server A
+    2. Server A → publish event
+    3. toate serverele → primesc
+    4. fiecare → trimite la clienții lui
+
+@Async & @EnableAsync
+    @EnableAsync
+      - creates proxies for beans annotated with @Async
+    @Async
+      - indicates that the method shuld be executed in another thead
+      - return types
+        - void
+        - Future
+        - CompletableFuture(better than future because it allows chaining)
+    TaskExecutor
+     - manges execution of asynchronous tasks
+     - Options:
+        - SimpleAsyncTaskExecutor
+            creates a thread for each task, not reuse them
+        - SyncTaskExecutor
+                executes tasks synchronously in the calling thread, not creating new threads
+        - ConcurrentTaskExecutor
+        - ThreadPoolTaskExecutor
+                    Task vine →
+                       ↓
+                    Thread disponibil? → DA → execută
+                       ↓ NU
+                    Creăm thread? → dacă < core
+                       ↓
+                    Punem în coadă? → dacă e loc
+                       ↓
+                    Creăm thread extra? → dacă < max
+                       ↓
+                    Respinge task
+    Thread pool
+        set of reusable threads that can be used to execute tasks concurrently
+        it's exepensive to create/destroy a thread for each task, a thread pool reduces the overhead by reusing existing threads for multiple tasks
 
 curl -X GET "http://localhost:8080/api/v1/progress/a9b2b8aa-73a0-4a42-b106-ebfeaa9429ba"  -H "Authentication: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzU5MTk5NzEsImV4cCI6MTc3NjAwNjM3MX0.K9CksxXynGZcsfkl633y2hxdz7E2ASrVE6n7IKBP6Ko" -H "Accept: text/event-stream"

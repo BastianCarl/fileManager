@@ -21,11 +21,6 @@ public class StatsService {
   public Object execute(StatsType type, StatsContext context) {
 
     StatsHandler handler = handlers.get(type);
-
-    if (handler == null) {
-      throw new IllegalArgumentException("No handler found for type: " + type);
-    }
-
     return handler.execute(context);
   }
 }
