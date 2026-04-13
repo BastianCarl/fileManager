@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.dto.ProgressUpdate;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ public class ProgressSseService {
 
   @Value("${progress.sse.service.timeout:5}")
   private int timeout;
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ProgressSseService.class);
   private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
   private final String EVENT = "File processing progress";
@@ -30,29 +32,30 @@ public class ProgressSseService {
     return emitter;
   }
 
-  public void sendUpdate(String uuid, ProgressUpdate update) {
-    SseEmitter emitter = emitters.get(uuid);
+  public void sendUpdate(UUID uuid, ProgressUpdate update) {
+    String uuidStr = uuid.toString();
+    SseEmitter emitter = emitters.get(uuidStr);
     if (emitter != null) {
       try {
         emitter.send(SseEmitter.event().name(EVENT).data(update));
       } catch (Exception e) {
-        emitters.remove(uuid);
+        emitters.remove(uuidStr);
       }
     } else {
-      LOGGER.warn("No SSE connection for user {}", uuid);
+      LOGGER.warn("No SSE connection for user {}", uuidStr);
     }
   }
 
-  private void complete(String uuid) {
-    SseEmitter emitter = emitters.get(uuid);
+  private void complete(UUID uuid) {
+    SseEmitter emitter = emitters.get(uuid.toString());
     if (emitter != null) {
       emitter.complete();
-      emitters.remove(uuid, emitter);
+      emitters.remove(uuid.toString(), emitter);
     }
   }
 
-  public void completeWithSuccess(String id) {
-    sendUpdate(id, ProgressUpdate.createCompletedUpdate());
-    complete(id);
+  public void completeWithSuccess(UUID uuid) {
+    sendUpdate(uuid, ProgressUpdate.createCompletedUpdate());
+    complete(uuid);
   }
 }

@@ -33,9 +33,8 @@ public class FileController {
       throws IOException {
 
     File tempFile = fileHelper.createTempFile(file);
-    UUID uuid = UUID.randomUUID();
+    UUID uuid = fileServiceOrchestrator.upload(tempFile, authToken);
     String location = uriBuilderService.buildFileLocation(uuid);
-    fileServiceOrchestrator.upload(tempFile, authToken, uuid);
     return ResponseEntity.accepted().header(HttpHeaders.LOCATION, location).body(uuid.toString());
   }
 

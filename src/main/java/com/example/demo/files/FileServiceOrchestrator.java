@@ -5,10 +5,7 @@ import com.example.demo.model.dto.ProgressUpdate;
 import com.example.demo.model.fileUploadingStep.Step;
 import com.example.demo.model.fileUploadingStep.UserUploadStep;
 import com.example.demo.repository.FileMetadataRepository;
-import com.example.demo.service.AuditService;
-import com.example.demo.service.FileMetaDataService;
-import com.example.demo.service.ProgressSseService;
-import com.example.demo.service.UserService;
+import com.example.demo.service.*;
 import com.example.demo.utility.Archiver;
 import com.example.demo.utility.FileHelper;
 import jakarta.annotation.PostConstruct;
@@ -28,8 +25,10 @@ import org.springframework.stereotype.Component;
 public class FileServiceOrchestrator {
   @Value("${file.uploader.job.date.format}")
   private String DATE_FORMAT;
+
   @Value("${limit.for.downloading}")
   private int LIMIT_FOR_DOWNLOADING;
+
   @Value("${file.uploader.job.backup.path}")
   private String BACKUP_PATH;
 
@@ -38,6 +37,7 @@ public class FileServiceOrchestrator {
   private final UserService userService;
   private final Archiver archiver;
   private final FileMetaDataService fileMetaDataService;
+  private final AsyncFileService asyncFileService;
   private final FileHelper fileHelper;
   private final FileMetadataMapper fileMetadataMapper;
   private final AuditService auditService;
@@ -57,6 +57,7 @@ public class FileServiceOrchestrator {
       @UserUploadStep List<Step> steps,
       AuditService auditService,
       ProgressSseService progressSseService,
+      AsyncFileService asyncFileService,
       FileHelper fileHelper) {
     this.fileService = awsImplementationFileService;
     this.fileMetadataRepository = fileMetadataRepository;
@@ -66,6 +67,7 @@ public class FileServiceOrchestrator {
     this.fileHelper = fileHelper;
     this.fileMetadataMapper = fileMetadataMapper;
     this.auditService = auditService;
+    this.asyncFileService = asyncFileService;
     this.steps = steps;
     this.progressSseService = progressSseService;
   }
@@ -75,28 +77,29 @@ public class FileServiceOrchestrator {
     formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
   }
 
-  @Async
-  public void upload(File file, String authToken, UUID uuid) {
-    String id = uuid.toString();
+  public UUID upload(File file, String authToken) {
+    UUID uuid = UUID.randomUUID();
     Resource resource =
         new Resource(
             file,
             fileMetadataMapper.map(
                 file, userService.getOwnerId(authToken), FileUploaderClient.API));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
-    progressSseService.sendUpdate(id, ProgressUpdate.createStartedUpdate());
-    for (int i = 0; i < steps.size(); i++) {
-      Step currentStep = steps.get(i);
-      progressSseService.sendUpdate(
-          id,
-          new ProgressUpdate(
-              ProgressUpdate.ProgressUpdateStatus.IN_PROGRESS, i, steps.size(), currentStep));
-
-      fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
-    }
-
-    progressSseService.completeWithSuccess(id);
+    fileProcessingStep = executeFirstStep(uuid, fileProcessingStep, resource);
+    asyncFileService.runAsyncSteps(resource, fileProcessingStep, uuid, 1, steps);
+    return uuid;
   }
+
+  private FileProcessingStep executeFirstStep(
+      UUID uuid, FileProcessingStep fileProcessingStep, Resource resource) {
+    progressSseService.sendUpdate(uuid, ProgressUpdate.createStartedUpdate());
+    Step firstStep = steps.getFirst();
+    progressSseService.sendUpdate(uuid,
+        new ProgressUpdate(
+            ProgressUpdate.ProgressUpdateStatus.IN_PROGRESS, 1, steps.size(), firstStep));
+    return firstStep.process(resource, fileProcessingStep, uuid);
+  }
+
 
   private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
     if (files == null || files.isEmpty()) {
