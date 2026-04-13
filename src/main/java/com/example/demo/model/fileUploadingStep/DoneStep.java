@@ -24,9 +24,9 @@ public class DoneStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep previousFileProcessingStep, UUID uuid) {
+      Resource resource, FileProcessingStep previousFileProcessingStep, UUID id) {
     if (shouldProcess(previousFileProcessingStep)) {
-      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
+      auditService.upsert(resource.getFileMetadata(), nextState(), id);
     }
     return nextState();
   }

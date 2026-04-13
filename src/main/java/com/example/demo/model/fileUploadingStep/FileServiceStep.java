@@ -29,11 +29,11 @@ public class FileServiceStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID id) {
     if (shouldProcess(currentFileProcessingStep)) {
-      auditService.upsert(resource.getFileMetadata(), FILE_SERVICE_STARTED, uuid);
+      auditService.upsert(resource.getFileMetadata(), FILE_SERVICE_STARTED, id);
       fileService.uploadFile(resource);
-      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
+      auditService.upsert(resource.getFileMetadata(), nextState(), id);
       currentFileProcessingStep = nextState();
     }
     return currentFileProcessingStep;

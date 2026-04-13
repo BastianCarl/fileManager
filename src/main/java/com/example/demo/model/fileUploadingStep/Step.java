@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface Step {
   FileProcessingStep process(
-      Resource resource, FileProcessingStep previousFileProcessingStep, UUID uuid);
+      Resource resource, FileProcessingStep previousFileProcessingStep, UUID id);
 
   FileProcessingStep nextState();
 

@@ -33,9 +33,9 @@ public class FileController {
       throws IOException {
 
     File tempFile = fileHelper.createTempFile(file);
-    UUID uuid = fileServiceOrchestrator.upload(tempFile, authToken);
-    String location = uriBuilderService.buildFileLocation(uuid);
-    return ResponseEntity.accepted().header(HttpHeaders.LOCATION, location).body(uuid.toString());
+    UUID id = fileServiceOrchestrator.upload(tempFile, authToken);
+    String location = uriBuilderService.buildFileLocation(id);
+    return ResponseEntity.accepted().header(HttpHeaders.LOCATION, location).body(id.toString());
   }
 
   @GetMapping

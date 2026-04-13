@@ -30,11 +30,11 @@ public class MetadataStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID id) {
     if (shouldProcess(currentFileProcessingStep)) {
-      auditService.upsert(resource.getFileMetadata(), METADATA_STARTED, uuid);
+      auditService.upsert(resource.getFileMetadata(), METADATA_STARTED, id);
       fileMetaDataService.save(resource.getFileMetadata());
-      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
+      auditService.upsert(resource.getFileMetadata(), nextState(), id);
       currentFileProcessingStep = nextState();
     }
     return currentFileProcessingStep;

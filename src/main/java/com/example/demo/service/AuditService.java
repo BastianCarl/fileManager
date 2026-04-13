@@ -26,7 +26,7 @@ public class AuditService {
         .orElse(FileProcessingStep.NOT_FOUND);
   }
 
-  public FileAuditState upsert(FileMetadata fileMetadata, FileProcessingStep newState, UUID uuid) {
+  public FileAuditState upsert(FileMetadata fileMetadata, FileProcessingStep newState, UUID id) {
     String code = fileMetadata.getCode();
     FileAuditState fileAuditState =
         auditRepository
@@ -34,7 +34,7 @@ public class AuditService {
             .orElseGet(
                 () -> {
                   FileAuditState a = new FileAuditState();
-                  a.setId(uuid);
+                  a.setId(id);
                   a.setCode(code);
                   return a;
                 });

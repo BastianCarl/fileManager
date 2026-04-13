@@ -20,20 +20,20 @@ public class ProgressSseService {
   private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
   private final String EVENT = "File processing progress";
 
-  public SseEmitter subscribe(String uuid) {
+  public SseEmitter subscribe(String id) {
     SseEmitter emitter = new SseEmitter(timeout * 60 * 1000L); // 5 minutes
 
-    emitters.put(uuid, emitter);
+    emitters.put(id, emitter);
 
-    emitter.onCompletion(() -> emitters.remove(uuid, emitter));
-    emitter.onTimeout(() -> emitters.remove(uuid, emitter));
-    emitter.onError((e) -> emitters.remove(uuid, emitter));
+    emitter.onCompletion(() -> emitters.remove(id, emitter));
+    emitter.onTimeout(() -> emitters.remove(id, emitter));
+    emitter.onError((e) -> emitters.remove(id, emitter));
 
     return emitter;
   }
 
-  public void sendUpdate(UUID uuid, ProgressUpdate update) {
-    String uuidStr = uuid.toString();
+  public void sendUpdate(UUID id, ProgressUpdate update) {
+    String uuidStr = id.toString();
     SseEmitter emitter = emitters.get(uuidStr);
     if (emitter != null) {
       try {
@@ -46,16 +46,16 @@ public class ProgressSseService {
     }
   }
 
-  private void complete(UUID uuid) {
-    SseEmitter emitter = emitters.get(uuid.toString());
+  private void complete(UUID id) {
+    SseEmitter emitter = emitters.get(id.toString());
     if (emitter != null) {
       emitter.complete();
-      emitters.remove(uuid.toString(), emitter);
+      emitters.remove(id.toString(), emitter);
     }
   }
 
-  public void completeWithSuccess(UUID uuid) {
-    sendUpdate(uuid, ProgressUpdate.createCompletedUpdate());
-    complete(uuid);
+  public void completeWithSuccess(UUID id) {
+    sendUpdate(id, ProgressUpdate.createCompletedUpdate());
+    complete(id);
   }
 }

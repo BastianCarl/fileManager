@@ -24,7 +24,7 @@ public class AsyncFileService {
   public void runAsyncSteps(
       Resource resource,
       FileProcessingStep fileProcessingStep,
-      UUID uuid,
+      UUID id,
       int startIndex,
       List<Step> steps) {
 
@@ -32,13 +32,13 @@ public class AsyncFileService {
       Step currentStep = steps.get(i);
 
       progressSseService.sendUpdate(
-              uuid,
+              id,
           new ProgressUpdate(
               ProgressUpdate.ProgressUpdateStatus.IN_PROGRESS, i, steps.size(), currentStep));
 
-      fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
+      fileProcessingStep = currentStep.process(resource, fileProcessingStep, id);
     }
 
-    progressSseService.completeWithSuccess(uuid);
+    progressSseService.completeWithSuccess(id);
   }
 }

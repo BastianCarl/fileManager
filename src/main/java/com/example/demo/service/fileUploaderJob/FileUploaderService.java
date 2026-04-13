@@ -73,9 +73,9 @@ public class FileUploaderService {
             file,
             fileMetadataMapper.map(file, userService.getOwnerId(userDTO), FileUploaderClient.JOB));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
-    UUID uuid = UUID.randomUUID();
+    UUID id = UUID.randomUUID();
     for (Step currentStep : steps) {
-      fileProcessingStep = currentStep.process(resource, fileProcessingStep, uuid);
+      fileProcessingStep = currentStep.process(resource, fileProcessingStep, id);
     }
   }
 

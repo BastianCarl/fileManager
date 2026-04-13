@@ -78,26 +78,26 @@ public class FileServiceOrchestrator {
   }
 
   public UUID upload(File file, String authToken) {
-    UUID uuid = UUID.randomUUID();
     Resource resource =
         new Resource(
             file,
             fileMetadataMapper.map(
                 file, userService.getOwnerId(authToken), FileUploaderClient.API));
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
-    fileProcessingStep = executeFirstStep(uuid, fileProcessingStep, resource);
-    asyncFileService.runAsyncSteps(resource, fileProcessingStep, uuid, 1, steps);
-    return uuid;
+    UUID id = UUID.randomUUID();
+    fileProcessingStep = executeFirstStep(id, fileProcessingStep, resource);
+    asyncFileService.runAsyncSteps(resource, fileProcessingStep, id, 1, steps);
+    return id;
   }
 
   private FileProcessingStep executeFirstStep(
-      UUID uuid, FileProcessingStep fileProcessingStep, Resource resource) {
-    progressSseService.sendUpdate(uuid, ProgressUpdate.createStartedUpdate());
+      UUID id, FileProcessingStep fileProcessingStep, Resource resource) {
+    progressSseService.sendUpdate(id, ProgressUpdate.createStartedUpdate());
     Step firstStep = steps.getFirst();
-    progressSseService.sendUpdate(uuid,
+    progressSseService.sendUpdate(id,
         new ProgressUpdate(
             ProgressUpdate.ProgressUpdateStatus.IN_PROGRESS, 1, steps.size(), firstStep));
-    return firstStep.process(resource, fileProcessingStep, uuid);
+    return firstStep.process(resource, fileProcessingStep, id);
   }
 
 

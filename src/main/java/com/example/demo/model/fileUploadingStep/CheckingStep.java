@@ -23,7 +23,7 @@ public class CheckingStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID id) {
     if (currentFileProcessingStep == FileProcessingStep.DONE) {
       LOGGER.info(
           "Duplicated File: {}. Moving directly to backup", resource.getFileMetadata().getName());

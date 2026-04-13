@@ -18,8 +18,8 @@ public class ProgressController {
     this.sseService = sseService;
   }
 
-  @GetMapping(value = "/{uuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public SseEmitter subscribe(@PathVariable String uuid) {
-    return sseService.subscribe(uuid);
+  @GetMapping(value = "/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public SseEmitter subscribe(@PathVariable String id) {
+    return sseService.subscribe(id);
   }
 }

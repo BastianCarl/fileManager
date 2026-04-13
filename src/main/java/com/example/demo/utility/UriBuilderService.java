@@ -7,10 +7,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Component
 public class UriBuilderService {
 
-  public String buildFileLocation(UUID uuid) {
+  public String buildFileLocation(UUID id) {
     return ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/files/{id}")
-        .buildAndExpand(uuid)
+        .buildAndExpand(id)
         .toUriString();
   }
 }

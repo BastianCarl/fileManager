@@ -47,13 +47,13 @@ public class DiskStep implements Step {
 
   @Override
   public FileProcessingStep process(
-      Resource resource, FileProcessingStep currentFileProcessingStep, UUID uuid) {
+      Resource resource, FileProcessingStep currentFileProcessingStep, UUID id) {
     if (shouldProcess(currentFileProcessingStep)) {
-      auditService.upsert(resource.getFileMetadata(), DISK_STARTED, uuid);
+      auditService.upsert(resource.getFileMetadata(), DISK_STARTED, id);
       File file = resource.getFile();
       fileHelper.move(
           file.toPath(), Path.of(backupPath.toString(), LocalDate.now().format(formatter)));
-      auditService.upsert(resource.getFileMetadata(), nextState(), uuid);
+      auditService.upsert(resource.getFileMetadata(), nextState(), id);
       currentFileProcessingStep = DISK_DONE;
     }
     return currentFileProcessingStep;
