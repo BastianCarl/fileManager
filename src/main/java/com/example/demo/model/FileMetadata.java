@@ -56,17 +56,10 @@ public class FileMetadata {
     this.hashValue = hashValue;
     this.uploadTime = uploadTime;
     this.fileUploaderClient = fileUploaderClient;
-    this.code = generateCode(ownerId, size, key, hashValue);
+    this.code = generateCode(hashValue);
   }
 
-  public String generateCode(Long ownerId, Long size, String key, String hashValue) {
-    try {
-      String combined = ownerId + "|" + size + "|" + key + "|" + hashValue;
-      MessageDigest digest = MessageDigest.getInstance("SHA-256");
-      byte[] hash = digest.digest(combined.getBytes(StandardCharsets.UTF_8));
-      return Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException("Hash algorithm not found", e);
-    }
+  public String generateCode( String hashValue) {
+    return hashValue;
   }
 }
