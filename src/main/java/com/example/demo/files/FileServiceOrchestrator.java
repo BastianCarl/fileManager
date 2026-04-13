@@ -3,6 +3,7 @@ package com.example.demo.files;
 import com.example.demo.model.*;
 import com.example.demo.model.dto.ProgressUpdate;
 import com.example.demo.model.fileUploadingStep.Step;
+import com.example.demo.model.fileUploadingStep.UserUploadStep;
 import com.example.demo.repository.FileMetadataRepository;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.FileMetaDataService;
@@ -53,7 +54,7 @@ public class FileServiceOrchestrator {
       FileMetaDataService fileMetaDataService,
       Archiver archiver,
       FileMetadataMapper fileMetadataMapper,
-      List<Step> steps,
+      @UserUploadStep List<Step> steps,
       AuditService auditService,
       ProgressSseService progressSseService,
       FileHelper fileHelper) {
@@ -85,11 +86,6 @@ public class FileServiceOrchestrator {
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
     progressSseService.sendUpdate(id, ProgressUpdate.createStartedUpdate());
     for (int i = 0; i < steps.size(); i++) {
-      try {
-        Thread.sleep(20000);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
       Step currentStep = steps.get(i);
       progressSseService.sendUpdate(
           id,

@@ -2,7 +2,7 @@
 @userName = cristi
 @password = cristi
 @boundary = WebAppBoundary
-@fileId= a9b2b8aa-73a0-4a42-b106-ebfeaa9429ba
+@fileId= 1
 ###
 # @name login
 POST {{rootURL}}/sessions

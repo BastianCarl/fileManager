@@ -8,6 +8,7 @@ import com.example.demo.model.FileMetadataMapper;
 import com.example.demo.model.FileProcessingStep;
 import com.example.demo.model.FileUploaderClient;
 import com.example.demo.model.Resource;
+import com.example.demo.model.fileUploadingStep.FileUploaderJobStep;
 import com.example.demo.model.fileUploadingStep.Step;
 import com.example.demo.service.AuditService;
 import com.example.demo.service.UserService;
@@ -50,7 +51,7 @@ public class FileUploaderService {
       FileHelper fileHelper,
       FileMetadataMapper fileMetadataMapper,
       AuditService auditService,
-      List<Step> steps) {
+      @FileUploaderJobStep List<Step> steps) {
     this.userService = userService;
     this.fileHelper = fileHelper;
     this.fileMetadataMapper = fileMetadataMapper;
