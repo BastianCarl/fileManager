@@ -10,11 +10,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping("/progress")
-public class ProgressController {
+public class FileUploadingProgressController {
 
   private final ProgressSseService sseService;
 
-  public ProgressController(ProgressSseService sseService) {
+  public FileUploadingProgressController(ProgressSseService sseService) {
     this.sseService = sseService;
   }
 

@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Component
-public class UriBuilderService {
+public class UrLBuilderService {
 
   public String buildFileLocation(UUID id) {
     return ServletUriComponentsBuilder.fromCurrentContextPath()
-        .path("/files/{id}")
+        .path("/progress/{id}")
         .buildAndExpand(id)
         .toUriString();
   }

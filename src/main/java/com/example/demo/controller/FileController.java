@@ -4,7 +4,7 @@ import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.Version;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.FileHelper;
-import com.example.demo.utility.UriBuilderService;
+import com.example.demo.utility.UrLBuilderService;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class FileController {
   private final FileServiceOrchestrator fileServiceOrchestrator;
   private final UserService userService;
   private final FileHelper fileHelper;
-  private final UriBuilderService uriBuilderService;
+  private final UrLBuilderService urLBuilderService;
 
   @PostMapping
   public ResponseEntity<String> uploadFile(
@@ -34,7 +34,7 @@ public class FileController {
 
     File tempFile = fileHelper.createTempFile(file);
     UUID id = fileServiceOrchestrator.upload(tempFile, authToken);
-    String location = uriBuilderService.buildFileLocation(id);
+    String location = urLBuilderService.buildFileLocation(id);
     return ResponseEntity.accepted().header(HttpHeaders.LOCATION, location).body(id.toString());
   }
 
