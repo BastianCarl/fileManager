@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.files.FileServiceOrchestrator;
 import com.example.demo.model.Version;
+import com.example.demo.service.ProgressSseService;
 import com.example.demo.service.UserService;
 import com.example.demo.utility.FileHelper;
 import com.example.demo.utility.UrLBuilderService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping({"/files"})
@@ -26,6 +28,7 @@ public class FileController {
   private final UserService userService;
   private final FileHelper fileHelper;
   private final UrLBuilderService urLBuilderService;
+  private final ProgressSseService sseService;
 
   @PostMapping
   public ResponseEntity<String> uploadFile(
@@ -65,5 +68,11 @@ public class FileController {
   public void restoreBackup(
       @PathVariable("date") String date, @RequestHeader("Authentication") String authToken) {
     fileServiceOrchestrator.restoreBackup(date, userService.getOwnerId(authToken));
+  }
+
+
+  @GetMapping(value = "/{id}/progress/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public SseEmitter subscribeToFileProgress(@PathVariable String id) {
+    return sseService.subscribe(id);
   }
 }

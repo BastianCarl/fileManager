@@ -19,9 +19,9 @@ Authentication is implemented using JSON Web Token.
 
 ## Authentication Flow
 
-1.  A user registers using the `/users` endpoint\
-2.  The user logs in using the `/sessions` endpoint\
-3.  The system returns a JSON Web Token\
+1.  A user registers using the `/users` endpoint
+2.  The user logs in using the `/sessions` endpoint
+3.  The system returns a JSON Web Token
 4.  The token must be included in all subsequent requests using the
     Authorization header
 
@@ -36,10 +36,10 @@ Authorization: Bearer `<token>`
 { "userName": "string", "password": "string", "role": "string" }
 
 Fields:
+
 - userName -- the unique username of the user
 - password -- the user password
 - role -- the role assigned to the user (for example: USER or ADMIN)
-
 ------------------------------------------------------------------------
 
 ## JSON Web Token Structure
