@@ -1186,4 +1186,97 @@ Solutie: Message broker
         set of reusable threads that can be used to execute tasks concurrently
         it's exepensive to create/destroy a thread for each task, a thread pool reduces the overhead by reusing existing threads for multiple tasks
 
+USER (exemplu de baza)
+{
+  "id": 2,
+  "userName": "sebi",
+  "email": "sebi@gmail.com",
+  "roles": ["USER"],
+  "address": {
+    "city": "Cluj",
+    "street": "Str. Florilor 10"
+  },
+  "isActive": true
+}
+
+
+POST -> Create
+- Creeaza un resource nou
+- Nu este idempotent
+
+Request:
+POST /users
+{
+  "userName": "ana",
+  "email": "ana@gmail.com",
+  "roles": ["USER"],
+  "address": {
+    "city": "Bucuresti",
+    "street": "Str. Lalelelor 5"
+  },
+  "isActive": true
+}
+
+Ce se intampla:
+- Se creeaza un user nou
+- ID-ul este generat de server
+- Multiple requests -> multiple users
+
+
+PUT -> Replace (update complet)
+- Inlocuieste intreg resource-ul
+- Necesita obiect complet
+- Este idempotent
+
+Request:
+PUT /users/2
+{
+  "userName": "sebi_updated",
+  "email": "sebi_new@gmail.com",
+  "roles": ["ADMIN"],
+  "address": {
+    "city": "Cluj",
+    "street": "Str. Noua 15"
+  },
+  "isActive": false
+}
+
+Ce se intampla:
+- User-ul cu ID = 2 este complet inlocuit
+- Campurile lipsa pot fi sterse sau resetate
+- Repetarea request-ului -> acelasi rezultat
+
+
+PATCH -> Update partial
+- Modifica doar anumite campuri
+- Trimite doar ce vrei sa schimbi
+- Nu este neaparat idempotent
+
+Request:
+PATCH /users/2
+{
+  "email": "sebi_patch@gmail.com",
+  "address": {
+    "street": "Str. Actualizata 20"
+  }
+}
+
+Ce se intampla:
+- Se modifica doar:
+  - email
+  - address.street
+- Restul datelor raman neschimbate
+
+
+Diferenta pe scurt:
+- Creezi user -> POST
+- Inlocuiesti complet user -> PUT
+- Modifici doar cateva campuri -> PATCH
+
+
+Mental model:
+- POST  -> creeaza ceva nou
+- PUT   -> inlocuieste tot
+- PATCH -> modifica doar ce specifici
+
 curl -X GET "http://localhost:8080/api/v1/files/2bdcbc73-b996-4962-9237-c3b59b91940e/progress/stream"  -H "Authentication: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzYxNjI0MTQsImV4cCI6MTc3NjI0ODgxNH0.xKGIv97qJcI7huOZlPiMemYIBD9yEXXh9L_EJuTeFaE" -H "Accept: text/event-stream"
