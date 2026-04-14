@@ -14,14 +14,14 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ImageService {
+public class ImageVariantService {
 
   private final FileService fileService;
   private final FileMetaDataService fileMetaDataService;
   private final String IMAGINE_FORMAT = "jpg";
 
   @Autowired
-  public ImageService(FileService fileService, FileMetaDataService fileMetaDataService) {
+  public ImageVariantService(FileService fileService, FileMetaDataService fileMetaDataService) {
     this.fileService = fileService;
     this.fileMetaDataService = fileMetaDataService;
   }

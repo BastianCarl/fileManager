@@ -1,24 +1,24 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.ImageType;
-import com.example.demo.service.ImageService;
+import com.example.demo.service.ImageVariantService;
 import java.io.IOException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/images")
-public class ImageController {
+public class ImageVariantController {
 
-  private final ImageService imageService;
+  private final ImageVariantService imageVariantService;
 
-  public ImageController(ImageService imageService) {
-    this.imageService = imageService;
+  public ImageVariantController(ImageVariantService imageVariantService) {
+    this.imageVariantService = imageVariantService;
   }
 
   @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
   public byte[] getImage(@PathVariable Long imageId, @RequestParam ImageType type)
       throws IOException {
-    return imageService.getProcessedImage(imageId, type);
+    return imageVariantService.getProcessedImage(imageId, type);
   }
 }
