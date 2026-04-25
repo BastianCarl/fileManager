@@ -1312,5 +1312,6 @@ Claude
                 - preToolUse
                     - dont allow to run
                 - postToolUse
+                    - run unit tests
                 - Notification
                 - Stop
