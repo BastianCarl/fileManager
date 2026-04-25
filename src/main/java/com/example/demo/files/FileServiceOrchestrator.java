@@ -15,7 +15,10 @@ import java.nio.file.Path;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -41,6 +44,7 @@ public class FileServiceOrchestrator {
   private final FileMetadataMapper fileMetadataMapper;
   private final AuditService auditService;
   private final ProgressSseService progressSseService;
+  private ExecutorService executor;
   private DateTimeFormatter formatter;
   private static final int DOWNLOAD_THREAD_POOL_SIZE = 5;
   private final List<Step> steps;
@@ -57,6 +61,7 @@ public class FileServiceOrchestrator {
       AuditService auditService,
       ProgressSseService progressSseService,
       AsyncFileUploadingService asyncFileUploadingService,
+      @Qualifier("fileDownloadExecutor") ExecutorService executor,
       FileHelper fileHelper) {
     this.fileService = awsImplementationFileService;
     this.fileMetadataRepository = fileMetadataRepository;
@@ -69,6 +74,7 @@ public class FileServiceOrchestrator {
     this.asyncFileUploadingService = asyncFileUploadingService;
     this.steps = steps;
     this.progressSseService = progressSseService;
+    this.executor = executor;
   }
 
   @PostConstruct
@@ -101,15 +107,14 @@ public class FileServiceOrchestrator {
 
 
   private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
+
     if (files == null || files.isEmpty()) {
       return Collections.emptyMap();
     }
 
-    ThreadManagerContext threadContext = new ThreadManagerContext();
-    ExecutorService executor = Executors.newFixedThreadPool(DOWNLOAD_THREAD_POOL_SIZE);
-    List<Future<?>> futures = new ArrayList<>();
-
     long accumulatedSize = 0;
+
+    List<CompletableFuture<Map.Entry<String, byte[]>>> futures = new ArrayList<>();
 
     for (FileMetadata fileMetadata : files) {
       long fileSize = fileMetadata.getSize();
@@ -120,22 +125,23 @@ public class FileServiceOrchestrator {
 
       accumulatedSize += fileSize;
 
-      Future<?> future =
-          executor.submit(
-              () -> {
+      futures.add(
+              CompletableFuture.supplyAsync(() -> {
                 byte[] fileContent = downloadFileWithRetry(fileMetadata);
-                if (fileContent != null) {
-                  threadContext.addElement(
-                      "v" + fileMetadata.getVersion() + fileMetadata.getName(), fileContent);
+                if (fileContent == null) {
+                  return null;
                 }
-              });
-
-      futures.add(future);
+                return Map.entry(
+                        "v" + fileMetadata.getVersion() + fileMetadata.getName(),
+                        fileContent
+                );
+              }, executor)
+      );
     }
-
-    awaitCompletion(futures);
-    executor.shutdown();
-    return threadContext.getFilesMap();
+    return futures.stream()
+            .map(CompletableFuture::join)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   private byte[] downloadFileWithRetry(FileMetadata fileMetadata) {
