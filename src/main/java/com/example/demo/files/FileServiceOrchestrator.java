@@ -18,7 +18,6 @@ import java.util.concurrent.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -37,7 +36,7 @@ public class FileServiceOrchestrator {
   private final UserService userService;
   private final Archiver archiver;
   private final FileMetaDataService fileMetaDataService;
-  private final AsyncFileService asyncFileService;
+  private final AsyncFileUploadingService asyncFileUploadingService;
   private final FileHelper fileHelper;
   private final FileMetadataMapper fileMetadataMapper;
   private final AuditService auditService;
@@ -57,7 +56,7 @@ public class FileServiceOrchestrator {
       @UserUploadStep List<Step> steps,
       AuditService auditService,
       ProgressSseService progressSseService,
-      AsyncFileService asyncFileService,
+      AsyncFileUploadingService asyncFileUploadingService,
       FileHelper fileHelper) {
     this.fileService = awsImplementationFileService;
     this.fileMetadataRepository = fileMetadataRepository;
@@ -67,7 +66,7 @@ public class FileServiceOrchestrator {
     this.fileHelper = fileHelper;
     this.fileMetadataMapper = fileMetadataMapper;
     this.auditService = auditService;
-    this.asyncFileService = asyncFileService;
+    this.asyncFileUploadingService = asyncFileUploadingService;
     this.steps = steps;
     this.progressSseService = progressSseService;
   }
@@ -86,7 +85,7 @@ public class FileServiceOrchestrator {
     FileProcessingStep fileProcessingStep = auditService.getAuditState(resource.getFileMetadata());
     UUID id = UUID.randomUUID();
     fileProcessingStep = executeFirstStep(id, fileProcessingStep, resource);
-    asyncFileService.runAsyncSteps(resource, fileProcessingStep, id, 1, steps);
+    asyncFileUploadingService.runAsyncSteps(resource, fileProcessingStep, id, 1, steps);
     return id;
   }
 

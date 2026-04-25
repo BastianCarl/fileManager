@@ -1157,7 +1157,7 @@ Solutie: Message broker
     @EnableAsync
       - creates proxies for beans annotated with @Async
     @Async
-      - indicates that the method shuld be executed in another thead
+      - indicates that the method should be executed in another thead
       - return types
         - void
         - Future
@@ -1280,3 +1280,37 @@ Mental model:
 - PATCH -> modifica doar ce specifici
 
 curl -X GET "http://localhost:8080/api/v1/files/2bdcbc73-b996-4962-9237-c3b59b91940e/progress/stream"  -H "Authentication: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzYxNjI0MTQsImV4cCI6MTc3NjI0ODgxNH0.xKGIv97qJcI7huOZlPiMemYIBD9yEXXh9L_EJuTeFaE" -H "Accept: text/event-stream"
+-------------------
+Claude
+    cladude code
+        agentic loop different from chat
+          - gathering context
+          - take action
+          - verify results
+          - repeat until goal is achieved
+        context
+            - place to store information about conversation. Once the limit is hit it starts compacting information
+        .md
+            used for storing information across conversations (persistent memory)
+        subagents
+            - specialized agents for specific tasks. Returns the result to the main agent
+            - improve the context
+         skills
+            - files of instructions that subagents can use to perform specific tasks(code review)
+            - skill.md file
+            - uses when the prompt requires them
+            - if you keep explaing to the agent how to do something, it's better to create a skill for that task and then call the skill when you need it instead of explaining it every time in the prompt
+         mcp (model context protocol)
+            - connects to external data sources(private resources)
+            - fill up your context
+            - offer capabilities
+            - tools ofered to ai
+         hooks
+            - they always run(run reformat, logging)
+            - events
+                - userPromptSubmit
+                - preToolUse
+                    - dont allow to run
+                - postToolUse
+                - Notification
+                - Stop

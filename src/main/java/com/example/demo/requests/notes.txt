@@ -283,3 +283,37 @@ documentatie pentru aplicatie
 
 
 curl.exe -N "http://localhost:8080/api/v1/progress/d2232d5a-4caf-4cd9-895a-140d9892747e" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcmlzdGkiLCJpYXQiOjE3NzU4MjMzMzAsImV4cCI6MTc3NTkwOTczMH0.aHyOZH2DwDDezQi49DBJnTQ-TcLaAY4WJLIIzo363oA"
+---
+private Map<String, byte[]> manageDownloadAllFiles(List<FileMetadata> files) {
+    if (files == null || files.isEmpty()) {
+      return Collections.emptyMap();
+    }
+
+
+cum pot sa suprasiu thead pool folosit pentru @async
+ce fac daca am 2 bean-uri cu @async care as vrea sa foloseasca pool-uri diferite
+daca ar trebui sa setez un status de enebled/disabled as folosi put sau post?
+
+PUT users/2/disabled
+
+
+PUT users/2/status
+{
+    "disabled": true
+}
+
+
+PUT users/2
+{
+    "firstName": joe
+}
+
+claude curs
+wire mock
+ce alternative de mock server?
+c4model
+mermaid
+sa fac arhitectura de context si componente
+db migrations(flyway vs liquidbase vs altele, how is rollback handled, how are scripts are  run? Are all in one transaction)
+sa fac cu docker compose(aplicatia, db si migratios sa ruleze automat cand fac docker compose up)
+webRTC vs webSockets

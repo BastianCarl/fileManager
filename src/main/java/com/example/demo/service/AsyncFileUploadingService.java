@@ -11,12 +11,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AsyncFileService {
+public class AsyncFileUploadingService {
 
   private final ProgressSseService progressSseService;
 
   @Autowired
-  public AsyncFileService(ProgressSseService progressSseService) {
+  public AsyncFileUploadingService(ProgressSseService progressSseService) {
     this.progressSseService = progressSseService;
   }
 
