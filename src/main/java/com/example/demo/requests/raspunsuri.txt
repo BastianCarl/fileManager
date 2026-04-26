@@ -1315,3 +1315,32 @@ Claude
                     - run unit tests
                 - Notification
                 - Stop
+
+@Async
+no custom executor defined -> SimpleAsyncTaskExecutor ->
+one custom executor defined -> all methods use that executor
+multiple custom executor defined -> @Async("executorName")
+---------------------------------------------------------------
+WireMock
+    - used for mocking external HTTP services
+    - alternative
+        - MockServer
+        - Hoverfly
+        - OkHttp MockWebServer
+-----------------------------------------------------------------
+c4model
+    - Context
+        - big picture
+        - what is the purpose?
+        - who use it?
+        - what are the external system that interact with it?
+    - Container
+        - layers(FE, BE, DB)
+        - how they communicate
+    - Component
+        - modules, services
+    - Code
+        - Nivelul cel mai detaliat
+        - used for synchronization between developers
+
+webRTC

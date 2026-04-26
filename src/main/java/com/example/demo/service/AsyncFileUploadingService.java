@@ -20,7 +20,7 @@ public class AsyncFileUploadingService {
     this.progressSseService = progressSseService;
   }
 
-  @Async
+  @Async("fileUploadExecutor")
   public void runAsyncSteps(
       Resource resource,
       FileProcessingStep fileProcessingStep,

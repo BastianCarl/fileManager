@@ -27,7 +27,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FileUploaderService {
+public class FileUploaderJobOrchestrator {
   private final UserService userService;
   private final FileHelper fileHelper;
   private final FileMetadataMapper fileMetadataMapper;
@@ -46,7 +46,7 @@ public class FileUploaderService {
   private DateTimeFormatter formatter;
 
   @Autowired
-  public FileUploaderService(
+  public FileUploaderJobOrchestrator(
       UserService userService,
       FileHelper fileHelper,
       FileMetadataMapper fileMetadataMapper,

@@ -19,7 +19,7 @@ public class LoggingAspect {
     LOGGER.info("FileController.restoreBackup called for {} by the userId = {}", date, userId);
   }
 
-  @Before("execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.process(..))")
+  @Before("execution(* com.example.demo.service.fileUploaderJob.FileUploaderJobOrchestrator.process(..))")
   public void logProcessCall(JoinPoint joinPoint) {
     File file = (File) joinPoint.getArgs()[0];
     LOGGER.info("FileUploaderService.process called for file {}", file.getAbsolutePath());
@@ -27,7 +27,7 @@ public class LoggingAspect {
 
   @AfterThrowing(
       pointcut =
-          "execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.process(..))",
+          "execution(* com.example.demo.service.fileUploaderJob.FileUploaderJobOrchestrator.process(..))",
       throwing = "ex")
   public void logProcessFailure(JoinPoint joinPoint, Throwable ex) {
     File file = (File) joinPoint.getArgs()[0];
@@ -36,13 +36,13 @@ public class LoggingAspect {
 
   @AfterReturning(
       pointcut =
-          "execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.process(..))")
+          "execution(* com.example.demo.service.fileUploaderJob.FileUploaderJobOrchestrator.process(..))")
   public void logProcessSuccessful(JoinPoint joinPoint) {
     File file = (File) joinPoint.getArgs()[0];
     LOGGER.info("FileUploaderService.process successful for file {}", file.getAbsolutePath());
   }
 
-  @Before("execution(* com.example.demo.service.fileUploaderJob.FileUploaderService.recover(..))")
+  @Before("execution(* com.example.demo.service.fileUploaderJob.FileUploaderJobOrchestrator.recover(..))")
   public void logRecoverCall(JoinPoint joinPoint) {
     File file = (File) joinPoint.getArgs()[1];
     Throwable ex = (Throwable) joinPoint.getArgs()[0];

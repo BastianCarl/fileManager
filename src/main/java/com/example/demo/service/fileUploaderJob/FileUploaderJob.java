@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileUploaderJob implements Job {
 
-  private final FileUploaderService fileUploaderService;
+  private final FileUploaderJobOrchestrator fileUploaderJobOrchestrator;
   private final FileHelper fileHelper;
 
   @Value("#{T(java.nio.file.Paths).get('${file.uploader.job.pending.path}')}")
@@ -23,8 +23,8 @@ public class FileUploaderJob implements Job {
   private Path workingPath;
 
   @Autowired
-  public FileUploaderJob(FileUploaderService fileUploaderService) {
-    this.fileUploaderService = fileUploaderService;
+  public FileUploaderJob(FileUploaderJobOrchestrator fileUploaderJobOrchestrator) {
+    this.fileUploaderJobOrchestrator = fileUploaderJobOrchestrator;
     this.fileHelper = new FileHelper();
   }
 
@@ -38,7 +38,7 @@ public class FileUploaderJob implements Job {
   public void execute(JobExecutionContext arg0) {
     fileHelper.copyFolder(pendingPath, workingPath);
     for (File file : fileHelper.listFiles(workingPath)) {
-      fileUploaderService.process(file);
+      fileUploaderJobOrchestrator.process(file);
     }
     fileHelper.deleteAllFiles(pendingPath);
   }
